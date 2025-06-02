@@ -52,7 +52,7 @@ export const Test = () => {
       <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
 
       <View>
-        <Text variant='h1'>Hello</Text>
+        <Text variant='heading'>Hello</Text>
       </View>
 
       <Button>Hello</Button>

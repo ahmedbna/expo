@@ -8,15 +8,12 @@ import {
 } from 'react-native';
 
 type TextVariant =
-  | 'default'
-  | 'large'
-  | 'small'
-  | 'muted'
-  | 'lead'
-  | 'h1'
-  | 'h2'
-  | 'h3'
-  | 'h4';
+  | 'body'
+  | 'title'
+  | 'subtitle'
+  | 'caption'
+  | 'heading'
+  | 'link';
 
 interface TextProps extends RNTextProps {
   variant?: TextVariant;
@@ -26,7 +23,7 @@ interface TextProps extends RNTextProps {
 }
 
 export function Text({
-  variant = 'default',
+  variant = 'body',
   lightColor,
   darkColor,
   style,
@@ -45,79 +42,55 @@ export function Text({
     };
 
     switch (variant) {
-      case 'h1':
+      case 'heading':
         return {
           ...baseStyle,
-          fontSize: 36,
-          fontWeight: '800',
-          lineHeight: 40,
-          letterSpacing: -0.02,
-        };
-      case 'h2':
-        return {
-          ...baseStyle,
-          fontSize: 30,
+          fontSize: 28,
           fontWeight: '700',
-          lineHeight: 36,
-          letterSpacing: -0.02,
+          lineHeight: 34,
         };
-      case 'h3':
-        return {
-          ...baseStyle,
-          fontSize: 24,
-          fontWeight: '600',
-          lineHeight: 32,
-          letterSpacing: -0.02,
-        };
-      case 'h4':
+      case 'title':
         return {
           ...baseStyle,
           fontSize: 20,
           fontWeight: '600',
-          lineHeight: 28,
-          letterSpacing: -0.02,
+          lineHeight: 26,
         };
-      case 'large':
-        return {
-          ...baseStyle,
-          fontSize: 18,
-          fontWeight: '600',
-          lineHeight: 28,
-        };
-      case 'lead':
-        return {
-          ...baseStyle,
-          fontSize: 20,
-          lineHeight: 28,
-          color: mutedColor,
-        };
-      case 'small':
-        return {
-          ...baseStyle,
-          fontSize: 14,
-          fontWeight: '500',
-          lineHeight: 20,
-        };
-      case 'muted':
-        return {
-          ...baseStyle,
-          fontSize: 14,
-          lineHeight: 20,
-          color: mutedColor,
-        };
-      default:
+      case 'subtitle':
         return {
           ...baseStyle,
           fontSize: 16,
+          fontWeight: '500',
+          lineHeight: 22,
+        };
+      case 'caption':
+        return {
+          ...baseStyle,
+          fontSize: 12,
+          fontWeight: '400',
+          lineHeight: 16,
+          color: mutedColor,
+        };
+      case 'link':
+        return {
+          ...baseStyle,
+          fontSize: 16,
+          fontWeight: '500',
+          lineHeight: 24,
+          textDecorationLine: 'underline',
+        };
+      default: // 'body'
+        return {
+          ...baseStyle,
+          fontSize: 16,
+          fontWeight: '400',
           lineHeight: 24,
         };
     }
   };
 
-  const textStyle = getTextStyle();
-
   return (
-    <RNText style={[textStyle, style]} {...props}>
+    <RNText style={[getTextStyle(), style]} {...props}>
       {children}
     </RNText>
   );

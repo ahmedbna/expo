@@ -30,8 +30,9 @@ export default function TabTwoScreen() {
           The layout file in <Text>app/(tabs)/_layout.tsx</Text> sets up the tab
           navigator.
         </Text>
+
         <Link href='https://docs.expo.dev/router/introduction'>
-          <Text variant='default'>Learn more</Text>
+          <Text variant='link'>Learn more</Text>
         </Link>
       </Collapsible>
       <Collapsible title='Android, iOS, and web support'>
@@ -52,7 +53,7 @@ export default function TabTwoScreen() {
           style={{ alignSelf: 'center' }}
         />
         <Link href='https://reactnative.dev/docs/images'>
-          <Text>Learn more</Text>
+          <Text variant='link'>Learn more</Text>
         </Link>
       </Collapsible>
       <Collapsible title='Custom fonts'>
