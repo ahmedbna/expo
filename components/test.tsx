@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { BottomSheet, useBottomSheet } from '@/components/ui/bottom-sheet';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -35,7 +36,10 @@ import { Textarea } from './ui/textarea';
 import { Toggle } from './ui/toggle';
 
 export const Test = () => {
+  const bottomSheet = useBottomSheet();
+  const settingsSheet = useBottomSheet();
   const bottom = useBottomTabBarHeight();
+
   const [checked, setChecked] = useState(false);
   const [switchValue, setSwitchValue] = useState(false);
   const [progress, setProgress] = useState(50);
@@ -69,6 +73,73 @@ export const Test = () => {
         <View>
           <Text variant='heading'>Hello</Text>
         </View>
+
+        <View style={{ gap: 16 }}>
+          <Button onPress={bottomSheet.open}>Open Simple Bottom Sheet</Button>
+
+          <Button onPress={settingsSheet.open} variant='outline'>
+            Open Settings Sheet
+          </Button>
+        </View>
+
+        {/* Simple Bottom Sheet */}
+        <BottomSheet
+          isVisible={bottomSheet.isVisible}
+          onClose={bottomSheet.close}
+          title='Simple Bottom Sheet'
+          snapPoints={[0.3, 0.6]}
+        >
+          <View style={{ gap: 16 }}>
+            <Text variant='subtitle'>Welcome to the bottom sheet!</Text>
+            <Text>
+              This is a simple bottom sheet with some content. You can drag it
+              up and down to resize it, or swipe down to dismiss it.
+            </Text>
+            <Button onPress={bottomSheet.close}>Close Sheet</Button>
+          </View>
+        </BottomSheet>
+
+        {/* Settings Bottom Sheet */}
+        <BottomSheet
+          isVisible={settingsSheet.isVisible}
+          onClose={settingsSheet.close}
+          title='Settings'
+          snapPoints={[0.4, 0.7, 0.9]}
+          enableBackdropDismiss={false}
+        >
+          <ScrollView showsVerticalScrollIndicator={false}>
+            <View style={{ gap: 16 }}>
+              <Text variant='subtitle'>Appearance</Text>
+              <View style={{ gap: 12 }}>
+                <Button variant='outline'>Light Mode</Button>
+                <Button variant='outline'>Dark Mode</Button>
+                <Button variant='outline'>System</Button>
+              </View>
+
+              <Text variant='subtitle' style={{ marginTop: 24 }}>
+                Notifications
+              </Text>
+              <View style={{ gap: 12 }}>
+                <Button variant='outline'>Push Notifications</Button>
+                <Button variant='outline'>Email Notifications</Button>
+                <Button variant='outline'>SMS Notifications</Button>
+              </View>
+
+              <Text variant='subtitle' style={{ marginTop: 24 }}>
+                Account
+              </Text>
+              <View style={{ gap: 12 }}>
+                <Button variant='outline'>Profile Settings</Button>
+                <Button variant='outline'>Privacy Settings</Button>
+                <Button variant='destructive'>Sign Out</Button>
+              </View>
+
+              <Button onPress={settingsSheet.close} style={{ marginTop: 24 }}>
+                Done
+              </Button>
+            </View>
+          </ScrollView>
+        </BottomSheet>
 
         <Button>Hello</Button>
 

@@ -1,140 +1,139 @@
 // components/ui/bottom-sheet.tsx
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  Animated,
   Dimensions,
   Modal,
-  StyleSheet,
   TouchableWithoutFeedback,
-  View,
+  ViewStyle,
 } from 'react-native';
 import {
+  Gesture,
+  GestureDetector,
   GestureHandlerRootView,
-  PanGestureHandler,
-  PanGestureHandlerGestureEvent,
-  State,
 } from 'react-native-gesture-handler';
+import Animated, {
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+  withTiming,
+} from 'react-native-reanimated';
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window');
+const MAX_TRANSLATE_Y = -SCREEN_HEIGHT + 50;
 
-interface BottomSheetProps {
+type BottomSheetProps = {
   isVisible: boolean;
   onClose: () => void;
   children: React.ReactNode;
-  snapPoints?: string[];
-  initialSnapIndex?: number;
+  snapPoints?: number[];
   enableBackdropDismiss?: boolean;
-  enableSwipeDown?: boolean;
-}
+  title?: string;
+  style?: ViewStyle;
+};
 
 export function BottomSheet({
   isVisible,
   onClose,
   children,
-  snapPoints = ['50%'],
-  initialSnapIndex = 0,
+  snapPoints = [0.3, 0.6, 0.9],
   enableBackdropDismiss = true,
-  enableSwipeDown = true,
+  title,
+  style,
 }: BottomSheetProps) {
   const backgroundColor = useThemeColor({}, 'card');
   const borderColor = useThemeColor({}, 'border');
-  const backdropColor = useThemeColor(
-    { light: 'rgba(0,0,0,0.5)', dark: 'rgba(0,0,0,0.7)' },
-    'background'
-  );
+  const mutedColor = useThemeColor({}, 'muted');
 
-  const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
-  const lastGesture = useRef(0);
-  const [currentSnapIndex, setCurrentSnapIndex] = useState(initialSnapIndex);
+  const translateY = useSharedValue(0);
+  const context = useSharedValue({ y: 0 });
+  const opacity = useSharedValue(0);
 
   // Convert snap points to actual heights
-  const snapHeights = snapPoints.map((point) => {
-    if (point.includes('%')) {
-      return (SCREEN_HEIGHT * parseInt(point)) / 100;
-    }
-    return parseInt(point);
-  });
-
-  const currentHeight = snapHeights[currentSnapIndex];
+  const snapPointsHeights = snapPoints.map((point) => -SCREEN_HEIGHT * point);
+  const defaultHeight = snapPointsHeights[0];
 
   useEffect(() => {
     if (isVisible) {
-      openSheet();
+      translateY.value = withSpring(defaultHeight, {
+        damping: 50,
+        stiffness: 400,
+      });
+      opacity.value = withTiming(1, { duration: 300 });
     } else {
-      closeSheet();
+      translateY.value = withSpring(0, {
+        damping: 50,
+        stiffness: 400,
+      });
+      opacity.value = withTiming(0, { duration: 300 });
     }
-  }, [isVisible]);
+  }, [isVisible, defaultHeight]);
 
-  const openSheet = () => {
-    Animated.spring(translateY, {
-      toValue: SCREEN_HEIGHT - currentHeight,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
+  const scrollTo = (destination: number) => {
+    'worklet';
+    translateY.value = withSpring(destination, {
+      damping: 50,
+      stiffness: 400,
+    });
   };
 
-  const closeSheet = () => {
-    Animated.spring(translateY, {
-      toValue: SCREEN_HEIGHT,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
-  };
+  const findClosestSnapPoint = (currentY: number) => {
+    'worklet';
+    let closest = snapPointsHeights[0];
+    let minDistance = Math.abs(currentY - closest);
 
-  const snapToPoint = (index: number) => {
-    const targetHeight = snapHeights[index];
-    setCurrentSnapIndex(index);
-
-    Animated.spring(translateY, {
-      toValue: SCREEN_HEIGHT - targetHeight,
-      useNativeDriver: true,
-      tension: 100,
-      friction: 8,
-    }).start();
-  };
-
-  const onGestureEvent = Animated.event(
-    [{ nativeEvent: { translationY: translateY } }],
-    {
-      useNativeDriver: true,
-      listener: (event: PanGestureHandlerGestureEvent) => {
-        lastGesture.current = event.nativeEvent.translationY;
-      },
+    for (const snapPoint of snapPointsHeights) {
+      const distance = Math.abs(currentY - snapPoint);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closest = snapPoint;
+      }
     }
-  );
 
-  const onHandlerStateChange = (event: any) => {
-    if (event.nativeEvent.oldState === State.ACTIVE) {
-      const { translationY, velocityY } = event.nativeEvent;
+    return closest;
+  };
 
-      // Determine if we should close the sheet
-      const shouldClose =
-        translationY > currentHeight * 0.3 || velocityY > 1000;
+  const gesture = Gesture.Pan()
+    .onStart(() => {
+      context.value = { y: translateY.value };
+    })
+    .onUpdate((event) => {
+      const newY = context.value.y + event.translationY;
+      // Limit the dragging range
+      if (newY <= 0 && newY >= MAX_TRANSLATE_Y) {
+        translateY.value = newY;
+      }
+    })
+    .onEnd((event) => {
+      const currentY = translateY.value;
+      const velocity = event.velocityY;
 
-      if (shouldClose) {
-        onClose();
+      // If dragging down with significant velocity, close the sheet
+      if (velocity > 500 && currentY > -SCREEN_HEIGHT * 0.2) {
+        runOnJS(onClose)();
         return;
       }
 
       // Find the closest snap point
-      let closestSnapIndex = 0;
-      let closestDistance = Math.abs(translationY - snapHeights[0]);
+      const closestSnapPoint = findClosestSnapPoint(currentY);
+      scrollTo(closestSnapPoint);
+    });
 
-      snapHeights.forEach((height, index) => {
-        const distance = Math.abs(translationY - height);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestSnapIndex = index;
-        }
-      });
+  const rBottomSheetStyle = useAnimatedStyle(() => {
+    return {
+      transform: [{ translateY: translateY.value }],
+    };
+  });
 
-      snapToPoint(closestSnapIndex);
-    }
-  };
+  const rBackdropStyle = useAnimatedStyle(() => {
+    return {
+      opacity: opacity.value,
+    };
+  });
 
   const handleBackdropPress = () => {
     if (enableBackdropDismiss) {
@@ -142,154 +141,95 @@ export function BottomSheet({
     }
   };
 
-  if (!isVisible) {
-    return null;
-  }
-
   return (
     <Modal
-      transparent
       visible={isVisible}
+      transparent
+      statusBarTranslucent
       animationType='none'
-      onRequestClose={onClose}
     >
-      <GestureHandlerRootView style={styles.container}>
-        <TouchableWithoutFeedback onPress={handleBackdropPress}>
-          <View style={[styles.backdrop, { backgroundColor: backdropColor }]} />
-        </TouchableWithoutFeedback>
-
-        <PanGestureHandler
-          enabled={enableSwipeDown}
-          onGestureEvent={onGestureEvent}
-          onHandlerStateChange={onHandlerStateChange}
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <Animated.View
+          style={[
+            {
+              flex: 1,
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            },
+            rBackdropStyle,
+          ]}
         >
-          <Animated.View
-            style={[
-              styles.bottomSheet,
-              {
-                transform: [{ translateY }],
-                backgroundColor,
-                borderColor,
-                minHeight: currentHeight,
-              },
-            ]}
-          >
-            {/* Drag Handle */}
-            <View style={styles.dragHandle}>
-              <View
-                style={[styles.dragIndicator, { backgroundColor: borderColor }]}
-              />
-            </View>
+          <TouchableWithoutFeedback onPress={handleBackdropPress}>
+            <Animated.View style={{ flex: 1 }} />
+          </TouchableWithoutFeedback>
 
-            {/* Content */}
-            <View style={styles.content}>{children}</View>
-          </Animated.View>
-        </PanGestureHandler>
+          <GestureDetector gesture={gesture}>
+            <Animated.View
+              style={[
+                {
+                  height: SCREEN_HEIGHT,
+                  width: '100%',
+                  position: 'absolute',
+                  top: SCREEN_HEIGHT,
+                  backgroundColor,
+                  borderTopLeftRadius: Radius.lg,
+                  borderTopRightRadius: Radius.lg,
+                },
+                rBottomSheetStyle,
+                style,
+              ]}
+            >
+              {/* Handle */}
+              <View
+                style={{
+                  width: 32,
+                  height: 4,
+                  backgroundColor: mutedColor,
+                  alignSelf: 'center',
+                  marginTop: 8,
+                  borderRadius: Radius.full,
+                }}
+              />
+
+              {/* Title */}
+              {title && (
+                <View
+                  style={{
+                    marginHorizontal: 16,
+                    marginTop: 16,
+                    paddingBottom: 8,
+                  }}
+                >
+                  <Text variant='subtitle' style={{ textAlign: 'center' }}>
+                    {title}
+                  </Text>
+                </View>
+              )}
+
+              {/* Content */}
+              <View style={{ flex: 1, padding: 16 }}>{children}</View>
+            </Animated.View>
+          </GestureDetector>
+        </Animated.View>
       </GestureHandlerRootView>
     </Modal>
   );
 }
 
-// Bottom Sheet Header Component
-interface BottomSheetHeaderProps {
-  children: React.ReactNode;
-}
-
-export function BottomSheetHeader({ children }: BottomSheetHeaderProps) {
-  const borderColor = useThemeColor({}, 'border');
-
-  return (
-    <View style={[styles.header, { borderBottomColor: borderColor }]}>
-      {children}
-    </View>
-  );
-}
-
-// Bottom Sheet Content Component
-interface BottomSheetContentProps {
-  children: React.ReactNode;
-}
-
-export function BottomSheetContent({ children }: BottomSheetContentProps) {
-  return <View style={styles.sheetContent}>{children}</View>;
-}
-
-// Bottom Sheet Footer Component
-interface BottomSheetFooterProps {
-  children: React.ReactNode;
-}
-
-export function BottomSheetFooter({ children }: BottomSheetFooterProps) {
-  const borderColor = useThemeColor({}, 'border');
-
-  return (
-    <View style={[styles.footer, { borderTopColor: borderColor }]}>
-      {children}
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  backdrop: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  bottomSheet: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    height: SCREEN_HEIGHT,
-    borderTopLeftRadius: Radius.lg,
-    borderTopRightRadius: Radius.lg,
-    borderTopWidth: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 12,
-    elevation: 16,
-  },
-  dragHandle: {
-    alignItems: 'center',
-    paddingVertical: 12,
-  },
-  dragIndicator: {
-    width: 32,
-    height: 4,
-    borderRadius: Radius.full,
-    opacity: 0.4,
-  },
-  content: {
-    flex: 1,
-    paddingHorizontal: 16,
-  },
-  header: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    marginBottom: 8,
-  },
-  sheetContent: {
-    flex: 1,
-    paddingVertical: 8,
-  },
-  footer: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    marginTop: 8,
-  },
-});
-
 // Hook for managing bottom sheet state
 export function useBottomSheet() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
 
-  const open = () => setIsVisible(true);
-  const close = () => setIsVisible(false);
-  const toggle = () => setIsVisible((prev) => !prev);
+  const open = React.useCallback(() => {
+    setIsVisible(true);
+  }, []);
+
+  const close = React.useCallback(() => {
+    setIsVisible(false);
+  }, []);
+
+  const toggle = React.useCallback(() => {
+    setIsVisible((prev) => !prev);
+  }, []);
 
   return {
     isVisible,
