@@ -1,5 +1,3 @@
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -16,9 +14,13 @@ import { Icon } from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ModeToggle } from '@/components/ui/mode-toggle';
+import { ScrollView } from '@/components/ui/scroll-view';
+import { Select } from '@/components/ui/select';
 import { Separator } from '@/components/ui/seperator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
 
@@ -30,20 +32,30 @@ export default function TestScreen() {
   const [checked, setChecked] = useState(false);
 
   return (
-    <ThemedView
-      style={{
+    <ScrollView
+      contentContainerStyle={{
         flex: 1,
         gap: 16,
+        paddingTop: 200,
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <ThemedText>Hello</ThemedText>
-      <Button>Hello</Button>
+      <Select
+        options={[
+          { label: 'Option 1', value: 'option1' },
+          { label: 'Option 2', value: 'option2' },
+          { label: 'Option 3', value: 'option3' },
+        ]}
+      />
 
-      <ThemedView style={{ width: '100%', padding: 16 }}>
-        <Skeleton />
-      </ThemedView>
+      <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
+
+      <View variant='muted'>
+        <Text variant='h1'>Hello</Text>
+      </View>
+
+      <Button>Hello</Button>
 
       {/* <Button onPress={basicSheet.open}>Open Basic Sheet</Button>
 
@@ -61,16 +73,16 @@ export default function TestScreen() {
         onClose={basicSheet.close}
         snapPoints={['40%']}
       >
-        <ThemedView style={{ padding: 16, alignItems: 'center' }}>
-          <ThemedText type='subtitle'>Basic Bottom Sheet</ThemedText>
-          <ThemedText style={{ textAlign: 'center', marginVertical: 12 }}>
+        <View style={{ padding: 16, alignItems: 'center' }}>
+          <Text type='subtitle'>Basic Bottom Sheet</Text>
+          <Text style={{ textAlign: 'center', marginVertical: 12 }}>
             This is a basic bottom sheet with a single snap point at 40% of
             screen height.
-          </ThemedText>
+          </Text>
           <Button onPress={basicSheet.close} variant='outline'>
             Close Sheet
           </Button>
-        </ThemedView>
+        </View>
       </BottomSheet> */}
 
       <ModeToggle />
@@ -85,7 +97,7 @@ export default function TestScreen() {
         />
 
         <AvatarFallback>
-          <ThemedText>AB</ThemedText>
+          <Text>AB</Text>
         </AvatarFallback>
       </Avatar>
 
@@ -96,7 +108,7 @@ export default function TestScreen() {
           <CardTitle>Card Title</CardTitle>
         </CardHeader>
         <CardContent>
-          <ThemedText>This is a card content area.</ThemedText>
+          <Text>This is a card content area.</Text>
           <CardDescription>This is a card description area.</CardDescription>
         </CardContent>
         <CardFooter>
@@ -111,16 +123,16 @@ export default function TestScreen() {
         label='Checkbox'
       />
 
-      <ThemedView>
+      <View>
         <Label>Input</Label>
         <Input placeholder='Enter text here' />
-      </ThemedView>
+      </View>
 
       {/* <Progress value={50} /> */}
 
       <Separator />
 
       <Switch />
-    </ThemedView>
+    </ScrollView>
   );
 }
