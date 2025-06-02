@@ -1,10 +1,10 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedView } from '@/components/ThemedView';
+import { HelloWave } from '@/components/ui/hello-wave';
+import { ParallaxScrollView } from '@/components/ui/parallax-scrollview';
 import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 
 export default function HomeScreen() {
   return (
@@ -17,11 +17,11 @@ export default function HomeScreen() {
         />
       }
     >
-      <ThemedView style={styles.titleContainer}>
+      <View style={styles.titleContainer}>
         <Text>Welcome!</Text>
         <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      </View>
+      <View style={styles.stepContainer}>
         <Text>Step 1: Try it</Text>
         <Text>
           Edit <Text>app/(tabs)/index.tsx</Text> to see changes. Press{' '}
@@ -34,14 +34,14 @@ export default function HomeScreen() {
           </Text>{' '}
           to open developer tools.
         </Text>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      </View>
+      <View style={styles.stepContainer}>
         <Text>Step 2: Explore</Text>
         <Text>
           {`Tap the Explore tab to learn more about what's included in this starter app.`}
         </Text>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
+      </View>
+      <View style={styles.stepContainer}>
         <Text>Step 3: Get a fresh start</Text>
         <Text>
           {`When you're ready, run `}
@@ -49,7 +49,7 @@ export default function HomeScreen() {
           directory. This will move the current <Text>app</Text> to{' '}
           <Text>app-example</Text>.
         </Text>
-      </ThemedView>
+      </View>
     </ParallaxScrollView>
   );
 }

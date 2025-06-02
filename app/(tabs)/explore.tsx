@@ -1,12 +1,12 @@
 import { Image } from 'expo-image';
 import { Platform, StyleSheet } from 'react-native';
 
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedView } from '@/components/ThemedView';
 import { Collapsible } from '@/components/ui/collapsible';
 import { Icon } from '@/components/ui/icon';
 import { Link } from '@/components/ui/link';
+import { ParallaxScrollView } from '@/components/ui/parallax-scrollview';
 import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { ChevronLeft } from 'lucide-react-native';
 
 export default function TabTwoScreen() {
@@ -17,9 +17,9 @@ export default function TabTwoScreen() {
         <Icon IconComponent={ChevronLeft} size={28} color='#808080' />
       }
     >
-      <ThemedView style={styles.titleContainer}>
+      <View style={styles.titleContainer}>
         <Text>Explore</Text>
-      </ThemedView>
+      </View>
       <Text>This app includes example code to help you get started.</Text>
       <Collapsible title='File-based routing'>
         <Text>

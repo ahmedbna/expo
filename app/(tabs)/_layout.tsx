@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 import { HapticTab } from '@/components/ui/haptic-tab';
 import { Icon } from '@/components/ui/icon';
-import TabBarBackground from '@/components/ui/TabBarBackground';
+import TabBarBackground from '@/components/ui/tabs-background';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Earth, Home, TestTube2 } from 'lucide-react-native';

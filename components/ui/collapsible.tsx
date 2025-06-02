@@ -1,10 +1,10 @@
 import { PropsWithChildren, useState } from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 
-import { ThemedView } from '@/components/ThemedView';
 import { Text } from '@/components/ui/text';
 import { ChevronRight } from 'lucide-react-native';
 import { Icon } from './icon';
+import { View } from './view';
 
 export function Collapsible({
   children,
@@ -13,9 +13,13 @@ export function Collapsible({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <ThemedView>
+    <View>
       <TouchableOpacity
-        style={styles.heading}
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 6,
+        }}
         onPress={() => setIsOpen((value) => !value)}
         activeOpacity={0.8}
       >
@@ -25,21 +29,18 @@ export function Collapsible({
           style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
         />
 
-        <Text variant='h2'>{title}</Text>
+        <Text variant='h4'>{title}</Text>
       </TouchableOpacity>
-      {isOpen && <ThemedView style={styles.content}>{children}</ThemedView>}
-    </ThemedView>
+      {isOpen && (
+        <View
+          style={{
+            marginTop: 6,
+            marginLeft: 24,
+          }}
+        >
+          {children}
+        </View>
+      )}
+    </View>
   );
 }
-
-const styles = StyleSheet.create({
-  heading: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  content: {
-    marginTop: 6,
-    marginLeft: 24,
-  },
-});

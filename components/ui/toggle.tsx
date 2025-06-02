@@ -28,9 +28,6 @@ export function Toggle({
   style,
   textStyle,
 }: ToggleProps) {
-  const backgroundColor = useThemeColor({}, 'background');
-  const textColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'muted');
   const mutedForegroundColor = useThemeColor({}, 'mutedForeground');
   const borderColor = useThemeColor({}, 'border');
   const accentColor = useThemeColor({}, 'accent');
