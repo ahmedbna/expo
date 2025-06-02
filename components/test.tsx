@@ -167,7 +167,6 @@ export const Test = () => {
 
                   <View
                     style={{
-                      backgroundColor: '#f8fafc',
                       padding: 16,
                       borderRadius: 8,
                       marginBottom: 16,
@@ -198,7 +197,6 @@ export const Test = () => {
 
                   <View
                     style={{
-                      backgroundColor: '#f1f5f9',
                       padding: 16,
                       borderRadius: 8,
                       marginBottom: 16,
