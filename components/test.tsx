@@ -23,6 +23,7 @@ import { Select } from '@/components/ui/select';
 import { Separator } from '@/components/ui/seperator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -70,6 +71,113 @@ export const Test = () => {
         </View>
 
         <Button>Hello</Button>
+
+        <View style={{ width: '100%' }}>
+          <Tabs defaultValue='overview' style={{ flex: 1 }}>
+            <TabsList>
+              <TabsTrigger value='overview'>Overview</TabsTrigger>
+              <TabsTrigger value='analytics'>Analytics</TabsTrigger>
+              <TabsTrigger value='reports'>Reports</TabsTrigger>
+              <TabsTrigger value='notifications' disabled>
+                Notifications
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value='overview'>
+              <ScrollView style={{ flex: 1 }}>
+                <View style={{ padding: 16 }}>
+                  <Text variant='title' style={{ marginBottom: 12 }}>
+                    Dashboard Overview
+                  </Text>
+                  <Text variant='body' style={{ marginBottom: 16 }}>
+                    Welcome to your dashboard! Here's a quick overview of your
+                    recent activity.
+                  </Text>
+
+                  <View
+                    style={{
+                      backgroundColor: '#f8fafc',
+                      padding: 16,
+                      borderRadius: 8,
+                      marginBottom: 16,
+                    }}
+                  >
+                    <Text variant='subtitle' style={{ marginBottom: 8 }}>
+                      Quick Stats
+                    </Text>
+                    <Text variant='body'>• 24 new messages</Text>
+                    <Text variant='body'>• 3 pending tasks</Text>
+                    <Text variant='body'>• 12 completed projects</Text>
+                  </View>
+
+                  <Button>View Details</Button>
+                </View>
+              </ScrollView>
+            </TabsContent>
+
+            <TabsContent value='analytics'>
+              <ScrollView style={{ flex: 1 }}>
+                <View style={{ padding: 16 }}>
+                  <Text variant='title' style={{ marginBottom: 12 }}>
+                    Analytics Dashboard
+                  </Text>
+                  <Text variant='body' style={{ marginBottom: 16 }}>
+                    Track your performance metrics and insights.
+                  </Text>
+
+                  <View
+                    style={{
+                      backgroundColor: '#f1f5f9',
+                      padding: 16,
+                      borderRadius: 8,
+                      marginBottom: 16,
+                    }}
+                  >
+                    <Text variant='subtitle' style={{ marginBottom: 8 }}>
+                      This Month
+                    </Text>
+                    <Text variant='body'>• 1,234 page views</Text>
+                    <Text variant='body'>• 456 unique visitors</Text>
+                    <Text variant='body'>• 78% engagement rate</Text>
+                  </View>
+
+                  <Button variant='outline'>Export Data</Button>
+                </View>
+              </ScrollView>
+            </TabsContent>
+
+            <TabsContent value='reports'>
+              <ScrollView style={{ flex: 1 }}>
+                <View style={{ padding: 16 }}>
+                  <Text variant='title' style={{ marginBottom: 12 }}>
+                    Reports Center
+                  </Text>
+                  <Text variant='body' style={{ marginBottom: 16 }}>
+                    Generate and download your reports here.
+                  </Text>
+
+                  <View
+                    style={{
+                      backgroundColor: '#fef3c7',
+                      padding: 16,
+                      borderRadius: 8,
+                      marginBottom: 16,
+                    }}
+                  >
+                    <Text variant='subtitle' style={{ marginBottom: 8 }}>
+                      Available Reports
+                    </Text>
+                    <Text variant='body'>• Weekly Summary</Text>
+                    <Text variant='body'>• Monthly Analytics</Text>
+                    <Text variant='body'>• Quarterly Review</Text>
+                  </View>
+
+                  <Button variant='secondary'>Generate Report</Button>
+                </View>
+              </ScrollView>
+            </TabsContent>
+          </Tabs>
+        </View>
 
         <Alert>
           <AlertTitle>Alert Title</AlertTitle>
