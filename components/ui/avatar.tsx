@@ -1,13 +1,13 @@
 // components/ui/avatar.tsx
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import {
   Image,
   ImageSourcePropType,
   ImageStyle,
-  Text,
   TextStyle,
-  View,
   ViewStyle,
 } from 'react-native';
 

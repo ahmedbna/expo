@@ -1,5 +1,7 @@
+import { useBottomTabOverflow } from '@/components/ui/tabs-background';
+import { View } from '@/components/ui/view';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import type { PropsWithChildren, ReactElement } from 'react';
-import { StyleSheet } from 'react-native';
 import Animated, {
   interpolate,
   useAnimatedRef,
@@ -7,19 +9,15 @@ import Animated, {
   useScrollViewOffset,
 } from 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { useBottomTabOverflow } from './tabs-background';
-import { View } from './view';
-
-const HEADER_HEIGHT = 250;
-
 type Props = PropsWithChildren<{
+  headerHeight?: number;
   headerImage: ReactElement;
   headerBackgroundColor: { dark: string; light: string };
 }>;
 
 export function ParallaxScrollView({
   children,
+  headerHeight = 250,
   headerImage,
   headerBackgroundColor,
 }: Props) {
@@ -33,14 +31,14 @@ export function ParallaxScrollView({
         {
           translateY: interpolate(
             scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75]
+            [-headerHeight, 0, headerHeight],
+            [-headerHeight / 2, 0, headerHeight * 0.75]
           ),
         },
         {
           scale: interpolate(
             scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
+            [-headerHeight, 0, headerHeight],
             [2, 1, 1]
           ),
         },
@@ -49,7 +47,11 @@ export function ParallaxScrollView({
   });
 
   return (
-    <View style={styles.container}>
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
       <Animated.ScrollView
         ref={scrollRef}
         scrollEventThrottle={16}
@@ -58,31 +60,27 @@ export function ParallaxScrollView({
       >
         <Animated.View
           style={[
-            styles.header,
+            {
+              height: headerHeight,
+              overflow: 'hidden',
+            },
             { backgroundColor: headerBackgroundColor[colorScheme] },
             headerAnimatedStyle,
           ]}
         >
           {headerImage}
         </Animated.View>
-        <View style={styles.content}>{children}</View>
+        <View
+          style={{
+            flex: 1,
+            padding: 32,
+            gap: 16,
+            overflow: 'hidden',
+          }}
+        >
+          {children}
+        </View>
       </Animated.ScrollView>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    height: HEADER_HEIGHT,
-    overflow: 'hidden',
-  },
-  content: {
-    flex: 1,
-    padding: 32,
-    gap: 16,
-    overflow: 'hidden',
-  },
-});

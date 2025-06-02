@@ -53,7 +53,7 @@ export function Text({
         return {
           ...baseStyle,
           fontSize: 20,
-          fontWeight: '600',
+          fontWeight: '700',
           lineHeight: 26,
         };
       case 'subtitle':
@@ -66,7 +66,7 @@ export function Text({
       case 'caption':
         return {
           ...baseStyle,
-          fontSize: 12,
+          fontSize: 16,
           fontWeight: '400',
           lineHeight: 16,
           color: mutedColor,

@@ -1,13 +1,17 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Icon } from '@/components/ui/icon';
@@ -21,118 +25,159 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
+import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Progress } from './ui/progress';
+import { Textarea } from './ui/textarea';
+import { Toggle } from './ui/toggle';
 
 export const Test = () => {
-  // const basicSheet = useBottomSheet();
-  // const multiSnapSheet = useBottomSheet();
-  // const formSheet = useBottomSheet();
-
+  const bottom = useBottomTabBarHeight();
   const [checked, setChecked] = useState(false);
+  const [switchValue, setSwitchValue] = useState(false);
+  const [progress, setProgress] = useState(50);
 
   return (
     <ScrollView
+      style={{ flex: 1 }}
       contentContainerStyle={{
-        flex: 1,
-        gap: 16,
-        paddingTop: 200,
-        alignItems: 'center',
-        justifyContent: 'center',
+        paddingTop: 100,
+        paddingBottom: bottom + 20, // Add bottom padding for better spacing
       }}
     >
-      <Select
-        options={[
-          { label: 'Option 1', value: 'option1' },
-          { label: 'Option 2', value: 'option2' },
-          { label: 'Option 3', value: 'option3' },
-        ]}
-      />
-
-      <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
-
-      <View>
-        <Text variant='heading'>Hello</Text>
-      </View>
-
-      <Button>Hello</Button>
-
-      {/* <Button onPress={basicSheet.open}>Open Basic Sheet</Button>
-
-      <Button onPress={multiSnapSheet.open} variant='secondary'>
-        Open Multi-Snap Sheet
-      </Button>
-
-      <Button onPress={formSheet.open} variant='outline'>
-        Open Form Sheet
-      </Button> */}
-
-      {/* Basic Bottom Sheet */}
-      {/* <BottomSheet
-        isVisible={basicSheet.isVisible}
-        onClose={basicSheet.close}
-        snapPoints={['40%']}
+      <View
+        style={{
+          gap: 16,
+          alignItems: 'center',
+          justifyContent: 'center',
+          minHeight: '100%', // Use minHeight instead of flex: 1
+        }}
       >
-        <View style={{ padding: 16, alignItems: 'center' }}>
-          <Text type='subtitle'>Basic Bottom Sheet</Text>
-          <Text style={{ textAlign: 'center', marginVertical: 12 }}>
-            This is a basic bottom sheet with a single snap point at 40% of
-            screen height.
-          </Text>
-          <Button onPress={basicSheet.close} variant='outline'>
-            Close Sheet
-          </Button>
-        </View>
-      </BottomSheet> */}
-
-      <ModeToggle />
-
-      <Icon IconComponent={Camera} size={48} />
-
-      <Avatar>
-        <AvatarImage
-          source={{
-            uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-          }}
+        <Select
+          options={[
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+            { label: 'Option 3', value: 'option3' },
+          ]}
         />
 
-        <AvatarFallback>
-          <Text>AB</Text>
-        </AvatarFallback>
-      </Avatar>
+        <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
 
-      <Badge>Hello</Badge>
+        <View>
+          <Text variant='heading'>Hello</Text>
+        </View>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Card Title</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Text>This is a card content area.</Text>
-          <CardDescription>This is a card description area.</CardDescription>
-        </CardContent>
-        <CardFooter>
-          <Button variant='destructive'>Click Me</Button>
-        </CardFooter>
-      </Card>
+        <Button>Hello</Button>
 
-      <Checkbox
-        checked={checked}
-        onCheckedChange={setChecked}
-        disabled={false}
-        label='Checkbox'
-      />
+        <Alert>
+          <AlertTitle>Alert Title</AlertTitle>
+          <AlertDescription>
+            Our flagship product combines cutting-edge technology with sleek
+            design. Built with premium materials, it offers unparalleled
+            performance and reliability.
+          </AlertDescription>
+        </Alert>
 
-      <View>
-        <Label>Input</Label>
-        <Input placeholder='Enter text here' />
+        <Accordion type='single' collapsible defaultValue='item-1'>
+          <AccordionItem value='item-1'>
+            <AccordionTrigger>Product Information</AccordionTrigger>
+            <AccordionContent>
+              <Text variant='body'>
+                Our flagship product combines cutting-edge technology with sleek
+                design. Built with premium materials, it offers unparalleled
+                performance and reliability.
+              </Text>
+              <Text variant='body' style={{ marginTop: 12 }}>
+                Key features include advanced processing capabilities, and an
+                intuitive user interface designed for both beginners and
+                experts.
+              </Text>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value='item-2'>
+            <AccordionTrigger>Shipping Details</AccordionTrigger>
+            <AccordionContent>
+              <Text variant='body'>
+                We offer worldwide shipping through trusted courier partners.
+                Standard delivery takes 3-5 business days, while express
+                shipping ensures delivery within 1-2 business days.
+              </Text>
+            </AccordionContent>
+          </AccordionItem>
+
+          <AccordionItem value='item-3'>
+            <AccordionTrigger>Return Policy</AccordionTrigger>
+            <AccordionContent>
+              <Text variant='body'>
+                We stand behind our products with a comprehensive 30-day return
+                policy. If you're not completely satisfied, simply return the
+                item in its original condition.
+              </Text>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+
+        <ModeToggle />
+
+        <Icon IconComponent={Camera} size={48} />
+
+        <Toggle variant='outline'>B</Toggle>
+
+        <Avatar>
+          <AvatarImage
+            source={{
+              uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+            }}
+          />
+
+          <AvatarFallback>
+            <Text>AB</Text>
+          </AvatarFallback>
+        </Avatar>
+
+        <Textarea />
+
+        <Progress
+          value={progress}
+          interactive={true}
+          onValueChange={setProgress}
+          style={{ width: 200 }}
+        />
+
+        <Badge>Badge</Badge>
+
+        <Card>
+          <CardHeader>
+            <Text variant='title'>Card Title</Text>
+          </CardHeader>
+          <CardContent>
+            <Text>This is a card content area.</Text>
+            <Text variant='caption'>This is a card description area.</Text>
+          </CardContent>
+          <CardFooter>
+            <Button variant='destructive'>Click Me</Button>
+          </CardFooter>
+        </Card>
+
+        <Checkbox
+          checked={checked}
+          onCheckedChange={setChecked}
+          disabled={false}
+          label='Checkbox'
+        />
+
+        <View style={{ width: '100%' }}>
+          <Label>Input</Label>
+          <Input placeholder='Enter text here' />
+        </View>
+
+        <Separator />
+
+        <Switch value={switchValue} onValueChange={setSwitchValue} />
       </View>
-
-      {/* <Progress value={50} /> */}
-
-      <Separator />
-
-      <Switch />
     </ScrollView>
   );
 };

@@ -1,7 +1,9 @@
 // components/ui/badge.tsx
-import { BorderRadius } from '@/constants/globals';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
+import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { Text, TextStyle, View, ViewStyle } from 'react-native';
+import { TextStyle, ViewStyle } from 'react-native';
 
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
 
@@ -29,8 +31,8 @@ export function Badge({
   const getBadgeStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
       paddingHorizontal: 8,
-      paddingVertical: 4,
-      borderRadius: BorderRadius.md,
+      paddingVertical: 2,
+      borderRadius: Radius.sm,
     };
 
     switch (variant) {

@@ -1,5 +1,5 @@
+import { Text } from '@/components/ui/text';
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -7,7 +7,6 @@ import Animated, {
   withSequence,
   withTiming,
 } from 'react-native-reanimated';
-import { Text } from './text';
 
 export function HelloWave() {
   const rotationAnimation = useSharedValue(0);
@@ -28,15 +27,15 @@ export function HelloWave() {
 
   return (
     <Animated.View style={animatedStyle}>
-      <Text style={styles.text}>👋</Text>
+      <Text
+        style={{
+          fontSize: 28,
+          lineHeight: 32,
+          marginTop: -6,
+        }}
+      >
+        👋
+      </Text>
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  text: {
-    fontSize: 28,
-    lineHeight: 32,
-    marginTop: -6,
-  },
-});

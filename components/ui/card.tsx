@@ -1,7 +1,9 @@
 // components/ui/card.tsx
-import { BorderRadius } from '@/constants/globals';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
+import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { Text, TextStyle, View, ViewStyle } from 'react-native';
+import { TextStyle, ViewStyle } from 'react-native';
 
 interface CardProps {
   children: React.ReactNode;
@@ -16,8 +18,9 @@ export function Card({ children, style }: CardProps) {
     <View
       style={[
         {
+          width: '100%',
           backgroundColor: cardColor,
-          borderRadius: BorderRadius.md,
+          borderRadius: Radius.md,
           borderWidth: 1,
           borderColor: borderColor,
           padding: 16,
@@ -50,15 +53,11 @@ interface CardTitleProps {
 }
 
 export function CardTitle({ children, style }: CardTitleProps) {
-  const foregroundColor = useThemeColor({}, 'cardForeground');
-
   return (
     <Text
+      variant='title'
       style={[
         {
-          fontSize: 18,
-          fontWeight: '600',
-          color: foregroundColor,
           marginBottom: 4,
         },
         style,

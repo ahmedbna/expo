@@ -1,4 +1,4 @@
-export const BorderRadius = {
+export const Radius = {
   none: 0,
   sm: 6,
   md: 8,

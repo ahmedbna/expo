@@ -1,7 +1,8 @@
 // components/ui/separator.tsx
+import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
-import { View, ViewStyle } from 'react-native';
+import { ViewStyle } from 'react-native';
 
 interface SeparatorProps {
   orientation?: 'horizontal' | 'vertical';

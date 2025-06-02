@@ -1,9 +1,9 @@
 // components/ui/button.tsx
-import { BorderRadius } from '@/constants/globals';
+import { Text } from '@/components/ui/text';
+import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ActivityIndicator,
-  Text,
   TextStyle,
   TouchableOpacity,
   ViewStyle,
@@ -46,11 +46,10 @@ export function Button({
   const destructiveColor = useThemeColor({}, 'destructive');
   const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
   const borderColor = useThemeColor({}, 'border');
-  const mutedForegroundColor = useThemeColor({}, 'mutedForeground');
 
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: BorderRadius.md,
+      borderRadius: Radius.md,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',

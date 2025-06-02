@@ -1,10 +1,9 @@
+import { Icon } from '@/components/ui/icon';
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
+import { ChevronRight } from 'lucide-react-native';
 import { PropsWithChildren, useState } from 'react';
 import { TouchableOpacity } from 'react-native';
-
-import { Text } from '@/components/ui/text';
-import { ChevronRight } from 'lucide-react-native';
-import { Icon } from './icon';
-import { View } from './view';
 
 export function Collapsible({
   children,

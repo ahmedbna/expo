@@ -1,6 +1,7 @@
 // components/ui/label.tsx
+import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { Text, TextStyle } from 'react-native';
+import { TextStyle } from 'react-native';
 
 interface LabelProps {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 // components/ui/bottom-sheet.tsx
-import { BorderRadius } from '@/constants/globals';
+import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React, { useEffect, useRef, useState } from 'react';
 import {
@@ -242,8 +242,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: SCREEN_HEIGHT,
-    borderTopLeftRadius: BorderRadius.lg,
-    borderTopRightRadius: BorderRadius.lg,
+    borderTopLeftRadius: Radius.lg,
+    borderTopRightRadius: Radius.lg,
     borderTopWidth: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: -4 },
@@ -258,7 +258,7 @@ const styles = StyleSheet.create({
   dragIndicator: {
     width: 32,
     height: 4,
-    borderRadius: BorderRadius.full,
+    borderRadius: Radius.full,
     opacity: 0.4,
   },
   content: {

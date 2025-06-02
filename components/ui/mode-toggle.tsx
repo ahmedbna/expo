@@ -1,4 +1,6 @@
 // components/ui/mode-toggle.tsx
+import { Button } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
 import { useModeToggle } from '@/hooks/useModeToggle';
 import { Moon, Sun } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
@@ -8,8 +10,6 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { Button } from './button';
-import { Icon } from './icon';
 
 export const ModeToggle = () => {
   const { toggleMode, isDark } = useModeToggle();

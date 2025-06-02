@@ -7,12 +7,11 @@ import { Switch as RNSwitch, SwitchProps as RNSwitchProps } from 'react-native';
 interface SwitchProps extends RNSwitchProps {}
 
 export function Switch(props: SwitchProps) {
-  const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'muted');
 
   return (
     <RNSwitch
-      trackColor={{ false: mutedColor, true: primaryColor }}
+      trackColor={{ false: mutedColor, true: '#7DD87D' }}
       thumbColor={props.value ? '#ffffff' : '#f4f3f4'}
       {...props}
     />

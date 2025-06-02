@@ -1,8 +1,9 @@
 // components/ui/textarea.tsx
-import { BorderRadius } from '@/constants/globals';
+import { View } from '@/components/ui/view';
+import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
-import { TextInput, TextInputProps, View, ViewStyle } from 'react-native';
+import { TextInput, TextInputProps, ViewStyle } from 'react-native';
 
 interface TextareaProps
   extends Omit<TextInputProps, 'multiline' | 'numberOfLines'> {
@@ -38,9 +39,10 @@ export function Textarea({
   const placeholderColor = useThemeColor({}, 'mutedForeground');
 
   const containerStyles: ViewStyle = {
+    width: '100%',
     borderWidth: 1,
     borderColor,
-    borderRadius: BorderRadius.md,
+    borderRadius: Radius.md,
     backgroundColor,
     overflow: 'hidden',
   };
