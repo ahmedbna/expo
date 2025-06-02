@@ -19,12 +19,13 @@ import { ModeToggle } from '@/components/ui/mode-toggle';
 import { Separator } from '@/components/ui/seperator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
-import { useModeToggle } from '@/hooks/useModeToggle';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
 
 export default function TestScreen() {
-  const { toggleMode } = useModeToggle();
+  // const basicSheet = useBottomSheet();
+  // const multiSnapSheet = useBottomSheet();
+  // const formSheet = useBottomSheet();
 
   const [checked, setChecked] = useState(false);
 
@@ -43,6 +44,34 @@ export default function TestScreen() {
       <ThemedView style={{ width: '100%', padding: 16 }}>
         <Skeleton />
       </ThemedView>
+
+      {/* <Button onPress={basicSheet.open}>Open Basic Sheet</Button>
+
+      <Button onPress={multiSnapSheet.open} variant='secondary'>
+        Open Multi-Snap Sheet
+      </Button>
+
+      <Button onPress={formSheet.open} variant='outline'>
+        Open Form Sheet
+      </Button> */}
+
+      {/* Basic Bottom Sheet */}
+      {/* <BottomSheet
+        isVisible={basicSheet.isVisible}
+        onClose={basicSheet.close}
+        snapPoints={['40%']}
+      >
+        <ThemedView style={{ padding: 16, alignItems: 'center' }}>
+          <ThemedText type='subtitle'>Basic Bottom Sheet</ThemedText>
+          <ThemedText style={{ textAlign: 'center', marginVertical: 12 }}>
+            This is a basic bottom sheet with a single snap point at 40% of
+            screen height.
+          </ThemedText>
+          <Button onPress={basicSheet.close} variant='outline'>
+            Close Sheet
+          </Button>
+        </ThemedView>
+      </BottomSheet> */}
 
       <ModeToggle />
 
