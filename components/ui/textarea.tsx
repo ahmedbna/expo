@@ -40,7 +40,7 @@ export function Textarea({
   const containerStyles: ViewStyle = {
     borderWidth: 1,
     borderColor,
-    borderRadius: BorderRadius.DEFAULT,
+    borderRadius: BorderRadius.md,
     backgroundColor,
     overflow: 'hidden',
   };

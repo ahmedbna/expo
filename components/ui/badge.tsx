@@ -30,7 +30,7 @@ export function Badge({
     const baseStyle: ViewStyle = {
       paddingHorizontal: 8,
       paddingVertical: 4,
-      borderRadius: BorderRadius.DEFAULT,
+      borderRadius: BorderRadius.md,
     };
 
     switch (variant) {

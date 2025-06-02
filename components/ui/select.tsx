@@ -57,7 +57,7 @@ export function Select({
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor,
-    borderRadius: BorderRadius.DEFAULT,
+    borderRadius: BorderRadius.md,
     backgroundColor,
     opacity: disabled ? 0.5 : 1,
   };

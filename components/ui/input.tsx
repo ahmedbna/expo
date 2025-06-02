@@ -24,7 +24,7 @@ export const Input = forwardRef<TextInput, InputProps>(
             height: 40,
             borderWidth: 1,
             borderColor: borderColor,
-            borderRadius: BorderRadius.DEFAULT,
+            borderRadius: BorderRadius.md,
             paddingHorizontal: 12,
             backgroundColor: backgroundColor,
             color: textColor,

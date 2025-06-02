@@ -22,7 +22,7 @@ export function Alert({ children, variant = 'default', style }: AlertProps) {
       style={[
         {
           padding: 16,
-          borderRadius: BorderRadius.DEFAULT,
+          borderRadius: BorderRadius.md,
           borderWidth: 1,
           borderColor:
             variant === 'destructive' ? destructiveColor : borderColor,

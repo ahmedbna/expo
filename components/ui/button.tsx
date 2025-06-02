@@ -50,7 +50,7 @@ export function Button({
 
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: BorderRadius.DEFAULT,
+      borderRadius: BorderRadius.md,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',

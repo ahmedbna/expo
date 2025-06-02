@@ -46,7 +46,7 @@ export function Skeleton({
           width: width as any, // Type assertion to bypass the strict typing
           height,
           backgroundColor: mutedColor,
-          borderRadius: BorderRadius.DEFAULT,
+          borderRadius: BorderRadius.md,
           opacity,
         },
         style,
