@@ -57,19 +57,28 @@ export function BottomSheet({
   const snapPointsHeights = snapPoints.map((point) => -SCREEN_HEIGHT * point);
   const defaultHeight = snapPointsHeights[0];
 
+  // Delayed modal close to allow animation to complete
+  const [modalVisible, setModalVisible] = React.useState(false);
+
   useEffect(() => {
     if (isVisible) {
+      setModalVisible(true);
       translateY.value = withSpring(defaultHeight, {
         damping: 50,
         stiffness: 400,
       });
       opacity.value = withTiming(1, { duration: 300 });
     } else {
+      // Animate slide down before closing modal
       translateY.value = withSpring(0, {
         damping: 50,
         stiffness: 400,
       });
-      opacity.value = withTiming(0, { duration: 300 });
+      opacity.value = withTiming(0, { duration: 300 }, (finished) => {
+        if (finished) {
+          runOnJS(setModalVisible)(false);
+        }
+      });
     }
   }, [isVisible, defaultHeight]);
 
@@ -97,6 +106,20 @@ export function BottomSheet({
     return closest;
   };
 
+  const animateClose = () => {
+    'worklet';
+    // Animate to slide down position
+    translateY.value = withSpring(0, {
+      damping: 50,
+      stiffness: 400,
+    });
+    opacity.value = withTiming(0, { duration: 300 }, (finished) => {
+      if (finished) {
+        runOnJS(onClose)();
+      }
+    });
+  };
+
   const gesture = Gesture.Pan()
     .onStart(() => {
       context.value = { y: translateY.value };
@@ -114,7 +137,7 @@ export function BottomSheet({
 
       // If dragging down with significant velocity, close the sheet
       if (velocity > 500 && currentY > -SCREEN_HEIGHT * 0.2) {
-        runOnJS(onClose)();
+        animateClose();
         return;
       }
 
@@ -137,13 +160,14 @@ export function BottomSheet({
 
   const handleBackdropPress = () => {
     if (enableBackdropDismiss) {
-      onClose();
+      // Use animated close instead of direct onClose
+      animateClose();
     }
   };
 
   return (
     <Modal
-      visible={isVisible}
+      visible={modalVisible}
       transparent
       statusBarTranslucent
       animationType='none'
