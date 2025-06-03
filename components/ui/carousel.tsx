@@ -61,26 +61,42 @@ export function Carousel({
   showArrows = false,
   loop = false,
   itemWidth,
-  spacing = 0, // Changed default to 0 for full-width slides
+  spacing = 0,
   style,
   onIndexChange,
 }: CarouselProps) {
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isAutoPlaying, setIsAutoPlaying] = useState(autoPlay);
   const [containerWidth, setContainerWidth] = useState(screenWidth);
-  // Fixed TypeScript error: Use number instead of NodeJS.Timeout
-  const autoPlayTimerRef = useRef<number | null>(null);
+  const [isUserInteracting, setIsUserInteracting] = useState(false);
 
-  // Calculate slide dimensions - full width by default
+  // Use useRef to store timer ID
+  const autoPlayTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Calculate slide dimensions
   const slideWidth = itemWidth || containerWidth - spacing * 2;
   const snapToInterval = slideWidth + spacing;
 
-  const startAutoPlay = useCallback(() => {
-    if (!autoPlay || children.length <= 1) return;
+  // Clear all timers
+  const clearTimers = useCallback(() => {
+    if (autoPlayTimerRef.current) {
+      clearInterval(autoPlayTimerRef.current);
+      autoPlayTimerRef.current = null;
+    }
+    if (scrollTimeoutRef.current) {
+      clearTimeout(scrollTimeoutRef.current);
+      scrollTimeoutRef.current = null;
+    }
+  }, []);
 
-    // Fixed: Use window.setInterval for React Native
-    autoPlayTimerRef.current = window.setInterval(() => {
+  // Start auto play
+  const startAutoPlay = useCallback(() => {
+    if (!autoPlay || children.length <= 1 || isUserInteracting) return;
+
+    clearTimers();
+
+    (autoPlayTimerRef.current as any) = setInterval(() => {
       setCurrentIndex((prevIndex) => {
         const nextIndex = prevIndex + 1;
         if (nextIndex >= children.length) {
@@ -89,113 +105,74 @@ export function Carousel({
         return nextIndex;
       });
     }, autoPlayInterval);
-  }, [autoPlay, autoPlayInterval, children.length, loop]);
+  }, [
+    autoPlay,
+    autoPlayInterval,
+    children.length,
+    loop,
+    isUserInteracting,
+    clearTimers,
+  ]);
 
+  // Stop auto play
   const stopAutoPlay = useCallback(() => {
-    if (autoPlayTimerRef.current) {
-      // Fixed: Use window.clearInterval for React Native
-      window.clearInterval(autoPlayTimerRef.current);
-      autoPlayTimerRef.current = null;
-    }
-  }, []);
+    clearTimers();
+  }, [clearTimers]);
 
+  // Handle auto play lifecycle
   useEffect(() => {
-    if (isAutoPlaying) {
+    if (autoPlay && !isUserInteracting) {
       startAutoPlay();
     } else {
       stopAutoPlay();
     }
 
-    return () => {
-      stopAutoPlay();
-    };
-  }, [isAutoPlaying, startAutoPlay, stopAutoPlay]);
+    return stopAutoPlay;
+  }, [autoPlay, isUserInteracting, startAutoPlay, stopAutoPlay]);
 
-  // Fixed: Properly scroll to the current slide
+  // Scroll to current index
+  const scrollToIndex = useCallback(
+    (index: number, animated: boolean = true) => {
+      if (scrollViewRef.current && index >= 0 && index < children.length) {
+        const scrollX = index * snapToInterval;
+
+        // Use requestAnimationFrame to ensure smooth scrolling
+        requestAnimationFrame(() => {
+          if (scrollViewRef.current) {
+            scrollViewRef.current.scrollTo({
+              x: scrollX,
+              animated,
+            });
+          }
+        });
+      }
+    },
+    [snapToInterval, children.length]
+  );
+
+  // Handle index changes - only scroll when index actually changes
   useEffect(() => {
-    if (
-      scrollViewRef.current &&
-      currentIndex >= 0 &&
-      currentIndex < children.length
-    ) {
-      const scrollX = currentIndex * snapToInterval;
-      scrollViewRef.current.scrollTo({
-        x: scrollX,
-        animated: true,
-      });
-    }
+    scrollToIndex(currentIndex);
     onIndexChange?.(currentIndex);
-  }, [currentIndex, snapToInterval, onIndexChange, children.length]);
+  }, [currentIndex, scrollToIndex, onIndexChange]);
 
+  // Handle scroll events - only update index from user scrolling
   const handleScroll = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      const scrollPosition = event.nativeEvent.contentOffset.x;
-      const index = Math.round(scrollPosition / snapToInterval);
+      // Only update index from scroll if user is manually scrolling
+      if (isUserInteracting) {
+        const scrollPosition = event.nativeEvent.contentOffset.x;
+        const index = Math.round(scrollPosition / snapToInterval);
 
-      if (index !== currentIndex && index >= 0 && index < children.length) {
-        setCurrentIndex(index);
-      }
-    },
-    [currentIndex, snapToInterval, children.length]
-  );
-
-  // Fixed: Improved slide navigation functions
-  const goToSlide = useCallback(
-    (index: number) => {
-      if (index >= 0 && index < children.length && index !== currentIndex) {
-        setCurrentIndex(index);
-        // Manually scroll to the slide
-        if (scrollViewRef.current) {
-          const scrollX = index * snapToInterval;
-          scrollViewRef.current.scrollTo({
-            x: scrollX,
-            animated: true,
-          });
-        }
-        // Stop auto-play temporarily when manually navigating
-        if (autoPlay) {
-          setIsAutoPlaying(false);
-          // Restart after delay
-          setTimeout(() => setIsAutoPlaying(true), 2000);
+        if (index !== currentIndex && index >= 0 && index < children.length) {
+          setCurrentIndex(index);
         }
       }
     },
-    [currentIndex, children.length, snapToInterval, autoPlay]
+    [currentIndex, snapToInterval, children.length, isUserInteracting]
   );
 
-  const goToPrevious = useCallback(() => {
-    const prevIndex = currentIndex - 1;
-    if (prevIndex >= 0) {
-      goToSlide(prevIndex);
-    } else if (loop) {
-      goToSlide(children.length - 1);
-    }
-  }, [currentIndex, loop, children.length, goToSlide]);
-
-  const goToNext = useCallback(() => {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < children.length) {
-      goToSlide(nextIndex);
-    } else if (loop) {
-      goToSlide(0);
-    }
-  }, [currentIndex, children.length, loop, goToSlide]);
-
-  const handleTouchStart = () => {
-    if (autoPlay) {
-      setIsAutoPlaying(false);
-    }
-  };
-
-  const handleTouchEnd = () => {
-    if (autoPlay) {
-      // Delay restart to allow user interaction to complete
-      setTimeout(() => {
-        setIsAutoPlaying(true);
-      }, 1000);
-    }
-  };
-
+  // Handle momentum scroll end
   const handleMomentumScrollEnd = useCallback(
     (event: NativeSyntheticEvent<NativeScrollEvent>) => {
       const scrollPosition = event.nativeEvent.contentOffset.x;
@@ -204,9 +181,92 @@ export function Carousel({
       if (index !== currentIndex && index >= 0 && index < children.length) {
         setCurrentIndex(index);
       }
+
+      // Re-enable auto play after user interaction
+      if (autoPlay) {
+        (scrollTimeoutRef.current as any) = setTimeout(() => {
+          setIsUserInteracting(false);
+        }, 1000);
+      }
     },
-    [currentIndex, snapToInterval, children.length]
+    [currentIndex, snapToInterval, children.length, autoPlay]
   );
+
+  // Navigation functions - force immediate scroll update
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < children.length && index !== currentIndex) {
+        setIsUserInteracting(true);
+        setCurrentIndex(index);
+
+        // Force immediate scroll to prevent lag
+        if (scrollViewRef.current) {
+          const scrollX = index * snapToInterval;
+          scrollViewRef.current.scrollTo({
+            x: scrollX,
+            animated: true,
+          });
+        }
+      }
+    },
+    [currentIndex, children.length, snapToInterval]
+  );
+
+  const goToPrevious = useCallback(() => {
+    setIsUserInteracting(true);
+    const prevIndex = currentIndex - 1;
+    const targetIndex =
+      prevIndex >= 0 ? prevIndex : loop ? children.length - 1 : currentIndex;
+
+    if (targetIndex !== currentIndex) {
+      setCurrentIndex(targetIndex);
+
+      // Force immediate scroll
+      if (scrollViewRef.current) {
+        const scrollX = targetIndex * snapToInterval;
+        scrollViewRef.current.scrollTo({
+          x: scrollX,
+          animated: true,
+        });
+      }
+    }
+  }, [currentIndex, loop, children.length, snapToInterval]);
+
+  const goToNext = useCallback(() => {
+    setIsUserInteracting(true);
+    const nextIndex = currentIndex + 1;
+    const targetIndex =
+      nextIndex < children.length ? nextIndex : loop ? 0 : currentIndex;
+
+    if (targetIndex !== currentIndex) {
+      setCurrentIndex(targetIndex);
+
+      // Force immediate scroll
+      if (scrollViewRef.current) {
+        const scrollX = targetIndex * snapToInterval;
+        scrollViewRef.current.scrollTo({
+          x: scrollX,
+          animated: true,
+        });
+      }
+    }
+  }, [currentIndex, children.length, loop, snapToInterval]);
+
+  // Touch handlers
+  const handleTouchStart = useCallback(() => {
+    setIsUserInteracting(true);
+  }, []);
+
+  const handleTouchEnd = useCallback(() => {
+    // Don't immediately re-enable auto play, let momentum scroll end handle it
+  }, []);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clearTimers();
+    };
+  }, [clearTimers]);
 
   return (
     <View
@@ -220,7 +280,7 @@ export function Carousel({
         <ScrollView
           ref={scrollViewRef}
           horizontal
-          pagingEnabled={!itemWidth} // Enable paging for full-width slides
+          pagingEnabled={!itemWidth}
           snapToInterval={itemWidth ? snapToInterval : undefined}
           snapToAlignment={itemWidth ? 'start' : 'center'}
           decelerationRate={itemWidth ? 'fast' : 'normal'}
@@ -390,7 +450,7 @@ export function CarouselArrow({
         {
           width: 24,
           height: 24,
-          borderRadius: 20,
+          borderRadius: 999,
           backgroundColor,
           borderWidth: 1,
           borderColor,
@@ -416,17 +476,21 @@ export function CarouselArrow({
 }
 
 // Hook for carousel control
-export function useCarousel() {
+export function useCarousel(totalSlides: number = 0) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const goToSlide = useCallback((index: number) => {
-    setCurrentIndex(index);
-  }, []);
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < totalSlides) {
+        setCurrentIndex(index);
+      }
+    },
+    [totalSlides]
+  );
 
   const goToNext = useCallback(() => {
-    const nextIndex = currentIndex + 1;
-    setCurrentIndex(nextIndex);
-  }, []);
+    setCurrentIndex((prev) => (prev + 1 < totalSlides ? prev + 1 : prev));
+  }, [totalSlides]);
 
   const goToPrevious = useCallback(() => {
     setCurrentIndex((prev) => Math.max(0, prev - 1));
