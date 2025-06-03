@@ -31,6 +31,7 @@ import { View } from '@/components/ui/view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
+import { CarouselTestComponent } from './carousel-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Progress } from './ui/progress';
 import { Textarea } from './ui/textarea';
@@ -73,6 +74,8 @@ export const Test = () => {
             { label: 'Option 3', value: 'option3' },
           ]}
         />
+
+        <CarouselTestComponent />
 
         <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
 
