@@ -12,7 +12,7 @@ import {
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
-
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 const { width: screenWidth } = Dimensions.get('window');
 
 interface CarouselProps {
@@ -178,80 +178,50 @@ export function Carousel({
       const scrollPosition = event.nativeEvent.contentOffset.x;
       const index = Math.round(scrollPosition / snapToInterval);
 
-      if (index !== currentIndex && index >= 0 && index < children.length) {
+      // Don't update index if it's the same as currentIndex (avoid overriding arrow press)
+      if (index >= 0 && index < children.length) {
         setCurrentIndex(index);
       }
 
-      // Re-enable auto play after user interaction
       if (autoPlay) {
         (scrollTimeoutRef.current as any) = setTimeout(() => {
           setIsUserInteracting(false);
         }, 1000);
       }
     },
-    [currentIndex, snapToInterval, children.length, autoPlay]
+    [snapToInterval, children.length, autoPlay]
   );
 
   // Navigation functions - force immediate scroll update
-  const goToSlide = useCallback(
-    (index: number) => {
-      if (index >= 0 && index < children.length && index !== currentIndex) {
-        setIsUserInteracting(true);
-        setCurrentIndex(index);
-
-        // Force immediate scroll to prevent lag
-        if (scrollViewRef.current) {
-          const scrollX = index * snapToInterval;
-          scrollViewRef.current.scrollTo({
-            x: scrollX,
-            animated: true,
-          });
-        }
-      }
-    },
-    [currentIndex, children.length, snapToInterval]
-  );
-
   const goToPrevious = useCallback(() => {
-    setIsUserInteracting(true);
     const prevIndex = currentIndex - 1;
     const targetIndex =
       prevIndex >= 0 ? prevIndex : loop ? children.length - 1 : currentIndex;
-
     if (targetIndex !== currentIndex) {
-      setCurrentIndex(targetIndex);
-
-      // Force immediate scroll
-      if (scrollViewRef.current) {
-        const scrollX = targetIndex * snapToInterval;
-        scrollViewRef.current.scrollTo({
-          x: scrollX,
-          animated: true,
-        });
-      }
+      setIsUserInteracting(true);
+      scrollToIndex(targetIndex);
     }
-  }, [currentIndex, loop, children.length, snapToInterval]);
+  }, [currentIndex, loop, children.length, scrollToIndex]);
 
   const goToNext = useCallback(() => {
-    setIsUserInteracting(true);
     const nextIndex = currentIndex + 1;
     const targetIndex =
       nextIndex < children.length ? nextIndex : loop ? 0 : currentIndex;
-
     if (targetIndex !== currentIndex) {
-      setCurrentIndex(targetIndex);
-
-      // Force immediate scroll
-      if (scrollViewRef.current) {
-        const scrollX = targetIndex * snapToInterval;
-        scrollViewRef.current.scrollTo({
-          x: scrollX,
-          animated: true,
-        });
-      }
+      setIsUserInteracting(true);
+      scrollToIndex(targetIndex);
     }
-  }, [currentIndex, children.length, loop, snapToInterval]);
+  }, [currentIndex, children.length, loop, scrollToIndex]);
 
+  const goToSlide = useCallback(
+    (index: number) => {
+      if (index >= 0 && index < children.length) {
+        setIsUserInteracting(true);
+        scrollToIndex(index);
+      }
+    },
+    [children.length, scrollToIndex]
+  );
   // Touch handlers
   const handleTouchStart = useCallback(() => {
     setIsUserInteracting(true);
@@ -268,6 +238,19 @@ export function Carousel({
     };
   }, [clearTimers]);
 
+  const horizontalPan = Gesture.Pan()
+    .onBegin(() => {
+      // Optional: trigger when gesture starts
+    })
+    .onUpdate(() => {
+      // Optional: you can track gesture updates here
+    })
+    .onEnd(() => {
+      // Optional: trigger when gesture ends
+    })
+    .activeOffsetX([-10, 10]) // Allow horizontal pan
+    .activeOffsetY([-1000, 1000]); // Block vertical gesture
+
   return (
     <View
       style={[{ width: '100%' }, style]}
@@ -277,42 +260,44 @@ export function Carousel({
       }}
     >
       <View style={{ position: 'relative', overflow: 'hidden' }}>
-        <ScrollView
-          ref={scrollViewRef}
-          horizontal
-          pagingEnabled={!itemWidth}
-          snapToInterval={itemWidth ? snapToInterval : undefined}
-          snapToAlignment={itemWidth ? 'start' : 'center'}
-          decelerationRate={itemWidth ? 'fast' : 'normal'}
-          showsHorizontalScrollIndicator={false}
-          onScroll={handleScroll}
-          onMomentumScrollEnd={handleMomentumScrollEnd}
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          scrollEventThrottle={16}
-          bounces={false}
-          contentContainerStyle={
-            itemWidth
-              ? {
-                  paddingHorizontal: spacing,
-                }
-              : {
-                  width: children.length * containerWidth,
-                }
-          }
-        >
-          {children.map((child, index) => (
-            <View
-              key={index}
-              style={{
-                width: slideWidth,
-                marginRight: itemWidth ? spacing : 0,
-              }}
-            >
-              {child}
-            </View>
-          ))}
-        </ScrollView>
+        <GestureDetector gesture={horizontalPan}>
+          <ScrollView
+            ref={scrollViewRef}
+            horizontal
+            pagingEnabled={!itemWidth}
+            snapToInterval={itemWidth ? snapToInterval : undefined}
+            snapToAlignment={itemWidth ? 'start' : 'center'}
+            decelerationRate={itemWidth ? 'fast' : 'normal'}
+            showsHorizontalScrollIndicator={false}
+            onScroll={handleScroll}
+            onMomentumScrollEnd={handleMomentumScrollEnd}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            scrollEventThrottle={16}
+            bounces={false}
+            contentContainerStyle={
+              itemWidth
+                ? {
+                    paddingHorizontal: spacing,
+                  }
+                : {
+                    width: children.length * containerWidth,
+                  }
+            }
+          >
+            {children.map((child, index) => (
+              <View
+                key={index}
+                style={{
+                  width: slideWidth,
+                  marginRight: itemWidth ? spacing : 0,
+                }}
+              >
+                {child}
+              </View>
+            ))}
+          </ScrollView>
+        </GestureDetector>
 
         {showArrows && children.length > 1 && (
           <>
