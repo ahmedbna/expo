@@ -15,6 +15,7 @@ import {
   CardHeader,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import { DatePicker } from '@/components/ui/date-picker';
 import { Icon } from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,6 +45,10 @@ export const Test = () => {
   const [switchValue, setSwitchValue] = useState(false);
   const [progress, setProgress] = useState(50);
 
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
+  const [selectedTime, setSelectedTime] = useState<Date | undefined>();
+  const [selectedDateTime, setSelectedDateTime] = useState<Date | undefined>();
+
   return (
     <ScrollView
       style={{ flex: 1 }}
@@ -72,6 +77,85 @@ export const Test = () => {
 
         <View>
           <Text variant='heading'>Hello</Text>
+        </View>
+
+        {/* Date only picker */}
+        <View style={{ gap: 8 }}>
+          <Text variant='subtitle'>Date Picker</Text>
+          <DatePicker
+            mode='date'
+            value={selectedDate}
+            onChange={setSelectedDate}
+            placeholder='Select a date'
+          />
+          {selectedDate && (
+            <Text variant='caption'>
+              Selected: {selectedDate.toLocaleDateString()}
+            </Text>
+          )}
+        </View>
+
+        {/* Time only picker */}
+        <View style={{ gap: 8 }}>
+          <Text variant='subtitle'>Time Picker</Text>
+          <DatePicker
+            mode='time'
+            value={selectedTime}
+            onChange={setSelectedTime}
+            placeholder='Select a time'
+          />
+          {selectedTime && (
+            <Text variant='caption'>
+              Selected:{' '}
+              {selectedTime.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </Text>
+          )}
+        </View>
+
+        {/* Date and time picker */}
+        <View style={{ gap: 8 }}>
+          <Text variant='subtitle'>Date & Time Picker</Text>
+          <DatePicker
+            mode='datetime'
+            value={selectedDateTime}
+            onChange={setSelectedDateTime}
+            placeholder='Select date and time'
+          />
+          {selectedDateTime && (
+            <Text variant='caption'>
+              Selected: {selectedDateTime.toLocaleDateString()} at{' '}
+              {selectedDateTime.toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </Text>
+          )}
+        </View>
+
+        {/* Disabled picker */}
+        <View style={{ gap: 8 }}>
+          <Text variant='subtitle'>Disabled Picker</Text>
+          <DatePicker
+            mode='date'
+            disabled
+            placeholder='This picker is disabled'
+          />
+        </View>
+
+        {/* With minimum and maximum dates */}
+        <View style={{ gap: 8 }}>
+          <Text variant='subtitle'>With Date Constraints</Text>
+          <DatePicker
+            mode='date'
+            value={selectedDate}
+            onChange={setSelectedDate}
+            placeholder='Only future dates allowed'
+            minimumDate={new Date()}
+            maximumDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)} // 1 year from now
+          />
         </View>
 
         <View style={{ gap: 16 }}>
