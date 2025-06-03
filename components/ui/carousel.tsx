@@ -2,6 +2,7 @@
 import { View } from '@/components/ui/view';
 import { Radius } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BlurView } from 'expo-blur';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
@@ -335,7 +336,7 @@ export function Carousel({
           current={currentIndex}
           onPress={goToSlide}
           style={{
-            marginTop: 16,
+            marginTop: 12,
             alignSelf: 'center',
           }}
         />
@@ -421,10 +422,7 @@ export function CarouselArrow({
   disabled = false,
   style,
 }: CarouselArrowProps) {
-  const backgroundColor = useThemeColor({}, 'background');
-  const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
-
   const IconComponent = direction === 'left' ? ChevronLeft : ChevronRight;
 
   return (
@@ -436,26 +434,25 @@ export function CarouselArrow({
           width: 24,
           height: 24,
           borderRadius: 999,
-          backgroundColor,
-          borderWidth: 1,
-          borderColor,
-          justifyContent: 'center',
-          alignItems: 'center',
+          overflow: 'hidden',
           opacity: disabled ? 0.3 : 1,
-          shadowColor: '#000',
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.1,
-          shadowRadius: 3.84,
-          elevation: 5,
         },
         style,
       ]}
       activeOpacity={0.7}
     >
-      <IconComponent size={20} color={primaryColor} />
+      <BlurView
+        tint='systemChromeMaterial' // or "light"/"dark" depending on theme
+        intensity={100}
+        style={{
+          flex: 1,
+          borderRadius: 999,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <IconComponent size={20} color={primaryColor} />
+      </BlurView>
     </TouchableOpacity>
   );
 }
