@@ -24,7 +24,7 @@ interface DatePickerProps {
   style?: ViewStyle;
   minimumDate?: Date;
   maximumDate?: Date;
-  timeFormat?: '12' | '24'; // New prop for time format
+  timeFormat?: '12' | '24';
 }
 
 const MONTHS = [
@@ -68,7 +68,6 @@ export function DatePicker({
   const [showYearPicker, setShowYearPicker] = useState(false);
 
   // Theme colors
-  const backgroundColor = useThemeColor({}, 'background');
   const cardColor = useThemeColor({}, 'card');
   const borderColor = useThemeColor({}, 'border');
   const primaryColor = useThemeColor({}, 'primary');
@@ -254,7 +253,7 @@ export function DatePicker({
         <ChevronLeft size={20} color={textColor} />
       </TouchableOpacity>
 
-      {/* Fixed header styling - fills space between arrows */}
+      {/* Header styling - fills space between arrows */}
       <View
         style={{
           flex: 1,
@@ -338,7 +337,7 @@ export function DatePicker({
         ))}
       </View>
 
-      {/* Fixed calendar grid */}
+      {/* Calendar grid */}
       <View style={{ paddingHorizontal: 4 }}>
         {calendarData.weeks.map((week, weekIndex) => (
           <View
@@ -414,9 +413,6 @@ export function DatePicker({
     const selectedHours = currentDate.getHours();
     const selectedMinutes = currentDate.getMinutes();
 
-    // Convert to 12-hour format if needed
-    const displayHours =
-      timeFormat === '12' ? selectedHours % 12 || 12 : selectedHours;
     const isPM = selectedHours >= 12;
 
     return (

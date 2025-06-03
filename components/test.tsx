@@ -53,6 +53,7 @@ export const Test = () => {
     <ScrollView
       style={{ flex: 1 }}
       contentContainerStyle={{
+        paddingHorizontal: 16,
         paddingTop: 100,
         paddingBottom: bottom + 20, // Add bottom padding for better spacing
       }}
@@ -102,6 +103,7 @@ export const Test = () => {
             mode='time'
             value={selectedTime}
             onChange={setSelectedTime}
+            timeFormat='12'
             placeholder='Select a time'
           />
           {selectedTime && (
@@ -120,6 +122,7 @@ export const Test = () => {
           <Text variant='subtitle'>Date & Time Picker</Text>
           <DatePicker
             mode='datetime'
+            timeFormat='12'
             value={selectedDateTime}
             onChange={setSelectedDateTime}
             placeholder='Select date and time'
