@@ -16,6 +16,10 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
+import FloatingActionButton, {
+  ExtendedFAB,
+  MiniFAB,
+} from '@/components/ui/floating-action-button';
 import { Icon } from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -29,7 +33,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { Camera } from 'lucide-react-native';
+import { Camera, Edit, Plus, Trash2 } from 'lucide-react-native';
 import { useState } from 'react';
 import { CarouselTestComponent } from './carousel-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -76,6 +80,67 @@ export const Test = () => {
             { label: 'Option 2', value: 'option2' },
             { label: 'Option 3', value: 'option3' },
           ]}
+        />
+
+        {/* Basic FAB */}
+        <FloatingActionButton
+          icon={<Plus size={24} color='white' />}
+          onPress={() => console.log('Add pressed')}
+        />
+
+        {/* Different sizes and variants */}
+        <FloatingActionButton
+          icon={<Edit size={20} color='white' />}
+          size='sm'
+          variant='secondary'
+          position='bottom-left'
+          onPress={() => console.log('Edit pressed')}
+        />
+
+        {/* Extended FAB with label */}
+        <FloatingActionButton
+          icon={<Plus size={24} color='white' />}
+          label='Create'
+          extended={true}
+          onPress={() => console.log('Create pressed')}
+        />
+
+        {/* Using compound components */}
+        <MiniFAB
+          icon={<Trash2 size={20} color='white' />}
+          variant='destructive'
+          position='top-right'
+          onPress={() => console.log('Delete pressed')}
+        />
+
+        <ExtendedFAB
+          label='New Message'
+          position='bottom-right'
+          onPress={() => console.log('New message pressed')}
+        >
+          <Plus size={24} color='white' />
+        </ExtendedFAB>
+
+        {/* Loading state */}
+        <FloatingActionButton
+          icon={<Plus size={24} color='white' />}
+          loading={true}
+          onPress={() => console.log('Loading...')}
+        />
+
+        {/* Without shadow (flat design) */}
+        <FloatingActionButton
+          icon={<Plus size={24} color='white' />}
+          shadow={false}
+          onPress={() => console.log('Flat FAB pressed')}
+        />
+
+        {/* Custom styling */}
+        <FloatingActionButton
+          icon={<Plus size={24} color='white' />}
+          style={{ backgroundColor: '#FF6B6B' }}
+          position='top-left'
+          onPress={() => console.log('Custom FAB pressed')}
         />
 
         <RadioGroup
