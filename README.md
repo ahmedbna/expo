@@ -7,11 +7,8 @@ Expo React Native CLI UI Library
 - Mansory Grid
 - Image, Video, File Picker
 - Form with zod
-- Toast
 - Chip
 - Drawer
-- ProgressBar
-- Loading Spinner
 - Searchbar
 
 ## Get started

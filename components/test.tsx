@@ -137,6 +137,8 @@ export const Test = () => {
             Show Custom Toast with Action
           </Button>
 
+          {/* <LoadingSpinnerExample /> */}
+
           <DataTableDemo />
 
           <RadioGroup
