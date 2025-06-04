@@ -4,7 +4,6 @@ Expo React Native CLI UI Library
 
 ## TODO
 
-- Carousel
 - Radio Buttons
 - Mansory Grid
 - Image, Video, File Picker
@@ -14,7 +13,6 @@ Expo React Native CLI UI Library
 - Chip
 - Drawer
 - Floating Action Button
-- HelperText
 - ProgressBar
 - Loading Spinner
 - Searchbar

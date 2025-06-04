@@ -1,6 +1,6 @@
 // components/ui/button.tsx
 import { Text } from '@/components/ui/text';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ActivityIndicator,
@@ -49,7 +49,7 @@ export function Button({
 
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: Radius.md,
+      borderRadius: BORDER_RADIUS,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',

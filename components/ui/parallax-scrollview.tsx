@@ -1,4 +1,4 @@
-import { useBottomTabOverflow } from '@/components/ui/tabs-background';
+import { useBottomTabOverflow } from '@/components/ui/blur-background';
 import { View } from '@/components/ui/view';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import type { PropsWithChildren, ReactElement } from 'react';

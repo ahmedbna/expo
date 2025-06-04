@@ -3,7 +3,7 @@ import { BottomSheet, useBottomSheet } from '@/components/ui/bottom-sheet';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   Calendar,
@@ -246,7 +246,7 @@ export function DatePicker({
         onPress={() => navigateMonth('prev')}
         style={{
           padding: 10,
-          borderRadius: Radius.sm,
+          borderRadius: BORDER_RADIUS,
           backgroundColor: mutedColor,
         }}
       >
@@ -273,7 +273,7 @@ export function DatePicker({
             justifyContent: 'center',
             paddingHorizontal: 16,
             paddingVertical: 10,
-            borderRadius: Radius.sm,
+            borderRadius: BORDER_RADIUS,
             backgroundColor: mutedColor,
           }}
         >
@@ -292,7 +292,7 @@ export function DatePicker({
             justifyContent: 'center',
             paddingHorizontal: 16,
             paddingVertical: 10,
-            borderRadius: Radius.sm,
+            borderRadius: BORDER_RADIUS,
             backgroundColor: mutedColor,
           }}
         >
@@ -307,7 +307,7 @@ export function DatePicker({
         onPress={() => navigateMonth('next')}
         style={{
           padding: 10,
-          borderRadius: Radius.sm,
+          borderRadius: BORDER_RADIUS,
           backgroundColor: mutedColor,
         }}
       >
@@ -372,7 +372,7 @@ export function DatePicker({
                       style={{
                         width: 40,
                         height: 40,
-                        borderRadius: Radius.full,
+                        borderRadius: 999,
                         backgroundColor: isSelected
                           ? primaryColor
                           : 'transparent',
@@ -462,7 +462,7 @@ export function DatePicker({
                     style={{
                       paddingVertical: 12,
                       paddingHorizontal: 16,
-                      borderRadius: Radius.sm,
+                      borderRadius: BORDER_RADIUS,
                       backgroundColor: isSelected
                         ? primaryColor
                         : 'transparent',
@@ -504,7 +504,7 @@ export function DatePicker({
                   style={{
                     paddingVertical: 12,
                     paddingHorizontal: 16,
-                    borderRadius: Radius.sm,
+                    borderRadius: BORDER_RADIUS,
                     backgroundColor:
                       minute === selectedMinutes ? primaryColor : 'transparent',
                     marginVertical: 2,
@@ -558,7 +558,7 @@ export function DatePicker({
                       style={{
                         paddingVertical: 12,
                         paddingHorizontal: 16,
-                        borderRadius: Radius.sm,
+                        borderRadius: BORDER_RADIUS,
                         backgroundColor: isSelected
                           ? primaryColor
                           : 'transparent',
@@ -606,7 +606,7 @@ export function DatePicker({
             style={{
               paddingVertical: 16,
               paddingHorizontal: 20,
-              borderRadius: Radius.sm,
+              borderRadius: BORDER_RADIUS,
               backgroundColor:
                 index === calendarData.month ? primaryColor : 'transparent',
               marginVertical: 2,
@@ -650,7 +650,7 @@ export function DatePicker({
             style={{
               paddingVertical: 16,
               paddingHorizontal: 20,
-              borderRadius: Radius.sm,
+              borderRadius: BORDER_RADIUS,
               backgroundColor:
                 year === calendarData.year ? primaryColor : 'transparent',
               marginVertical: 2,
@@ -716,7 +716,7 @@ export function DatePicker({
     paddingVertical: 12,
     borderWidth: 1,
     borderColor: borderColor,
-    borderRadius: Radius.md,
+    borderRadius: BORDER_RADIUS,
     backgroundColor: cardColor,
     minHeight: 48,
   };

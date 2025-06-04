@@ -1,7 +1,7 @@
 // components/ui/select.tsx
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { ChevronDown } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -52,7 +52,7 @@ export function Select({
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor,
-    borderRadius: Radius.md,
+    borderRadius: BORDER_RADIUS,
     backgroundColor,
     opacity: disabled ? 0.5 : 1,
   };
@@ -101,9 +101,9 @@ export function Select({
           <Pressable
             style={{
               backgroundColor: cardColor,
-              borderRadius: Radius.lg,
-              borderWidth: 1,
-              borderColor,
+              borderRadius: BORDER_RADIUS,
+              // borderWidth: 1,
+              // borderColor,
               maxHeight: 300,
               width: '100%',
               maxWidth: 400,

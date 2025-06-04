@@ -1,7 +1,7 @@
 // components/ui/tabs.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React, { createContext, useContext, useState } from 'react';
 import {
@@ -92,7 +92,7 @@ export function TabsList({ children, style }: TabsListProps) {
       contentContainerStyle={{
         flexDirection: 'row',
         backgroundColor,
-        borderRadius: Radius.md,
+        borderRadius: BORDER_RADIUS,
         padding: 4,
         borderWidth: 1,
         borderColor,
@@ -130,7 +130,7 @@ export function TabsTrigger({
   const triggerStyle: ViewStyle = {
     paddingHorizontal: 12,
     paddingVertical: 8,
-    borderRadius: Radius.sm,
+    borderRadius: BORDER_RADIUS,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 36,

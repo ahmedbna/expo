@@ -1,7 +1,7 @@
 // components/ui/checkbox.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Check } from 'lucide-react-native';
 import React from 'react';
@@ -39,7 +39,7 @@ export function Checkbox({
         style={{
           width: 20,
           height: 20,
-          borderRadius: Radius.sm,
+          borderRadius: BORDER_RADIUS,
           borderWidth: 2,
           borderColor: checked ? primaryColor : borderColor,
           backgroundColor: checked ? primaryColor : 'transparent',

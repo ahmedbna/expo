@@ -34,6 +34,7 @@ import { useState } from 'react';
 import { CarouselTestComponent } from './carousel-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Progress } from './ui/progress';
+import RadioGroup, { RadioButton } from './ui/radio';
 import { Textarea } from './ui/textarea';
 import { Toggle } from './ui/toggle';
 
@@ -49,6 +50,8 @@ export const Test = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<Date | undefined>();
   const [selectedDateTime, setSelectedDateTime] = useState<Date | undefined>();
+
+  const [selectedValue, setSelectedValue] = useState('option1');
 
   return (
     <ScrollView
@@ -73,6 +76,45 @@ export const Test = () => {
             { label: 'Option 2', value: 'option2' },
             { label: 'Option 3', value: 'option3' },
           ]}
+        />
+
+        <RadioGroup
+          options={[
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+            { label: 'Option 3', value: 'option3' },
+          ]}
+          value={selectedValue}
+          onValueChange={setSelectedValue}
+        />
+
+        {/* Horizontal layout */}
+        <RadioGroup
+          orientation='horizontal'
+          options={[
+            { label: 'Option 1', value: 'option1' },
+            { label: 'Option 2', value: 'option2' },
+            { label: 'Option 3', value: 'option3' },
+          ]}
+          value={selectedValue}
+          onValueChange={setSelectedValue}
+        />
+
+        {/* With disabled options */}
+        <RadioGroup
+          options={[
+            { label: 'Available', value: 'available' },
+            { label: 'Unavailable', value: 'unavailable', disabled: true },
+          ]}
+          value={selectedValue}
+          onValueChange={setSelectedValue}
+        />
+
+        {/* Individual radio button */}
+        <RadioButton
+          option={{ label: 'Custom Option', value: 'custom' }}
+          selected={selectedValue === 'custom'}
+          onPress={() => setSelectedValue('custom')}
         />
 
         <CarouselTestComponent />

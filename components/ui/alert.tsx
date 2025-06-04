@@ -1,7 +1,7 @@
 // components/ui/alert.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { TextStyle, ViewStyle } from 'react-native';
@@ -24,7 +24,7 @@ export function Alert({ children, variant = 'default', style }: AlertProps) {
       style={[
         {
           padding: 16,
-          borderRadius: Radius.md,
+          borderRadius: BORDER_RADIUS,
           borderWidth: 1,
           borderColor:
             variant === 'destructive' ? destructiveColor : borderColor,

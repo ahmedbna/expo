@@ -1,7 +1,7 @@
 // components/ui/badge.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { TextStyle, ViewStyle } from 'react-native';
 
@@ -32,7 +32,7 @@ export function Badge({
     const baseStyle: ViewStyle = {
       paddingHorizontal: 8,
       paddingVertical: 2,
-      borderRadius: Radius.sm,
+      borderRadius: BORDER_RADIUS,
     };
 
     switch (variant) {

@@ -1,7 +1,7 @@
 // components/ui/bottom-sheet.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React, { useEffect } from 'react';
 import {
@@ -195,8 +195,8 @@ export function BottomSheet({
                   position: 'absolute',
                   top: SCREEN_HEIGHT,
                   backgroundColor,
-                  borderTopLeftRadius: Radius.lg,
-                  borderTopRightRadius: Radius.lg,
+                  borderTopLeftRadius: BORDER_RADIUS,
+                  borderTopRightRadius: BORDER_RADIUS,
                 },
                 rBottomSheetStyle,
                 style,
@@ -210,7 +210,7 @@ export function BottomSheet({
                   backgroundColor: mutedColor,
                   alignSelf: 'center',
                   marginTop: 8,
-                  borderRadius: Radius.full,
+                  borderRadius: 999,
                 }}
               />
 

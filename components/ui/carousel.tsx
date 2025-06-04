@@ -1,6 +1,6 @@
 // components/ui/carousel.tsx
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BlurView } from 'expo-blur';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
@@ -360,7 +360,7 @@ export function CarouselItem({ children, style }: CarouselItemProps) {
       style={[
         {
           backgroundColor,
-          borderRadius: Radius.lg,
+          borderRadius: BORDER_RADIUS,
           borderWidth: 1,
           borderColor,
           padding: 16,

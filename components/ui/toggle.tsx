@@ -1,6 +1,6 @@
 // components/ui/toggle.tsx
 import { Text } from '@/components/ui/text';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { Pressable, TextStyle, ViewStyle } from 'react-native';
@@ -42,7 +42,7 @@ export function Toggle({
 
   const getToggleStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: Radius.md,
+      borderRadius: BORDER_RADIUS,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',

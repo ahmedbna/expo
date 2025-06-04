@@ -1,6 +1,6 @@
 // components/ui/textarea.tsx
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { TextInput, TextInputProps, ViewStyle } from 'react-native';
@@ -42,7 +42,7 @@ export function Textarea({
     width: '100%',
     borderWidth: 1,
     borderColor,
-    borderRadius: Radius.md,
+    borderRadius: BORDER_RADIUS,
     backgroundColor,
     overflow: 'hidden',
   };

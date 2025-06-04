@@ -1,7 +1,7 @@
 // components/ui/card.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { Radius } from '@/constants/globals';
+import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { TextStyle, ViewStyle } from 'react-native';
 
@@ -20,7 +20,7 @@ export function Card({ children, style }: CardProps) {
         {
           width: '100%',
           backgroundColor: cardColor,
-          borderRadius: Radius.md,
+          borderRadius: BORDER_RADIUS,
           borderWidth: 1,
           borderColor: borderColor,
           padding: 16,
