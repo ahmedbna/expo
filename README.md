@@ -8,7 +8,6 @@ Expo React Native CLI UI Library
 - Image, Video, File Picker
 - Form with zod
 - Chip
-- Drawer
 - Searchbar
 
 ## Get started
