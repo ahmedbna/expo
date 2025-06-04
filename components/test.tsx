@@ -16,10 +16,6 @@ import {
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
-import FloatingActionButton, {
-  ExtendedFAB,
-  MiniFAB,
-} from '@/components/ui/floating-action-button';
 import { Icon } from '@/components/ui/icon';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -33,7 +29,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { Camera, Edit, Plus, Trash2 } from 'lucide-react-native';
+import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
 import { CarouselTestComponent } from './carousel-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -41,6 +37,7 @@ import { Progress } from './ui/progress';
 import RadioGroup, { RadioButton } from './ui/radio';
 import { Textarea } from './ui/textarea';
 import { Toggle } from './ui/toggle';
+import { DataTableDemo } from './user-table';
 
 export const Test = () => {
   const bottomSheet = useBottomSheet();
@@ -58,500 +55,443 @@ export const Test = () => {
   const [selectedValue, setSelectedValue] = useState('option1');
 
   return (
-    <ScrollView
-      style={{ flex: 1 }}
-      contentContainerStyle={{
-        paddingHorizontal: 16,
-        paddingTop: 100,
-        paddingBottom: bottom + 20, // Add bottom padding for better spacing
-      }}
-    >
-      <View
-        style={{
-          gap: 16,
-          alignItems: 'center',
-          justifyContent: 'center',
-          minHeight: '100%', // Use minHeight instead of flex: 1
+    <View style={{ flex: 1 }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          paddingHorizontal: 16,
+          paddingTop: 100,
+          paddingBottom: bottom + 20, // Add bottom padding for better spacing
         }}
       >
-        <Select
-          options={[
-            { label: 'Option 1', value: 'option1' },
-            { label: 'Option 2', value: 'option2' },
-            { label: 'Option 3', value: 'option3' },
-          ]}
-        />
-
-        {/* Basic FAB */}
-        <FloatingActionButton
-          icon={<Plus size={24} color='white' />}
-          onPress={() => console.log('Add pressed')}
-        />
-
-        {/* Different sizes and variants */}
-        <FloatingActionButton
-          icon={<Edit size={20} color='white' />}
-          size='sm'
-          variant='secondary'
-          position='bottom-left'
-          onPress={() => console.log('Edit pressed')}
-        />
-
-        {/* Extended FAB with label */}
-        <FloatingActionButton
-          icon={<Plus size={24} color='white' />}
-          label='Create'
-          extended={true}
-          onPress={() => console.log('Create pressed')}
-        />
-
-        {/* Using compound components */}
-        <MiniFAB
-          icon={<Trash2 size={20} color='white' />}
-          variant='destructive'
-          position='top-right'
-          onPress={() => console.log('Delete pressed')}
-        />
-
-        <ExtendedFAB
-          label='New Message'
-          position='bottom-right'
-          onPress={() => console.log('New message pressed')}
+        <View
+          style={{
+            gap: 16,
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '100%', // Use minHeight instead of flex: 1
+          }}
         >
-          <Plus size={24} color='white' />
-        </ExtendedFAB>
-
-        {/* Loading state */}
-        <FloatingActionButton
-          icon={<Plus size={24} color='white' />}
-          loading={true}
-          onPress={() => console.log('Loading...')}
-        />
-
-        {/* Without shadow (flat design) */}
-        <FloatingActionButton
-          icon={<Plus size={24} color='white' />}
-          shadow={false}
-          onPress={() => console.log('Flat FAB pressed')}
-        />
-
-        {/* Custom styling */}
-        <FloatingActionButton
-          icon={<Plus size={24} color='white' />}
-          style={{ backgroundColor: '#FF6B6B' }}
-          position='top-left'
-          onPress={() => console.log('Custom FAB pressed')}
-        />
-
-        <RadioGroup
-          options={[
-            { label: 'Option 1', value: 'option1' },
-            { label: 'Option 2', value: 'option2' },
-            { label: 'Option 3', value: 'option3' },
-          ]}
-          value={selectedValue}
-          onValueChange={setSelectedValue}
-        />
-
-        {/* Horizontal layout */}
-        <RadioGroup
-          orientation='horizontal'
-          options={[
-            { label: 'Option 1', value: 'option1' },
-            { label: 'Option 2', value: 'option2' },
-            { label: 'Option 3', value: 'option3' },
-          ]}
-          value={selectedValue}
-          onValueChange={setSelectedValue}
-        />
-
-        {/* With disabled options */}
-        <RadioGroup
-          options={[
-            { label: 'Available', value: 'available' },
-            { label: 'Unavailable', value: 'unavailable', disabled: true },
-          ]}
-          value={selectedValue}
-          onValueChange={setSelectedValue}
-        />
-
-        {/* Individual radio button */}
-        <RadioButton
-          option={{ label: 'Custom Option', value: 'custom' }}
-          selected={selectedValue === 'custom'}
-          onPress={() => setSelectedValue('custom')}
-        />
-
-        <CarouselTestComponent />
-
-        <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
-
-        <View>
-          <Text variant='heading'>Hello</Text>
-        </View>
-
-        {/* Date only picker */}
-        <View style={{ gap: 8 }}>
-          <Text variant='subtitle'>Date Picker</Text>
-          <DatePicker
-            mode='date'
-            value={selectedDate}
-            onChange={setSelectedDate}
-            placeholder='Select a date'
+          <Select
+            options={[
+              { label: 'Option 1', value: 'option1' },
+              { label: 'Option 2', value: 'option2' },
+              { label: 'Option 3', value: 'option3' },
+            ]}
           />
-          {selectedDate && (
-            <Text variant='caption'>
-              Selected: {selectedDate.toLocaleDateString()}
-            </Text>
-          )}
-        </View>
 
-        {/* Time only picker */}
-        <View style={{ gap: 8 }}>
-          <Text variant='subtitle'>Time Picker</Text>
-          <DatePicker
-            mode='time'
-            value={selectedTime}
-            onChange={setSelectedTime}
-            timeFormat='12'
-            placeholder='Select a time'
+          <DataTableDemo />
+
+          <RadioGroup
+            options={[
+              { label: 'Option 1', value: 'option1' },
+              { label: 'Option 2', value: 'option2' },
+              { label: 'Option 3', value: 'option3' },
+            ]}
+            value={selectedValue}
+            onValueChange={setSelectedValue}
           />
-          {selectedTime && (
-            <Text variant='caption'>
-              Selected:{' '}
-              {selectedTime.toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </Text>
-          )}
-        </View>
 
-        {/* Date and time picker */}
-        <View style={{ gap: 8 }}>
-          <Text variant='subtitle'>Date & Time Picker</Text>
-          <DatePicker
-            mode='datetime'
-            timeFormat='12'
-            value={selectedDateTime}
-            onChange={setSelectedDateTime}
-            placeholder='Select date and time'
+          {/* Horizontal layout */}
+          <RadioGroup
+            orientation='horizontal'
+            options={[
+              { label: 'Option 1', value: 'option1' },
+              { label: 'Option 2', value: 'option2' },
+              { label: 'Option 3', value: 'option3' },
+            ]}
+            value={selectedValue}
+            onValueChange={setSelectedValue}
           />
-          {selectedDateTime && (
-            <Text variant='caption'>
-              Selected: {selectedDateTime.toLocaleDateString()} at{' '}
-              {selectedDateTime.toLocaleTimeString([], {
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </Text>
-          )}
-        </View>
 
-        {/* Disabled picker */}
-        <View style={{ gap: 8 }}>
-          <Text variant='subtitle'>Disabled Picker</Text>
-          <DatePicker
-            mode='date'
-            disabled
-            placeholder='This picker is disabled'
+          {/* With disabled options */}
+          <RadioGroup
+            options={[
+              { label: 'Available', value: 'available' },
+              { label: 'Unavailable', value: 'unavailable', disabled: true },
+            ]}
+            value={selectedValue}
+            onValueChange={setSelectedValue}
           />
-        </View>
 
-        {/* With minimum and maximum dates */}
-        <View style={{ gap: 8 }}>
-          <Text variant='subtitle'>With Date Constraints</Text>
-          <DatePicker
-            mode='date'
-            value={selectedDate}
-            onChange={setSelectedDate}
-            placeholder='Only future dates allowed'
-            minimumDate={new Date()}
-            maximumDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)} // 1 year from now
+          {/* Individual radio button */}
+          <RadioButton
+            option={{ label: 'Custom Option', value: 'custom' }}
+            selected={selectedValue === 'custom'}
+            onPress={() => setSelectedValue('custom')}
           />
-        </View>
 
-        <View style={{ gap: 16 }}>
-          <Button onPress={bottomSheet.open}>Open Simple Bottom Sheet</Button>
+          <CarouselTestComponent />
 
-          <Button onPress={settingsSheet.open} variant='outline'>
-            Open Settings Sheet
-          </Button>
-        </View>
+          <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
 
-        {/* Simple Bottom Sheet */}
-        <BottomSheet
-          isVisible={bottomSheet.isVisible}
-          onClose={bottomSheet.close}
-          title='Simple Bottom Sheet'
-          snapPoints={[0.3, 0.6]}
-        >
-          <View style={{ gap: 16 }}>
-            <Text variant='subtitle'>Welcome to the bottom sheet!</Text>
-            <Text>
-              This is a simple bottom sheet with some content. You can drag it
-              up and down to resize it, or swipe down to dismiss it.
-            </Text>
-            <Button onPress={bottomSheet.close}>Close Sheet</Button>
+          <View>
+            <Text variant='heading'>Hello</Text>
           </View>
-        </BottomSheet>
 
-        {/* Settings Bottom Sheet */}
-        <BottomSheet
-          isVisible={settingsSheet.isVisible}
-          onClose={settingsSheet.close}
-          title='Settings'
-          snapPoints={[0.4, 0.7, 0.9]}
-          enableBackdropDismiss={false}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
+          {/* Date only picker */}
+          <View style={{ gap: 8 }}>
+            <Text variant='subtitle'>Date Picker</Text>
+            <DatePicker
+              mode='date'
+              value={selectedDate}
+              onChange={setSelectedDate}
+              placeholder='Select a date'
+            />
+            {selectedDate && (
+              <Text variant='caption'>
+                Selected: {selectedDate.toLocaleDateString()}
+              </Text>
+            )}
+          </View>
+
+          {/* Time only picker */}
+          <View style={{ gap: 8 }}>
+            <Text variant='subtitle'>Time Picker</Text>
+            <DatePicker
+              mode='time'
+              value={selectedTime}
+              onChange={setSelectedTime}
+              timeFormat='12'
+              placeholder='Select a time'
+            />
+            {selectedTime && (
+              <Text variant='caption'>
+                Selected:{' '}
+                {selectedTime.toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            )}
+          </View>
+
+          {/* Date and time picker */}
+          <View style={{ gap: 8 }}>
+            <Text variant='subtitle'>Date & Time Picker</Text>
+            <DatePicker
+              mode='datetime'
+              timeFormat='12'
+              value={selectedDateTime}
+              onChange={setSelectedDateTime}
+              placeholder='Select date and time'
+            />
+            {selectedDateTime && (
+              <Text variant='caption'>
+                Selected: {selectedDateTime.toLocaleDateString()} at{' '}
+                {selectedDateTime.toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            )}
+          </View>
+
+          {/* Disabled picker */}
+          <View style={{ gap: 8 }}>
+            <Text variant='subtitle'>Disabled Picker</Text>
+            <DatePicker
+              mode='date'
+              disabled
+              placeholder='This picker is disabled'
+            />
+          </View>
+
+          {/* With minimum and maximum dates */}
+          <View style={{ gap: 8 }}>
+            <Text variant='subtitle'>With Date Constraints</Text>
+            <DatePicker
+              mode='date'
+              value={selectedDate}
+              onChange={setSelectedDate}
+              placeholder='Only future dates allowed'
+              minimumDate={new Date()}
+              maximumDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)} // 1 year from now
+            />
+          </View>
+
+          <View style={{ gap: 16 }}>
+            <Button onPress={bottomSheet.open}>Open Simple Bottom Sheet</Button>
+
+            <Button onPress={settingsSheet.open} variant='outline'>
+              Open Settings Sheet
+            </Button>
+          </View>
+
+          {/* Simple Bottom Sheet */}
+          <BottomSheet
+            isVisible={bottomSheet.isVisible}
+            onClose={bottomSheet.close}
+            title='Simple Bottom Sheet'
+            snapPoints={[0.3, 0.6]}
+          >
             <View style={{ gap: 16 }}>
-              <Text variant='subtitle'>Appearance</Text>
-              <View style={{ gap: 12 }}>
-                <Button variant='outline'>Light Mode</Button>
-                <Button variant='outline'>Dark Mode</Button>
-                <Button variant='outline'>System</Button>
-              </View>
-
-              <Text variant='subtitle' style={{ marginTop: 24 }}>
-                Notifications
+              <Text variant='subtitle'>Welcome to the bottom sheet!</Text>
+              <Text>
+                This is a simple bottom sheet with some content. You can drag it
+                up and down to resize it, or swipe down to dismiss it.
               </Text>
-              <View style={{ gap: 12 }}>
-                <Button variant='outline'>Push Notifications</Button>
-                <Button variant='outline'>Email Notifications</Button>
-                <Button variant='outline'>SMS Notifications</Button>
-              </View>
-
-              <Text variant='subtitle' style={{ marginTop: 24 }}>
-                Account
-              </Text>
-              <View style={{ gap: 12 }}>
-                <Button variant='outline'>Profile Settings</Button>
-                <Button variant='outline'>Privacy Settings</Button>
-                <Button variant='destructive'>Sign Out</Button>
-              </View>
-
-              <Button onPress={settingsSheet.close} style={{ marginTop: 24 }}>
-                Done
-              </Button>
+              <Button onPress={bottomSheet.close}>Close Sheet</Button>
             </View>
-          </ScrollView>
-        </BottomSheet>
+          </BottomSheet>
 
-        <Button>Hello</Button>
-
-        <View style={{ width: '100%' }}>
-          <Tabs defaultValue='overview' style={{ flex: 1 }}>
-            <TabsList>
-              <TabsTrigger value='overview'>Overview</TabsTrigger>
-              <TabsTrigger value='analytics'>Analytics</TabsTrigger>
-              <TabsTrigger value='reports'>Reports</TabsTrigger>
-              <TabsTrigger value='notifications' disabled>
-                Notifications
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value='overview'>
-              <ScrollView style={{ flex: 1 }}>
-                <View style={{ padding: 16 }}>
-                  <Text variant='title' style={{ marginBottom: 12 }}>
-                    Dashboard Overview
-                  </Text>
-                  <Text variant='body' style={{ marginBottom: 16 }}>
-                    Welcome to your dashboard! Here's a quick overview of your
-                    recent activity.
-                  </Text>
-
-                  <View
-                    style={{
-                      padding: 16,
-                      borderRadius: 8,
-                      marginBottom: 16,
-                    }}
-                  >
-                    <Text variant='subtitle' style={{ marginBottom: 8 }}>
-                      Quick Stats
-                    </Text>
-                    <Text variant='body'>• 24 new messages</Text>
-                    <Text variant='body'>• 3 pending tasks</Text>
-                    <Text variant='body'>• 12 completed projects</Text>
-                  </View>
-
-                  <Button>View Details</Button>
+          {/* Settings Bottom Sheet */}
+          <BottomSheet
+            isVisible={settingsSheet.isVisible}
+            onClose={settingsSheet.close}
+            title='Settings'
+            snapPoints={[0.4, 0.7, 0.9]}
+            enableBackdropDismiss={false}
+          >
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={{ gap: 16 }}>
+                <Text variant='subtitle'>Appearance</Text>
+                <View style={{ gap: 12 }}>
+                  <Button variant='outline'>Light Mode</Button>
+                  <Button variant='outline'>Dark Mode</Button>
+                  <Button variant='outline'>System</Button>
                 </View>
-              </ScrollView>
-            </TabsContent>
 
-            <TabsContent value='analytics'>
-              <ScrollView style={{ flex: 1 }}>
-                <View style={{ padding: 16 }}>
-                  <Text variant='title' style={{ marginBottom: 12 }}>
-                    Analytics Dashboard
-                  </Text>
-                  <Text variant='body' style={{ marginBottom: 16 }}>
-                    Track your performance metrics and insights.
-                  </Text>
-
-                  <View
-                    style={{
-                      padding: 16,
-                      borderRadius: 8,
-                      marginBottom: 16,
-                    }}
-                  >
-                    <Text variant='subtitle' style={{ marginBottom: 8 }}>
-                      This Month
-                    </Text>
-                    <Text variant='body'>• 1,234 page views</Text>
-                    <Text variant='body'>• 456 unique visitors</Text>
-                    <Text variant='body'>• 78% engagement rate</Text>
-                  </View>
-
-                  <Button variant='outline'>Export Data</Button>
+                <Text variant='subtitle' style={{ marginTop: 24 }}>
+                  Notifications
+                </Text>
+                <View style={{ gap: 12 }}>
+                  <Button variant='outline'>Push Notifications</Button>
+                  <Button variant='outline'>Email Notifications</Button>
+                  <Button variant='outline'>SMS Notifications</Button>
                 </View>
-              </ScrollView>
-            </TabsContent>
 
-            <TabsContent value='reports'>
-              <ScrollView style={{ flex: 1 }}>
-                <View style={{ padding: 16 }}>
-                  <Text variant='title' style={{ marginBottom: 12 }}>
-                    Reports Center
-                  </Text>
-                  <Text variant='body' style={{ marginBottom: 16 }}>
-                    Generate and download your reports here.
-                  </Text>
-
-                  <View
-                    style={{
-                      backgroundColor: '#fef3c7',
-                      padding: 16,
-                      borderRadius: 8,
-                      marginBottom: 16,
-                    }}
-                  >
-                    <Text variant='subtitle' style={{ marginBottom: 8 }}>
-                      Available Reports
-                    </Text>
-                    <Text variant='body'>• Weekly Summary</Text>
-                    <Text variant='body'>• Monthly Analytics</Text>
-                    <Text variant='body'>• Quarterly Review</Text>
-                  </View>
-
-                  <Button variant='secondary'>Generate Report</Button>
+                <Text variant='subtitle' style={{ marginTop: 24 }}>
+                  Account
+                </Text>
+                <View style={{ gap: 12 }}>
+                  <Button variant='outline'>Profile Settings</Button>
+                  <Button variant='outline'>Privacy Settings</Button>
+                  <Button variant='destructive'>Sign Out</Button>
                 </View>
-              </ScrollView>
-            </TabsContent>
-          </Tabs>
-        </View>
 
-        <Alert>
-          <AlertTitle>Alert Title</AlertTitle>
-          <AlertDescription>
-            Our flagship product combines cutting-edge technology with sleek
-            design. Built with premium materials, it offers unparalleled
-            performance and reliability.
-          </AlertDescription>
-        </Alert>
+                <Button onPress={settingsSheet.close} style={{ marginTop: 24 }}>
+                  Done
+                </Button>
+              </View>
+            </ScrollView>
+          </BottomSheet>
 
-        <Accordion type='single' collapsible defaultValue='item-1'>
-          <AccordionItem value='item-1'>
-            <AccordionTrigger>Product Information</AccordionTrigger>
-            <AccordionContent>
-              <Text variant='body'>
-                Our flagship product combines cutting-edge technology with sleek
-                design. Built with premium materials, it offers unparalleled
-                performance and reliability.
-              </Text>
-              <Text variant='body' style={{ marginTop: 12 }}>
-                Key features include advanced processing capabilities, and an
-                intuitive user interface designed for both beginners and
-                experts.
-              </Text>
-            </AccordionContent>
-          </AccordionItem>
+          <Button>Hello</Button>
 
-          <AccordionItem value='item-2'>
-            <AccordionTrigger>Shipping Details</AccordionTrigger>
-            <AccordionContent>
-              <Text variant='body'>
-                We offer worldwide shipping through trusted courier partners.
-                Standard delivery takes 3-5 business days, while express
-                shipping ensures delivery within 1-2 business days.
-              </Text>
-            </AccordionContent>
-          </AccordionItem>
+          <View style={{ width: '100%' }}>
+            <Tabs defaultValue='overview' style={{ flex: 1 }}>
+              <TabsList>
+                <TabsTrigger value='overview'>Overview</TabsTrigger>
+                <TabsTrigger value='analytics'>Analytics</TabsTrigger>
+                <TabsTrigger value='reports'>Reports</TabsTrigger>
+                <TabsTrigger value='notifications' disabled>
+                  Notifications
+                </TabsTrigger>
+              </TabsList>
 
-          <AccordionItem value='item-3'>
-            <AccordionTrigger>Return Policy</AccordionTrigger>
-            <AccordionContent>
-              <Text variant='body'>
-                We stand behind our products with a comprehensive 30-day return
-                policy. If you're not completely satisfied, simply return the
-                item in its original condition.
-              </Text>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+              <TabsContent value='overview'>
+                <ScrollView style={{ flex: 1 }}>
+                  <View style={{ padding: 16 }}>
+                    <Text variant='title' style={{ marginBottom: 12 }}>
+                      Dashboard Overview
+                    </Text>
+                    <Text variant='body' style={{ marginBottom: 16 }}>
+                      Welcome to your dashboard! Here's a quick overview of your
+                      recent activity.
+                    </Text>
 
-        <ModeToggle />
+                    <View
+                      style={{
+                        padding: 16,
+                        borderRadius: 8,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Text variant='subtitle' style={{ marginBottom: 8 }}>
+                        Quick Stats
+                      </Text>
+                      <Text variant='body'>• 24 new messages</Text>
+                      <Text variant='body'>• 3 pending tasks</Text>
+                      <Text variant='body'>• 12 completed projects</Text>
+                    </View>
 
-        <Icon IconComponent={Camera} size={48} />
+                    <Button>View Details</Button>
+                  </View>
+                </ScrollView>
+              </TabsContent>
 
-        <Toggle variant='outline'>B</Toggle>
+              <TabsContent value='analytics'>
+                <ScrollView style={{ flex: 1 }}>
+                  <View style={{ padding: 16 }}>
+                    <Text variant='title' style={{ marginBottom: 12 }}>
+                      Analytics Dashboard
+                    </Text>
+                    <Text variant='body' style={{ marginBottom: 16 }}>
+                      Track your performance metrics and insights.
+                    </Text>
 
-        <Avatar>
-          <AvatarImage
-            source={{
-              uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-            }}
+                    <View
+                      style={{
+                        padding: 16,
+                        borderRadius: 8,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Text variant='subtitle' style={{ marginBottom: 8 }}>
+                        This Month
+                      </Text>
+                      <Text variant='body'>• 1,234 page views</Text>
+                      <Text variant='body'>• 456 unique visitors</Text>
+                      <Text variant='body'>• 78% engagement rate</Text>
+                    </View>
+
+                    <Button variant='outline'>Export Data</Button>
+                  </View>
+                </ScrollView>
+              </TabsContent>
+
+              <TabsContent value='reports'>
+                <ScrollView style={{ flex: 1 }}>
+                  <View style={{ padding: 16 }}>
+                    <Text variant='title' style={{ marginBottom: 12 }}>
+                      Reports Center
+                    </Text>
+                    <Text variant='body' style={{ marginBottom: 16 }}>
+                      Generate and download your reports here.
+                    </Text>
+
+                    <View
+                      style={{
+                        backgroundColor: '#fef3c7',
+                        padding: 16,
+                        borderRadius: 8,
+                        marginBottom: 16,
+                      }}
+                    >
+                      <Text variant='subtitle' style={{ marginBottom: 8 }}>
+                        Available Reports
+                      </Text>
+                      <Text variant='body'>• Weekly Summary</Text>
+                      <Text variant='body'>• Monthly Analytics</Text>
+                      <Text variant='body'>• Quarterly Review</Text>
+                    </View>
+
+                    <Button variant='secondary'>Generate Report</Button>
+                  </View>
+                </ScrollView>
+              </TabsContent>
+            </Tabs>
+          </View>
+
+          <Alert>
+            <AlertTitle>Alert Title</AlertTitle>
+            <AlertDescription>
+              Our flagship product combines cutting-edge technology with sleek
+              design. Built with premium materials, it offers unparalleled
+              performance and reliability.
+            </AlertDescription>
+          </Alert>
+
+          <Accordion type='single' collapsible defaultValue='item-1'>
+            <AccordionItem value='item-1'>
+              <AccordionTrigger>Product Information</AccordionTrigger>
+              <AccordionContent>
+                <Text variant='body'>
+                  Our flagship product combines cutting-edge technology with
+                  sleek design. Built with premium materials, it offers
+                  unparalleled performance and reliability.
+                </Text>
+                <Text variant='body' style={{ marginTop: 12 }}>
+                  Key features include advanced processing capabilities, and an
+                  intuitive user interface designed for both beginners and
+                  experts.
+                </Text>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value='item-2'>
+              <AccordionTrigger>Shipping Details</AccordionTrigger>
+              <AccordionContent>
+                <Text variant='body'>
+                  We offer worldwide shipping through trusted courier partners.
+                  Standard delivery takes 3-5 business days, while express
+                  shipping ensures delivery within 1-2 business days.
+                </Text>
+              </AccordionContent>
+            </AccordionItem>
+
+            <AccordionItem value='item-3'>
+              <AccordionTrigger>Return Policy</AccordionTrigger>
+              <AccordionContent>
+                <Text variant='body'>
+                  We stand behind our products with a comprehensive 30-day
+                  return policy. If you're not completely satisfied, simply
+                  return the item in its original condition.
+                </Text>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          <ModeToggle />
+
+          <Icon IconComponent={Camera} size={48} />
+
+          <Toggle variant='outline'>B</Toggle>
+
+          <Avatar>
+            <AvatarImage
+              source={{
+                uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=3087&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+              }}
+            />
+
+            <AvatarFallback>
+              <Text>AB</Text>
+            </AvatarFallback>
+          </Avatar>
+
+          <Textarea />
+
+          <Progress
+            value={progress}
+            interactive={true}
+            onValueChange={setProgress}
+            style={{ width: 200 }}
           />
 
-          <AvatarFallback>
-            <Text>AB</Text>
-          </AvatarFallback>
-        </Avatar>
+          <Badge>Badge</Badge>
 
-        <Textarea />
+          <Card>
+            <CardHeader>
+              <Text variant='title'>Card Title</Text>
+            </CardHeader>
+            <CardContent>
+              <Text>This is a card content area.</Text>
+              <Text variant='caption'>This is a card description area.</Text>
+            </CardContent>
+            <CardFooter>
+              <Button variant='destructive'>Click Me</Button>
+            </CardFooter>
+          </Card>
 
-        <Progress
-          value={progress}
-          interactive={true}
-          onValueChange={setProgress}
-          style={{ width: 200 }}
-        />
+          <Checkbox
+            checked={checked}
+            onCheckedChange={setChecked}
+            disabled={false}
+            label='Checkbox'
+          />
 
-        <Badge>Badge</Badge>
+          <View style={{ width: '100%' }}>
+            <Label>Input</Label>
+            <Input placeholder='Enter text here' />
+          </View>
 
-        <Card>
-          <CardHeader>
-            <Text variant='title'>Card Title</Text>
-          </CardHeader>
-          <CardContent>
-            <Text>This is a card content area.</Text>
-            <Text variant='caption'>This is a card description area.</Text>
-          </CardContent>
-          <CardFooter>
-            <Button variant='destructive'>Click Me</Button>
-          </CardFooter>
-        </Card>
+          <Separator />
 
-        <Checkbox
-          checked={checked}
-          onCheckedChange={setChecked}
-          disabled={false}
-          label='Checkbox'
-        />
-
-        <View style={{ width: '100%' }}>
-          <Label>Input</Label>
-          <Input placeholder='Enter text here' />
+          <Switch value={switchValue} onValueChange={setSwitchValue} />
         </View>
-
-        <Separator />
-
-        <Switch value={switchValue} onValueChange={setSwitchValue} />
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
