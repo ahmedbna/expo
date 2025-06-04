@@ -12,9 +12,7 @@ export function CarouselTestComponent() {
   const cardColor = useThemeColor({}, 'card');
 
   const handleIndexChange = (index: number) => {
-    console.log('Current slide index:', index);
-    // You can also show an alert to verify it's working
-    // Alert.alert('Slide Changed', `Now showing slide ${index + 1}`);
+    // console.log('Current slide index:', index);
   };
 
   return (

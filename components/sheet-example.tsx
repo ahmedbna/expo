@@ -13,8 +13,6 @@ export function SheetExample() {
   const [sheetOpen, setSheetOpen] = useState(false);
 
   const handleOpenChange = (open: boolean) => {
-    console.log('Sheet open state changed:', open);
-
     setSheetOpen(open);
   };
 
@@ -25,7 +23,6 @@ export function SheetExample() {
       {/* Manual button to test state */}
       <Button
         onPress={() => {
-          console.log('Manual toggle pressed');
           setSheetOpen(!sheetOpen);
         }}
       >

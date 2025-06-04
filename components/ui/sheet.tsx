@@ -83,7 +83,6 @@ export function SheetTrigger({ children, asChild }: SheetTriggerProps) {
   const context = React.useContext(SheetContext);
 
   const handlePress = () => {
-    console.log('SheetTrigger pressed, context:', context);
     if (context) {
       context.onOpenChange(true);
     }
@@ -112,8 +111,6 @@ export function SheetContent({ children, style }: SheetContentProps) {
   const backgroundColor = useThemeColor({}, 'background');
   const borderColor = useThemeColor({}, 'border');
   const iconColor = useThemeColor({}, 'text');
-
-  console.log('SheetContent render:', { open, side, sheetWidth });
 
   useEffect(() => {
     if (open) {
@@ -163,7 +160,6 @@ export function SheetContent({ children, style }: SheetContentProps) {
   }, [open, side, slideAnim, overlayOpacity, sheetWidth, isVisible]);
 
   const handleClose = () => {
-    console.log('Sheet closing');
     onOpenChange(false);
   };
 

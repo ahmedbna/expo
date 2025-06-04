@@ -175,7 +175,7 @@ export function BasicUserTable() {
   ];
 
   const handleRowPress = (user: User) => {
-    console.log('User clicked:', user);
+    // console.log('User clicked:', user);
     // Navigate to user detail or show modal
   };
 
