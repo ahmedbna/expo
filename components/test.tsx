@@ -36,6 +36,7 @@ import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Progress } from './ui/progress';
 import RadioGroup, { RadioButton } from './ui/radio';
 import { Textarea } from './ui/textarea';
+import { useToast } from './ui/toast';
 import { Toggle } from './ui/toggle';
 import { DataTableDemo } from './user-table';
 
@@ -43,6 +44,7 @@ export const Test = () => {
   const bottomSheet = useBottomSheet();
   const settingsSheet = useBottomSheet();
   const bottom = useBottomTabBarHeight();
+  const { toast, success, error, warning, info } = useToast();
 
   const [checked, setChecked] = useState(false);
   const [switchValue, setSwitchValue] = useState(false);
@@ -79,6 +81,61 @@ export const Test = () => {
               { label: 'Option 3', value: 'option3' },
             ]}
           />
+
+          <Button
+            onPress={() =>
+              success('Success!', 'Your action was completed successfully.')
+            }
+          >
+            Show Success Toast
+          </Button>
+
+          <Button
+            variant='destructive'
+            onPress={() =>
+              error('Error!', 'Something went wrong. Please try again.')
+            }
+          >
+            Show Error Toast
+          </Button>
+
+          <Button
+            variant='outline'
+            onPress={() =>
+              warning('Warning!', 'Please check your input before proceeding.')
+            }
+          >
+            Show Warning Toast
+          </Button>
+
+          <Button
+            variant='secondary'
+            onPress={() =>
+              info('Info', 'Here is some useful information for you.')
+            }
+          >
+            Show Info Toast
+          </Button>
+
+          <Button
+            variant='ghost'
+            onPress={() =>
+              toast({
+                title: 'Custom Toast',
+                description: 'This is a custom toast with an action.',
+                variant: 'default',
+                duration: 10000, // 10 seconds
+                action: {
+                  label: 'Undo',
+                  onPress: () => {
+                    console.log('Undo pressed!');
+                  },
+                },
+              })
+            }
+          >
+            Show Custom Toast with Action
+          </Button>
 
           <DataTableDemo />
 
