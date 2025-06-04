@@ -9,18 +9,40 @@ import {
 export interface ScrollViewProps extends RNScrollViewProps {
   lightColor?: string;
   darkColor?: string;
+  variant?: 'default' | 'card';
 }
 
 export function ScrollView({
   style,
   lightColor,
   darkColor,
+  variant = 'default',
   ...otherProps
 }: ScrollViewProps) {
+  const cardColor = useThemeColor(
+    { light: lightColor, dark: darkColor },
+    'card'
+  );
+
   const backgroundColor = useThemeColor(
     { light: lightColor, dark: darkColor },
     'background'
   );
 
-  return <RNScrollView style={[{ backgroundColor }, style]} {...otherProps} />;
+  const background = (() => {
+    switch (variant) {
+      case 'card':
+        return cardColor;
+      case 'default':
+      default:
+        return backgroundColor;
+    }
+  })();
+
+  return (
+    <RNScrollView
+      style={[{ backgroundColor: background }, style]}
+      {...otherProps}
+    />
+  );
 }

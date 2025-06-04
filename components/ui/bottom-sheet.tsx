@@ -45,8 +45,7 @@ export function BottomSheet({
   title,
   style,
 }: BottomSheetProps) {
-  const backgroundColor = useThemeColor({}, 'card');
-  const borderColor = useThemeColor({}, 'border');
+  const cardColor = useThemeColor({}, 'card');
   const mutedColor = useThemeColor({}, 'muted');
 
   const translateY = useSharedValue(0);
@@ -171,6 +170,7 @@ export function BottomSheet({
       transparent
       statusBarTranslucent
       animationType='none'
+      style={{ backgroundColor: cardColor }}
     >
       <GestureHandlerRootView style={{ flex: 1 }}>
         <Animated.View
@@ -194,7 +194,7 @@ export function BottomSheet({
                   width: '100%',
                   position: 'absolute',
                   top: SCREEN_HEIGHT,
-                  backgroundColor,
+                  backgroundColor: cardColor,
                   borderTopLeftRadius: BORDER_RADIUS,
                   borderTopRightRadius: BORDER_RADIUS,
                 },
@@ -205,8 +205,8 @@ export function BottomSheet({
               {/* Handle */}
               <View
                 style={{
-                  width: 32,
-                  height: 4,
+                  width: 64,
+                  height: 6,
                   backgroundColor: mutedColor,
                   alignSelf: 'center',
                   marginTop: 8,
@@ -221,6 +221,7 @@ export function BottomSheet({
                     marginHorizontal: 16,
                     marginTop: 16,
                     paddingBottom: 8,
+                    backgroundColor: cardColor,
                   }}
                 >
                   <Text variant='subtitle' style={{ textAlign: 'center' }}>
@@ -230,7 +231,11 @@ export function BottomSheet({
               )}
 
               {/* Content */}
-              <View style={{ flex: 1, padding: 16 }}>{children}</View>
+              <View
+                style={{ flex: 1, padding: 16, backgroundColor: cardColor }}
+              >
+                {children}
+              </View>
             </Animated.View>
           </GestureDetector>
         </Animated.View>

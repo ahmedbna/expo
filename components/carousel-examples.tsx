@@ -2,12 +2,15 @@
 import { Carousel, CarouselItem } from '@/components/ui/carousel';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
 export function CarouselTestComponent() {
+  const cardColor = useThemeColor({}, 'card');
+
   const handleIndexChange = (index: number) => {
     console.log('Current slide index:', index);
     // You can also show an alert to verify it's working
@@ -87,7 +90,13 @@ export function CarouselTestComponent() {
           {testimonials.map((testimonial) => (
             <CarouselItem key={testimonial.id} style={styles.testimonialCard}>
               <Text style={styles.testimonialText}>"{testimonial.text}"</Text>
-              <View style={styles.testimonialAuthor}>
+              <View
+                style={{
+                  backgroundColor: cardColor,
+                  alignItems: 'center',
+                  gap: 4,
+                }}
+              >
                 <Text variant='subtitle'>{testimonial.author}</Text>
                 <Text variant='caption' style={styles.testimonialRole}>
                   {testimonial.role}
@@ -226,10 +235,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 16,
   },
-  testimonialAuthor: {
-    alignItems: 'center',
-    gap: 4,
-  },
+
   testimonialRole: {
     opacity: 0.6,
   },

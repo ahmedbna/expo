@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ChevronDown,
@@ -234,7 +234,7 @@ export function DataTable<T = any>({
         {
           flexDirection: 'row',
           backgroundColor: cardColor,
-          borderBottomWidth: 2,
+          borderBottomWidth: 1,
           borderBottomColor: borderColor,
         },
         headerStyle,
@@ -388,11 +388,11 @@ export function DataTable<T = any>({
           borderBottomWidth: 1,
           borderColor: borderColor,
           paddingHorizontal: 12,
-          marginBottom: 16,
-          height: 40,
+          height: HEIGHT,
         }}
       >
         <Search size={16} color={mutedColor} style={{ marginRight: 8 }} />
+
         <TextInput
           style={{
             flex: 1,
@@ -447,7 +447,7 @@ export function DataTable<T = any>({
           borderRadius: BORDER_RADIUS,
           borderWidth: 1,
           borderColor: borderColor,
-          backgroundColor: backgroundColor,
+          backgroundColor: cardColor,
           overflow: 'hidden',
         },
         style,

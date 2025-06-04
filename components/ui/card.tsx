@@ -44,7 +44,13 @@ interface CardHeaderProps {
 }
 
 export function CardHeader({ children, style }: CardHeaderProps) {
-  return <View style={[{ marginBottom: 16 }, style]}>{children}</View>;
+  const cardColor = useThemeColor({}, 'card');
+
+  return (
+    <View style={[{ marginBottom: 16, backgroundColor: cardColor }, style]}>
+      {children}
+    </View>
+  );
 }
 
 interface CardTitleProps {
@@ -98,7 +104,11 @@ interface CardContentProps {
 }
 
 export function CardContent({ children, style }: CardContentProps) {
-  return <View style={style}>{children}</View>;
+  const cardColor = useThemeColor({}, 'card');
+
+  return (
+    <View style={[{ backgroundColor: cardColor }, style]}>{children}</View>
+  );
 }
 
 interface CardFooterProps {
@@ -107,8 +117,20 @@ interface CardFooterProps {
 }
 
 export function CardFooter({ children, style }: CardFooterProps) {
+  const cardColor = useThemeColor({}, 'card');
+
   return (
-    <View style={[{ marginTop: 16, flexDirection: 'row', gap: 8 }, style]}>
+    <View
+      style={[
+        {
+          backgroundColor: cardColor,
+          marginTop: 16,
+          flexDirection: 'row',
+          gap: 8,
+        },
+        style,
+      ]}
+    >
       {children}
     </View>
   );

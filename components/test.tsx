@@ -28,6 +28,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
@@ -45,6 +46,8 @@ export const Test = () => {
   const bottomSheet = useBottomSheet();
   const settingsSheet = useBottomSheet();
   const bottom = useBottomTabBarHeight();
+  const cardColor = useThemeColor({}, 'card');
+
   const { toast, success, error, warning, info } = useToast();
 
   const [checked, setChecked] = useState(false);
@@ -214,7 +217,7 @@ export const Test = () => {
               mode='time'
               value={selectedTime}
               onChange={setSelectedTime}
-              timeFormat='12'
+              timeFormat='24'
               placeholder='Select a time'
             />
             {selectedTime && (
@@ -287,7 +290,7 @@ export const Test = () => {
             title='Simple Bottom Sheet'
             snapPoints={[0.3, 0.6]}
           >
-            <View style={{ gap: 16 }}>
+            <View style={{ gap: 16, backgroundColor: cardColor }}>
               <Text variant='subtitle'>Welcome to the bottom sheet!</Text>
               <Text>
                 This is a simple bottom sheet with some content. You can drag it
@@ -305,10 +308,14 @@ export const Test = () => {
             snapPoints={[0.4, 0.7, 0.9]}
             enableBackdropDismiss={false}
           >
-            <ScrollView showsVerticalScrollIndicator={false}>
-              <View style={{ gap: 16 }}>
+            <ScrollView
+              showsVerticalScrollIndicator={false}
+              style={{ backgroundColor: cardColor }}
+              contentContainerStyle={{ backgroundColor: cardColor }}
+            >
+              <View style={{ gap: 16, backgroundColor: cardColor }}>
                 <Text variant='subtitle'>Appearance</Text>
-                <View style={{ gap: 12 }}>
+                <View style={{ gap: 12, backgroundColor: cardColor }}>
                   <Button variant='outline'>Light Mode</Button>
                   <Button variant='outline'>Dark Mode</Button>
                   <Button variant='outline'>System</Button>
@@ -317,7 +324,7 @@ export const Test = () => {
                 <Text variant='subtitle' style={{ marginTop: 24 }}>
                   Notifications
                 </Text>
-                <View style={{ gap: 12 }}>
+                <View style={{ gap: 12, backgroundColor: cardColor }}>
                   <Button variant='outline'>Push Notifications</Button>
                   <Button variant='outline'>Email Notifications</Button>
                   <Button variant='outline'>SMS Notifications</Button>
@@ -326,7 +333,7 @@ export const Test = () => {
                 <Text variant='subtitle' style={{ marginTop: 24 }}>
                   Account
                 </Text>
-                <View style={{ gap: 12 }}>
+                <View style={{ gap: 12, backgroundColor: cardColor }}>
                   <Button variant='outline'>Profile Settings</Button>
                   <Button variant='outline'>Privacy Settings</Button>
                   <Button variant='destructive'>Sign Out</Button>

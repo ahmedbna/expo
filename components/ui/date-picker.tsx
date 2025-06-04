@@ -1,6 +1,7 @@
 // components/ui/date-picker.tsx
 import { BottomSheet, useBottomSheet } from '@/components/ui/bottom-sheet';
 import { Button } from '@/components/ui/button';
+import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
@@ -13,7 +14,7 @@ import {
   Clock,
 } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { ScrollView, TouchableOpacity, ViewStyle } from 'react-native';
+import { TouchableOpacity, ViewStyle } from 'react-native';
 
 interface DatePickerProps {
   value?: Date;
@@ -234,6 +235,7 @@ export function DatePicker({
 
   const renderMonthYearHeader = () => (
     <View
+      variant='card'
       style={{
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -255,6 +257,7 @@ export function DatePicker({
 
       {/* Header styling - fills space between arrows */}
       <View
+        variant='card'
         style={{
           flex: 1,
           flexDirection: 'row',
@@ -317,11 +320,12 @@ export function DatePicker({
   );
 
   const renderCalendar = () => (
-    <View>
+    <View variant='card'>
       {renderMonthYearHeader()}
 
       {/* Day headers */}
       <View
+        variant='card'
         style={{
           flexDirection: 'row',
           marginBottom: 12,
@@ -329,7 +333,14 @@ export function DatePicker({
         }}
       >
         {DAYS.map((day) => (
-          <View key={day} style={{ flex: 1, alignItems: 'center' }}>
+          <View
+            variant='card'
+            key={day}
+            style={{
+              flex: 1,
+              alignItems: 'center',
+            }}
+          >
             <Text variant='caption' style={{ fontSize: 12, fontWeight: '600' }}>
               {day}
             </Text>
@@ -338,11 +349,15 @@ export function DatePicker({
       </View>
 
       {/* Calendar grid */}
-      <View style={{ paddingHorizontal: 4 }}>
+      <View variant='card' style={{ paddingHorizontal: 4 }}>
         {calendarData.weeks.map((week, weekIndex) => (
           <View
             key={weekIndex}
-            style={{ flexDirection: 'row', marginBottom: 4 }}
+            variant='card'
+            style={{
+              flexDirection: 'row',
+              marginBottom: 4,
+            }}
           >
             {week.map((day, dayIndex) => {
               const isSelected =
@@ -364,7 +379,14 @@ export function DatePicker({
               const disabled = dayDate ? isDateDisabled(dayDate) : false;
 
               return (
-                <View key={dayIndex} style={{ flex: 1, alignItems: 'center' }}>
+                <View
+                  key={dayIndex}
+                  variant='card'
+                  style={{
+                    flex: 1,
+                    alignItems: 'center',
+                  }}
+                >
                   {day ? (
                     <TouchableOpacity
                       onPress={() => !disabled && handleDateSelect(day)}
@@ -398,7 +420,7 @@ export function DatePicker({
                       </Text>
                     </TouchableOpacity>
                   ) : (
-                    <View style={{ width: 40, height: 40 }} />
+                    <View variant='card' style={{ width: 40, height: 40 }} />
                   )}
                 </View>
               );
@@ -416,17 +438,17 @@ export function DatePicker({
     const isPM = selectedHours >= 12;
 
     return (
-      <View style={{ height: 300 }}>
-        <Text
-          variant='subtitle'
-          style={{ textAlign: 'center', marginBottom: 20 }}
+      <View variant='card' style={{ height: 300 }}>
+        <View
+          variant='card'
+          style={{
+            flexDirection: 'row',
+            flex: 1,
+            gap: 16,
+          }}
         >
-          Select Time
-        </Text>
-
-        <View style={{ flexDirection: 'row', flex: 1, gap: 16 }}>
           {/* Hours */}
-          <View style={{ flex: 1 }}>
+          <View variant='card' style={{ flex: 1 }}>
             <Text
               variant='caption'
               style={{ textAlign: 'center', marginBottom: 12 }}
@@ -434,8 +456,11 @@ export function DatePicker({
               Hours
             </Text>
             <ScrollView
+              variant='card'
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingVertical: 20 }}
+              contentContainerStyle={{
+                paddingVertical: 20,
+              }}
             >
               {Array.from({ length: timeFormat === '12' ? 12 : 24 }, (_, i) =>
                 timeFormat === '12' ? (i === 0 ? 12 : i) : i
@@ -486,7 +511,7 @@ export function DatePicker({
           </View>
 
           {/* Minutes */}
-          <View style={{ flex: 1 }}>
+          <View variant='card' style={{ flex: 1 }}>
             <Text
               variant='caption'
               style={{ textAlign: 'center', marginBottom: 12 }}
@@ -494,8 +519,11 @@ export function DatePicker({
               Minutes
             </Text>
             <ScrollView
+              variant='card'
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={{ paddingVertical: 20 }}
+              contentContainerStyle={{
+                paddingVertical: 20,
+              }}
             >
               {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
                 <TouchableOpacity
@@ -530,14 +558,20 @@ export function DatePicker({
 
           {/* AM/PM picker for 12-hour format */}
           {timeFormat === '12' && (
-            <View style={{ flex: 0.5 }}>
+            <View variant='card' style={{ flex: 0.5 }}>
               <Text
                 variant='caption'
                 style={{ textAlign: 'center', marginBottom: 12 }}
               >
                 Period
               </Text>
-              <View style={{ paddingVertical: 20, gap: 8 }}>
+              <View
+                variant='card'
+                style={{
+                  paddingVertical: 20,
+                  gap: 8,
+                }}
+              >
                 {['AM', 'PM'].map((period) => {
                   const isAM = period === 'AM';
                   const isSelected = isAM ? !isPM : isPM;
@@ -588,16 +622,13 @@ export function DatePicker({
   };
 
   const renderMonthPicker = () => (
-    <View style={{ height: 300 }}>
-      <Text
-        variant='subtitle'
-        style={{ textAlign: 'center', marginBottom: 20 }}
-      >
-        Select Month
-      </Text>
+    <View variant='card' style={{ height: 300 }}>
       <ScrollView
+        variant='card'
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingVertical: 20 }}
+        contentContainerStyle={{
+          paddingVertical: 20,
+        }}
       >
         {MONTHS.map((month, index) => (
           <TouchableOpacity
@@ -632,16 +663,13 @@ export function DatePicker({
   );
 
   const renderYearPicker = () => (
-    <View style={{ height: 300 }}>
-      <Text
-        variant='subtitle'
-        style={{ textAlign: 'center', marginBottom: 20 }}
-      >
-        Select Year
-      </Text>
+    <View variant='card' style={{ height: 300 }}>
       <ScrollView
+        variant='card'
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingVertical: 20 }}
+        contentContainerStyle={{
+          paddingVertical: 20,
+        }}
       >
         {YEARS.map((year) => (
           <TouchableOpacity
@@ -713,7 +741,6 @@ export function DatePicker({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    // paddingVertical: 12,
     borderWidth: 1,
     borderColor: borderColor,
     borderRadius: BORDER_RADIUS,
@@ -754,10 +781,11 @@ export function DatePicker({
         title={getBottomSheetTitle()}
         snapPoints={[0.7]}
       >
-        <View style={{ flex: 1 }}>
+        <View variant='card' style={{ flex: 1 }}>
           {getBottomSheetContent()}
 
           <View
+            variant='card'
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
@@ -774,7 +802,14 @@ export function DatePicker({
               Today
             </Button>
 
-            <View style={{ flexDirection: 'row', gap: 8, flex: 1 }}>
+            <View
+              variant='card'
+              style={{
+                flexDirection: 'row',
+                gap: 8,
+                flex: 1,
+              }}
+            >
               <Button
                 variant='outline'
                 onPress={() => {
