@@ -3,7 +3,7 @@ import { BottomSheet, useBottomSheet } from '@/components/ui/bottom-sheet';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   Calendar,
@@ -713,12 +713,12 @@ export function DatePicker({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    // paddingVertical: 12,
     borderWidth: 1,
     borderColor: borderColor,
     borderRadius: BORDER_RADIUS,
     backgroundColor: cardColor,
-    minHeight: 48,
+    minHeight: HEIGHT,
   };
 
   return (

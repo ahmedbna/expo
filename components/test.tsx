@@ -32,6 +32,7 @@ import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
 import { CarouselTestComponent } from './carousel-examples';
+import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Progress } from './ui/progress';
 import RadioGroup, { RadioButton } from './ui/radio';
@@ -81,6 +82,8 @@ export const Test = () => {
               { label: 'Option 3', value: 'option3' },
             ]}
           />
+
+          <SheetExample />
 
           <Button
             onPress={() =>

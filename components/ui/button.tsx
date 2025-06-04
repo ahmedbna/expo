@@ -1,6 +1,6 @@
 // components/ui/button.tsx
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ActivityIndicator,
@@ -71,7 +71,7 @@ export function Button({
         });
         break;
       default:
-        Object.assign(baseStyle, { height: 40, paddingHorizontal: 16 });
+        Object.assign(baseStyle, { height: HEIGHT, paddingHorizontal: 16 });
     }
 
     // Variant styles

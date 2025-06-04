@@ -64,6 +64,7 @@ export function Textarea({
         numberOfLines={rows}
         style={[inputStyles, style]}
         placeholderTextColor={placeholderColor}
+        placeholder='Type your message...'
         {...props}
       />
     </View>

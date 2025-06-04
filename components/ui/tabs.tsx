@@ -83,7 +83,6 @@ export function Tabs({
 // TabsList component
 export function TabsList({ children, style }: TabsListProps) {
   const backgroundColor = useThemeColor({}, 'muted');
-  const borderColor = useThemeColor({}, 'border');
 
   return (
     <ScrollView
@@ -94,8 +93,6 @@ export function TabsList({ children, style }: TabsListProps) {
         backgroundColor,
         borderRadius: BORDER_RADIUS,
         padding: 4,
-        borderWidth: 1,
-        borderColor,
         ...style,
       }}
       scrollEnabled={false} // Disable scroll by default, can be overridden
@@ -117,7 +114,6 @@ export function TabsTrigger({
   const isActive = activeTab === value;
 
   const primaryColor = useThemeColor({}, 'primary');
-  const primaryForegroundColor = useThemeColor({}, 'primaryForeground');
   const mutedForegroundColor = useThemeColor({}, 'mutedForeground');
   const backgroundColor = useThemeColor({}, 'background');
 
@@ -129,7 +125,6 @@ export function TabsTrigger({
 
   const triggerStyle: ViewStyle = {
     paddingHorizontal: 12,
-    paddingVertical: 8,
     borderRadius: BORDER_RADIUS,
     alignItems: 'center',
     justifyContent: 'center',

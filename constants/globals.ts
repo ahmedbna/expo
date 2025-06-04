@@ -1,1 +1,2 @@
-export const BORDER_RADIUS = 12;
+export const BORDER_RADIUS = 8;
+export const HEIGHT = 40;

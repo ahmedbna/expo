@@ -18,7 +18,7 @@ export function Label({ children, style }: LabelProps) {
           fontSize: 14,
           fontWeight: '500',
           color: foregroundColor,
-          marginBottom: 8,
+          marginBottom: 2,
         },
         style,
       ]}

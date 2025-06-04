@@ -31,7 +31,6 @@ export function Badge({
   const getBadgeStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
       paddingHorizontal: 8,
-      paddingVertical: 2,
       borderRadius: BORDER_RADIUS,
     };
 

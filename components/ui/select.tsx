@@ -1,7 +1,7 @@
 // components/ui/select.tsx
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { ChevronDown } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -48,7 +48,7 @@ export function Select({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    height: 40,
+    height: HEIGHT,
     paddingHorizontal: 12,
     borderWidth: 1,
     borderColor,
@@ -102,8 +102,8 @@ export function Select({
             style={{
               backgroundColor: cardColor,
               borderRadius: BORDER_RADIUS,
-              // borderWidth: 1,
-              // borderColor,
+              borderWidth: 1,
+              borderColor,
               maxHeight: 300,
               width: '100%',
               maxWidth: 400,
@@ -111,7 +111,7 @@ export function Select({
             onPress={(e) => e.stopPropagation()}
           >
             <ScrollView
-              style={{ maxHeight: 300 }}
+              style={{ maxHeight: 300, borderRadius: BORDER_RADIUS }}
               showsVerticalScrollIndicator={false}
             >
               {options.map((option, index) => (
