@@ -1,4 +1,5 @@
 // components/ui/text.tsx
+import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import {
@@ -47,44 +48,38 @@ export function Text({
           ...baseStyle,
           fontSize: 28,
           fontWeight: '700',
-          lineHeight: 34,
         };
       case 'title':
         return {
           ...baseStyle,
-          fontSize: 20,
+          fontSize: 24,
           fontWeight: '700',
-          lineHeight: 26,
         };
       case 'subtitle':
         return {
           ...baseStyle,
-          fontSize: 16,
+          fontSize: FONT_SIZE,
           fontWeight: '500',
-          lineHeight: 22,
         };
       case 'caption':
         return {
           ...baseStyle,
-          fontSize: 16,
+          fontSize: FONT_SIZE,
           fontWeight: '400',
-          lineHeight: 16,
           color: mutedColor,
         };
       case 'link':
         return {
           ...baseStyle,
-          fontSize: 16,
+          fontSize: FONT_SIZE,
           fontWeight: '500',
-          lineHeight: 24,
           textDecorationLine: 'underline',
         };
       default: // 'body'
         return {
           ...baseStyle,
-          fontSize: 16,
+          fontSize: FONT_SIZE,
           fontWeight: '400',
-          lineHeight: 24,
         };
     }
   };

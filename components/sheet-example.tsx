@@ -5,6 +5,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import { FONT_SIZE } from '@/constants/globals';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from './ui/button';
@@ -105,13 +106,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   contentText: {
-    fontSize: 16,
+    fontSize: FONT_SIZE,
     textAlign: 'center',
     marginBottom: 20,
   },
   debugInfo: {
     marginTop: 20,
-    fontSize: 16,
+    fontSize: FONT_SIZE,
     fontWeight: 'bold',
     color: '#666',
   },

@@ -290,7 +290,7 @@ export const Test = () => {
             title='Simple Bottom Sheet'
             snapPoints={[0.3, 0.6]}
           >
-            <View style={{ gap: 16, backgroundColor: cardColor }}>
+            <View style={{ gap: 16 }}>
               <Text variant='subtitle'>Welcome to the bottom sheet!</Text>
               <Text>
                 This is a simple bottom sheet with some content. You can drag it
@@ -308,14 +308,10 @@ export const Test = () => {
             snapPoints={[0.4, 0.7, 0.9]}
             enableBackdropDismiss={false}
           >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{ backgroundColor: cardColor }}
-              contentContainerStyle={{ backgroundColor: cardColor }}
-            >
-              <View style={{ gap: 16, backgroundColor: cardColor }}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <View style={{ gap: 16 }}>
                 <Text variant='subtitle'>Appearance</Text>
-                <View style={{ gap: 12, backgroundColor: cardColor }}>
+                <View style={{ gap: 12 }}>
                   <Button variant='outline'>Light Mode</Button>
                   <Button variant='outline'>Dark Mode</Button>
                   <Button variant='outline'>System</Button>
@@ -324,7 +320,7 @@ export const Test = () => {
                 <Text variant='subtitle' style={{ marginTop: 24 }}>
                   Notifications
                 </Text>
-                <View style={{ gap: 12, backgroundColor: cardColor }}>
+                <View style={{ gap: 12 }}>
                   <Button variant='outline'>Push Notifications</Button>
                   <Button variant='outline'>Email Notifications</Button>
                   <Button variant='outline'>SMS Notifications</Button>
@@ -333,7 +329,7 @@ export const Test = () => {
                 <Text variant='subtitle' style={{ marginTop: 24 }}>
                   Account
                 </Text>
-                <View style={{ gap: 12, backgroundColor: cardColor }}>
+                <View style={{ gap: 12 }}>
                   <Button variant='outline'>Profile Settings</Button>
                   <Button variant='outline'>Privacy Settings</Button>
                   <Button variant='destructive'>Sign Out</Button>

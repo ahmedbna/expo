@@ -1,7 +1,7 @@
 // components/ui/select.tsx
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { ChevronDown } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -67,7 +67,7 @@ export function Select({
       >
         <Text
           style={{
-            fontSize: 14,
+            fontSize: FONT_SIZE,
             color: selectedOption ? textColor : mutedColor,
           }}
         >
@@ -132,7 +132,7 @@ export function Select({
                 >
                   <Text
                     style={{
-                      fontSize: 14,
+                      fontSize: FONT_SIZE,
                       color: textColor,
                       fontWeight: value === option.value ? '500' : '400',
                     }}

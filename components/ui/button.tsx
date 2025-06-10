@@ -1,6 +1,6 @@
 // components/ui/button.tsx
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ActivityIndicator,
@@ -58,15 +58,15 @@ export function Button({
     // Size variants
     switch (size) {
       case 'sm':
-        Object.assign(baseStyle, { height: 36, paddingHorizontal: 12 });
+        Object.assign(baseStyle, { height: 40, paddingHorizontal: 12 });
         break;
       case 'lg':
-        Object.assign(baseStyle, { height: 44, paddingHorizontal: 32 });
+        Object.assign(baseStyle, { height: 48, paddingHorizontal: 32 });
         break;
       case 'icon':
         Object.assign(baseStyle, {
-          height: 40,
-          width: 40,
+          height: HEIGHT,
+          width: HEIGHT,
           paddingHorizontal: 0,
         });
         break;
@@ -103,7 +103,7 @@ export function Button({
 
   const getTextStyle = (): TextStyle => {
     const baseTextStyle: TextStyle = {
-      fontSize: 14,
+      fontSize: FONT_SIZE,
       fontWeight: '500',
     };
 

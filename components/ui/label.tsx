@@ -1,5 +1,6 @@
 // components/ui/label.tsx
 import { Text } from '@/components/ui/text';
+import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { TextStyle } from 'react-native';
 
@@ -15,7 +16,7 @@ export function Label({ children, style }: LabelProps) {
     <Text
       style={[
         {
-          fontSize: 14,
+          fontSize: FONT_SIZE,
           fontWeight: '500',
           color: foregroundColor,
           marginBottom: 2,

@@ -44,13 +44,7 @@ interface CardHeaderProps {
 }
 
 export function CardHeader({ children, style }: CardHeaderProps) {
-  const cardColor = useThemeColor({}, 'card');
-
-  return (
-    <View style={[{ marginBottom: 16, backgroundColor: cardColor }, style]}>
-      {children}
-    </View>
-  );
+  return <View style={[{ marginBottom: 16 }, style]}>{children}</View>;
 }
 
 interface CardTitleProps {
@@ -80,19 +74,8 @@ interface CardDescriptionProps {
 }
 
 export function CardDescription({ children, style }: CardDescriptionProps) {
-  const mutedForegroundColor = useThemeColor({}, 'mutedForeground');
-
   return (
-    <Text
-      style={[
-        {
-          fontSize: 14,
-          color: mutedForegroundColor,
-          lineHeight: 20,
-        },
-        style,
-      ]}
-    >
+    <Text variant='caption' style={[style]}>
       {children}
     </Text>
   );
@@ -104,11 +87,7 @@ interface CardContentProps {
 }
 
 export function CardContent({ children, style }: CardContentProps) {
-  const cardColor = useThemeColor({}, 'card');
-
-  return (
-    <View style={[{ backgroundColor: cardColor }, style]}>{children}</View>
-  );
+  return <View style={[style]}>{children}</View>;
 }
 
 interface CardFooterProps {
@@ -117,13 +96,10 @@ interface CardFooterProps {
 }
 
 export function CardFooter({ children, style }: CardFooterProps) {
-  const cardColor = useThemeColor({}, 'card');
-
   return (
     <View
       style={[
         {
-          backgroundColor: cardColor,
           marginTop: 16,
           flexDirection: 'row',
           gap: 8,

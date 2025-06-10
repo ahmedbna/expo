@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ChevronDown,
@@ -220,7 +220,9 @@ export function DataTable<T = any>({
         ]}
       >
         {typeof cellContent === 'string' ? (
-          <Text style={[{ fontSize: 14 }, alignStyle]}>{cellContent}</Text>
+          <Text style={[{ fontSize: FONT_SIZE }, alignStyle]}>
+            {cellContent}
+          </Text>
         ) : (
           cellContent
         )}
@@ -396,7 +398,7 @@ export function DataTable<T = any>({
         <TextInput
           style={{
             flex: 1,
-            fontSize: 14,
+            fontSize: FONT_SIZE,
             color: textColor,
             paddingVertical: 8,
           }}

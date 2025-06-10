@@ -1,6 +1,7 @@
 // components/ui/avatar.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import {
@@ -88,7 +89,7 @@ export function AvatarFallback({
         style={[
           {
             color: mutedForegroundColor,
-            fontSize: 14,
+            fontSize: FONT_SIZE,
             fontWeight: '500',
           },
           textStyle,

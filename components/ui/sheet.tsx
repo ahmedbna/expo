@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { X } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
@@ -305,7 +306,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   description: {
-    fontSize: 14,
+    fontSize: FONT_SIZE,
     lineHeight: 20,
   },
 });

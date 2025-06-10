@@ -44,20 +44,8 @@ interface AlertTitleProps {
 }
 
 export function AlertTitle({ children, style }: AlertTitleProps) {
-  const foregroundColor = useThemeColor({}, 'foreground');
-
   return (
-    <Text
-      style={[
-        {
-          fontSize: 16,
-          fontWeight: '600',
-          color: foregroundColor,
-          marginBottom: 4,
-        },
-        style,
-      ]}
-    >
+    <Text variant='title' style={[style]}>
       {children}
     </Text>
   );
@@ -69,15 +57,12 @@ interface AlertDescriptionProps {
 }
 
 export function AlertDescription({ children, style }: AlertDescriptionProps) {
-  const mutedForegroundColor = useThemeColor({}, 'mutedForeground');
-
   return (
     <Text
+      variant='caption'
       style={[
         {
-          fontSize: 14,
-          color: mutedForegroundColor,
-          lineHeight: 20,
+          marginTop: 8,
         },
         style,
       ]}

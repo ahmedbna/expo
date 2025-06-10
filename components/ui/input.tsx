@@ -1,5 +1,5 @@
 // components/ui/input.tsx
-import { BORDER_RADIUS, HEIGHT } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { forwardRef } from 'react';
 import { TextInput, TextInputProps } from 'react-native';
@@ -28,7 +28,7 @@ export const Input = forwardRef<TextInput, InputProps>(
             paddingHorizontal: 12,
             backgroundColor: backgroundColor,
             color: textColor,
-            fontSize: 14,
+            fontSize: FONT_SIZE,
           },
           style,
         ]}

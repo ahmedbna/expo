@@ -1,5 +1,6 @@
 // components/ui/loading-spinner.tsx
 import { Text } from '@/components/ui/text';
+import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Loader2 } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
@@ -34,7 +35,7 @@ interface SpinnerConfig {
 
 const sizeConfig: Record<SpinnerSize, SpinnerConfig> = {
   sm: { size: 16, iconSize: 16, fontSize: 12, gap: 6 },
-  md: { size: 24, iconSize: 24, fontSize: 14, gap: 8 },
+  md: { size: 24, iconSize: 24, fontSize: FONT_SIZE, gap: 8 },
   lg: { size: 32, iconSize: 32, fontSize: 16, gap: 10 },
   xl: { size: 48, iconSize: 48, fontSize: 18, gap: 12 },
 };

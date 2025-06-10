@@ -1,7 +1,7 @@
 // components/ui/checkbox.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Check } from 'lucide-react-native';
 import React from 'react';
@@ -54,7 +54,7 @@ export function Checkbox({
         <Text
           style={{
             color: foregroundColor,
-            fontSize: 14,
+            fontSize: FONT_SIZE,
           }}
         >
           {label}

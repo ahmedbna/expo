@@ -1,7 +1,7 @@
 // components/ui/tabs.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React, { createContext, useContext, useState } from 'react';
 import {
@@ -135,7 +135,7 @@ export function TabsTrigger({
   };
 
   const triggerTextStyle: TextStyle = {
-    fontSize: 14,
+    fontSize: FONT_SIZE,
     fontWeight: '500',
     color: isActive ? primaryColor : mutedForegroundColor,
     ...textStyle,

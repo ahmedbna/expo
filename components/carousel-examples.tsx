@@ -2,6 +2,7 @@
 import { Carousel, CarouselItem } from '@/components/ui/carousel';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
+import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
@@ -228,7 +229,7 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   testimonialText: {
-    fontSize: 16,
+    fontSize: FONT_SIZE,
     fontStyle: 'italic',
     textAlign: 'center',
     marginBottom: 16,
@@ -238,7 +239,7 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
   sectionTitle: {
-    fontSize: 16,
+    fontSize: FONT_SIZE,
     fontWeight: '600',
     marginBottom: 12,
     textAlign: 'center',
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   slideSubtitle: {
-    fontSize: 16,
+    fontSize: FONT_SIZE,
     color: 'white',
     opacity: 0.9,
   },

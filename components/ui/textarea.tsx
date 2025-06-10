@@ -1,6 +1,6 @@
 // components/ui/textarea.tsx
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
+import { BORDER_RADIUS, FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 import { TextInput, TextInputProps, ViewStyle } from 'react-native';
@@ -48,7 +48,7 @@ export function Textarea({
   };
 
   const inputStyles = {
-    fontSize: 14,
+    fontSize: FONT_SIZE,
     lineHeight: 20,
     color: textColor,
     paddingHorizontal: 12,
