@@ -4,8 +4,8 @@ import { Button } from '@/components/ui/button';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import {
   Calendar,
   ChevronDown,

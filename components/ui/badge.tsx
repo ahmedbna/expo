@@ -1,8 +1,8 @@
 // components/ui/badge.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS } from '@/theme/globals';
 import { TextStyle, ViewStyle } from 'react-native';
 
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';

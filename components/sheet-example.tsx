@@ -5,7 +5,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { FONT_SIZE } from '@/constants/globals';
+import { FONT_SIZE } from '@/theme/globals';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Button } from './ui/button';

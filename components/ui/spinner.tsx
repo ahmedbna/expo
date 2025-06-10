@@ -1,7 +1,7 @@
 // components/ui/loading-spinner.tsx
 import { Text } from '@/components/ui/text';
-import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { FONT_SIZE } from '@/theme/globals';
 import { Loader2 } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
 import {

@@ -1,7 +1,7 @@
 // components/ui/toast.tsx
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS } from '@/theme/globals';
 import { AlertCircle, Check, Info, X } from 'lucide-react-native';
 import React, {
   createContext,

@@ -5,8 +5,8 @@ import { Platform } from 'react-native';
 import BlurBackground from '@/components/ui/blur-background';
 import { HapticTab } from '@/components/ui/haptic-tab';
 import { Icon } from '@/components/ui/icon';
-import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '@/theme/colors';
 import { Earth, Home, TestTube2 } from 'lucide-react-native';
 
 export default function TabLayout() {
@@ -15,7 +15,7 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].background,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: BlurBackground,

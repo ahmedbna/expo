@@ -17,7 +17,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Icon } from '@/components/ui/icon';
-import { Input } from '@/components/ui/input';
+import { ExampleUsage, Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { ScrollView } from '@/components/ui/scroll-view';
@@ -85,6 +85,8 @@ export const Test = () => {
               { label: 'Option 3', value: 'option3' },
             ]}
           />
+
+          <ExampleUsage />
 
           <SheetExample />
 

@@ -1,7 +1,7 @@
 // components/ui/radio.tsx
 import { Text } from '@/components/ui/text';
-import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { FONT_SIZE } from '@/theme/globals';
 import React from 'react';
 import { TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 

@@ -1,7 +1,7 @@
 // components/ui/button.tsx
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import {
   ActivityIndicator,
   TextStyle,

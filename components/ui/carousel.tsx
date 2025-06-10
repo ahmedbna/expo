@@ -1,7 +1,7 @@
 // components/ui/carousel.tsx
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS } from '@/theme/globals';
 import { BlurView } from 'expo-blur';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';

@@ -2,8 +2,8 @@
 import { Carousel, CarouselItem } from '@/components/ui/carousel';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { FONT_SIZE } from '@/theme/globals';
 import React from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
 

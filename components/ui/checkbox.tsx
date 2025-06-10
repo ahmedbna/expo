@@ -1,8 +1,8 @@
 // components/ui/checkbox.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS, FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
 import { Check } from 'lucide-react-native';
 import React from 'react';
 import { TouchableOpacity } from 'react-native';

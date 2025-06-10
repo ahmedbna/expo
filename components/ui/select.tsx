@@ -1,8 +1,8 @@
 // components/ui/select.tsx
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import { ChevronDown } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Modal, Pressable, TouchableOpacity, ViewStyle } from 'react-native';

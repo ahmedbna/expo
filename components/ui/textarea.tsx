@@ -1,7 +1,7 @@
 // components/ui/textarea.tsx
 import { View } from '@/components/ui/view';
-import { BORDER_RADIUS, FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
 import React from 'react';
 import { TextInput, TextInputProps, ViewStyle } from 'react-native';
 

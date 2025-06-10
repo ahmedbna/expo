@@ -1,7 +1,7 @@
 // components/ui/toggle.tsx
 import { Text } from '@/components/ui/text';
-import { BORDER_RADIUS } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { BORDER_RADIUS } from '@/theme/globals';
 import React from 'react';
 import { Pressable, TextStyle, ViewStyle } from 'react-native';
 

@@ -1,14 +1,14 @@
 const lightColors = {
   // Base colors
-  background: '#ffffff',
+  background: '#FFFFFF',
   foreground: '#0a0a0a',
 
   // Card colors
-  card: '#F8F9FA',
+  card: '#F2F2F7',
   cardForeground: '#0a0a0a',
 
   // Popover colors
-  popover: '#F8F9FA',
+  popover: '#F2F2F7',
   popoverForeground: '#0a0a0a',
 
   // Primary colors
@@ -46,22 +46,32 @@ const lightColors = {
   tabIconDefault: '#71717a',
   tabIconSelected: '#18181b',
 
-  // Chart colors for data visualization
-  chart1: '#f97316',
-  chart2: '#06b6d4',
-  chart3: '#8b5cf6',
-  chart4: '#84cc16',
-  chart5: '#f59e0b',
+  // Default buttons, links, Send button, selected tabs
+  blue: '#007AFF',
 
-  // Sidebar colors
-  sidebar: '#fafafa',
-  sidebarForeground: '#0a0a0a',
-  sidebarPrimary: '#18181b',
-  sidebarPrimaryForeground: '#fafafa',
-  sidebarAccent: '#EBECED',
-  sidebarAccentForeground: '#18181b',
-  sidebarBorder: '#e4e4e7',
-  sidebarRing: '#a1a1aa',
+  // Success states, FaceTime buttons, completed tasks
+  green: '#34C759',
+
+  // Delete buttons, error states, critical alerts
+  red: '#FF3B30',
+
+  // VoiceOver highlights, warning states
+  orange: '#FF9500',
+
+  // Notes app accent, Reminders highlights
+  yellow: '#FFCC00',
+
+  // Pink accent color for various UI elements
+  pink: '#FF2D92',
+
+  // Purple accent for creative apps and features
+  purple: '#AF52DE',
+
+  // Teal accent for communication features
+  teal: '#5AC8FA',
+
+  // Indigo accent for system features
+  indigo: '#5856D6',
 };
 
 const darkColors = {
@@ -70,7 +80,7 @@ const darkColors = {
   foreground: '#fafafa',
 
   // Card colors
-  card: '#18181b',
+  card: '#1C1C1E',
   cardForeground: '#fafafa',
 
   // Popover colors
@@ -112,22 +122,32 @@ const darkColors = {
   tabIconDefault: '#a1a1aa',
   tabIconSelected: '#fafafa',
 
-  // Chart colors for data visualization (adjusted for dark mode)
-  chart1: '#8b5cf6',
-  chart2: '#10b981',
-  chart3: '#f59e0b',
-  chart4: '#ef4444',
-  chart5: '#06b6d4',
+  // Default buttons, links, Send button, selected tabs
+  blue: '#0A84FF',
 
-  // Sidebar colors
-  sidebar: '#18181b',
-  sidebarForeground: '#fafafa',
-  sidebarPrimary: '#8b5cf6',
-  sidebarPrimaryForeground: '#fafafa',
-  sidebarAccent: '#27272a',
-  sidebarAccentForeground: '#fafafa',
-  sidebarBorder: 'rgba(255, 255, 255, 0.1)',
-  sidebarRing: '#71717a',
+  // Success states, FaceTime buttons, completed tasks
+  green: '#30D158',
+
+  // Delete buttons, error states, critical alerts
+  red: '#FF453A',
+
+  // VoiceOver highlights, warning states
+  orange: '#FF9F0A',
+
+  // Notes app accent, Reminders highlights
+  yellow: '#FFD60A',
+
+  // Pink accent color for various UI elements
+  pink: '#FF375F',
+
+  // Purple accent for creative apps and features
+  purple: '#BF5AF2',
+
+  // Teal accent for communication features
+  teal: '#64D2FF',
+
+  // Indigo accent for system features
+  indigo: '#5E5CE6',
 };
 
 export const Colors = {

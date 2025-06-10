@@ -1,6 +1,6 @@
 // components/ui/text.tsx
-import { FONT_SIZE } from '@/constants/globals';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { FONT_SIZE } from '@/theme/globals';
 import React from 'react';
 import {
   Text as RNText,
