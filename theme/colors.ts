@@ -16,15 +16,15 @@ const lightColors = {
   primaryForeground: '#fafafa',
 
   // Secondary colors
-  secondary: '#EBECED',
+  secondary: '#F2F2F7',
   secondaryForeground: '#18181b',
 
   // Muted colors
-  muted: '#EBECED',
+  muted: '#F2F2F7',
   mutedForeground: '#71717a',
 
   // Accent colors
-  accent: '#EBECED',
+  accent: '#F2F2F7',
   accentForeground: '#18181b',
 
   // Destructive colors
@@ -32,7 +32,7 @@ const lightColors = {
   destructiveForeground: '#fafafa',
 
   // Border and input
-  border: '#e4e4e7',
+  border: '#C6C6C8',
   input: '#e4e4e7',
   ring: '#a1a1aa',
 
@@ -92,15 +92,15 @@ const darkColors = {
   primaryForeground: '#18181b',
 
   // Secondary colors
-  secondary: '#27272a',
+  secondary: '#1C1C1E',
   secondaryForeground: '#fafafa',
 
   // Muted colors
-  muted: '#27272a',
+  muted: '#1C1C1E',
   mutedForeground: '#a1a1aa',
 
   // Accent colors
-  accent: '#27272a',
+  accent: '#1C1C1E',
   accentForeground: '#fafafa',
 
   // Destructive colors
@@ -108,7 +108,7 @@ const darkColors = {
   destructiveForeground: '#fafafa',
 
   // Border and input - using alpha values for better blending
-  border: 'rgba(255, 255, 255, 0.1)',
+  border: '#38383A',
   input: 'rgba(255, 255, 255, 0.15)',
   ring: '#71717a',
 

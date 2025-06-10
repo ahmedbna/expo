@@ -1,7 +1,7 @@
 // components/ui/button.tsx
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { FONT_SIZE, HEIGHT } from '@/theme/globals';
 import {
   ActivityIndicator,
   TextStyle,
@@ -43,13 +43,13 @@ export function Button({
   const primaryForegroundColor = useThemeColor({}, 'primaryForeground');
   const secondaryColor = useThemeColor({}, 'secondary');
   const secondaryForegroundColor = useThemeColor({}, 'secondaryForeground');
-  const destructiveColor = useThemeColor({}, 'destructive');
+  const destructiveColor = useThemeColor({}, 'red');
   const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
   const borderColor = useThemeColor({}, 'border');
 
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: BORDER_RADIUS,
+      borderRadius: 999,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -58,10 +58,10 @@ export function Button({
     // Size variants
     switch (size) {
       case 'sm':
-        Object.assign(baseStyle, { height: 40, paddingHorizontal: 12 });
+        Object.assign(baseStyle, { height: 44, paddingHorizontal: 24 });
         break;
       case 'lg':
-        Object.assign(baseStyle, { height: 48, paddingHorizontal: 32 });
+        Object.assign(baseStyle, { height: 54, paddingHorizontal: 36 });
         break;
       case 'icon':
         Object.assign(baseStyle, {
@@ -71,7 +71,7 @@ export function Button({
         });
         break;
       default:
-        Object.assign(baseStyle, { height: HEIGHT, paddingHorizontal: 16 });
+        Object.assign(baseStyle, { height: HEIGHT, paddingHorizontal: 32 });
     }
 
     // Variant styles

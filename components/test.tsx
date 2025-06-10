@@ -86,6 +86,18 @@ export const Test = () => {
             ]}
           />
 
+          <ModeToggle />
+
+          <Button size='sm'>Hello</Button>
+          <Button>Hello</Button>
+          <Button size='lg'>Hello</Button>
+          <Button size='icon'>Hello</Button>
+          <Button variant='secondary'>Hello</Button>
+          <Button variant='outline'>Hello</Button>
+          <Button variant='ghost'>Hello</Button>
+          <Button variant='link'>Hello</Button>
+          <Button variant='destructive'>Hello</Button>
+
           <ExampleUsage />
 
           <SheetExample />
@@ -499,8 +511,6 @@ export const Test = () => {
               </AccordionContent>
             </AccordionItem>
           </Accordion>
-
-          <ModeToggle />
 
           <Icon IconComponent={Camera} size={48} />
 
