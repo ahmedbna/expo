@@ -44,7 +44,7 @@ interface CardHeaderProps {
 }
 
 export function CardHeader({ children, style }: CardHeaderProps) {
-  return <View style={[{ marginBottom: 16 }, style]}>{children}</View>;
+  return <View style={[{ marginBottom: 8 }, style]}>{children}</View>;
 }
 
 interface CardTitleProps {

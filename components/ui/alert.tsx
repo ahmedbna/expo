@@ -25,9 +25,6 @@ export function Alert({ children, variant = 'default', style }: AlertProps) {
         {
           padding: BORDER_RADIUS,
           borderRadius: BORDER_RADIUS,
-          borderWidth: 1,
-          borderColor:
-            variant === 'destructive' ? destructiveColor : borderColor,
           backgroundColor: backgroundColor,
         },
         style,

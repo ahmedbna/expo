@@ -40,7 +40,7 @@ export function Checkbox({
           width: BORDER_RADIUS,
           height: BORDER_RADIUS,
           borderRadius: BORDER_RADIUS,
-          borderWidth: 2,
+          borderWidth: 1,
           borderColor: checked ? primaryColor : borderColor,
           backgroundColor: checked ? primaryColor : 'transparent',
           alignItems: 'center',

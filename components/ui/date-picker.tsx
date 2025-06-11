@@ -15,6 +15,7 @@ import {
 } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { TouchableOpacity, ViewStyle } from 'react-native';
+import { Icon } from './icon';
 
 interface DatePickerProps {
   value?: Date;
@@ -753,9 +754,9 @@ export function DatePicker({
         </Text>
 
         {mode === 'time' ? (
-          <Clock size={20} color={mutedForegroundColor} />
+          <Icon IconComponent={Clock} size={20} strokeWidth={1} />
         ) : (
-          <Calendar size={20} color={mutedForegroundColor} />
+          <Icon IconComponent={Calendar} size={20} strokeWidth={1} />
         )}
       </TouchableOpacity>
 

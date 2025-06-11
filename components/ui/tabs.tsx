@@ -80,25 +80,35 @@ export function Tabs({
   );
 }
 
-// TabsList component
+// TabsList component - FIXED
 export function TabsList({ children, style }: TabsListProps) {
   const backgroundColor = useThemeColor({}, 'muted');
 
   return (
-    <ScrollView
-      horizontal
-      showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{
-        flexDirection: 'row',
-        backgroundColor,
-        borderRadius: CORNERS,
-        padding: 4,
-        ...style,
-      }}
-      scrollEnabled={false} // Disable scroll by default, can be overridden
+    <View
+      style={[
+        {
+          backgroundColor,
+          borderRadius: CORNERS,
+          padding: 6,
+        },
+        style,
+      ]}
     >
-      {children}
-    </ScrollView>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          flexDirection: 'row',
+          minWidth: '100%', // Ensures content takes at least full width
+        }}
+        style={{
+          flexGrow: 0, // Prevents ScrollView from taking more space than needed
+        }}
+      >
+        {children}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -128,9 +138,10 @@ export function TabsTrigger({
     borderRadius: CORNERS,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 36,
+    minHeight: 40,
     backgroundColor: isActive ? backgroundColor : 'transparent',
     opacity: disabled ? 0.5 : 1,
+    flex: 1, // This makes tabs distribute evenly when they fit
     ...style,
   };
 

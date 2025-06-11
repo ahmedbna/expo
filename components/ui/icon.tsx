@@ -31,6 +31,7 @@ export function Icon({
       color={iconColor}
       size={size}
       strokeWidth={strokeWidth}
+      strokeLinecap='round'
       {...rest}
     />
   );
