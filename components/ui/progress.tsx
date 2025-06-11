@@ -1,6 +1,7 @@
 // components/ui/progress.tsx
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { HEIGHT } from '@/theme/globals';
 import React, { useEffect } from 'react';
 import { ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -22,7 +23,7 @@ interface ProgressProps {
 export function Progress({
   value,
   style,
-  height = 8,
+  height = HEIGHT,
   onValueChange,
   interactive = false,
 }: ProgressProps) {

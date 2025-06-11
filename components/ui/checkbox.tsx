@@ -37,8 +37,8 @@ export function Checkbox({
     >
       <View
         style={{
-          width: 20,
-          height: 20,
+          width: BORDER_RADIUS,
+          height: BORDER_RADIUS,
           borderRadius: BORDER_RADIUS,
           borderWidth: 2,
           borderColor: checked ? primaryColor : borderColor,
@@ -48,12 +48,20 @@ export function Checkbox({
           marginRight: label ? 8 : 0,
         }}
       >
-        {checked && <Check size={16} color={primaryForegroundColor} />}
+        {checked && (
+          <Check
+            size={16}
+            color={primaryForegroundColor}
+            strokeWidth={3}
+            strokeLinecap='round'
+          />
+        )}
       </View>
       {label && (
         <Text
           style={{
-            color: foregroundColor,
+            lineHeight: BORDER_RADIUS,
+            color: primaryColor,
             fontSize: FONT_SIZE,
           }}
         >

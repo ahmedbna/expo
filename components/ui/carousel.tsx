@@ -383,7 +383,7 @@ export function CarouselIndicators({
   style,
 }: CarouselIndicatorsProps) {
   const primaryColor = useThemeColor({}, 'primary');
-  const mutedColor = useThemeColor({}, 'muted');
+  const secondaryColor = useThemeColor({}, 'secondary');
 
   return (
     <View
@@ -392,7 +392,7 @@ export function CarouselIndicators({
           flexDirection: 'row',
           justifyContent: 'center',
           alignItems: 'center',
-          gap: 8,
+          gap: 6,
         },
         style,
       ]}
@@ -404,9 +404,8 @@ export function CarouselIndicators({
           style={{
             width: 8,
             height: 8,
-            borderRadius: 4,
-            backgroundColor: index === current ? primaryColor : mutedColor,
-            opacity: index === current ? 1 : 0.5,
+            borderRadius: 999,
+            backgroundColor: index === current ? primaryColor : secondaryColor,
           }}
           activeOpacity={0.7}
         />

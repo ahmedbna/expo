@@ -79,7 +79,6 @@ export function DataTable<T = any>({
   filterable = true,
 }: DataTableProps<T>) {
   // Theme colors
-  const backgroundColor = useThemeColor({}, 'background');
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'textMuted');
@@ -212,7 +211,7 @@ export function DataTable<T = any>({
             flex: column.width ? 0 : 1,
             width: column.width as any,
             minWidth: column.minWidth || 100,
-            paddingHorizontal: 12,
+            paddingHorizontal: 18,
             paddingVertical: 16,
             justifyContent: 'center',
           },
@@ -249,7 +248,7 @@ export function DataTable<T = any>({
             flex: column.width ? 0 : 1,
             width: column.width as any,
             minWidth: column.minWidth || 100,
-            paddingHorizontal: 12,
+            paddingHorizontal: 18,
             paddingVertical: 16,
             flexDirection: 'row',
             alignItems: 'center',
@@ -314,7 +313,7 @@ export function DataTable<T = any>({
           justifyContent: 'space-between',
           alignItems: 'center',
           paddingHorizontal: 16,
-          paddingVertical: 12,
+          paddingVertical: 18,
           backgroundColor: cardColor,
           borderTopWidth: 1,
           borderTopColor: borderColor,
@@ -389,8 +388,9 @@ export function DataTable<T = any>({
           backgroundColor: cardColor,
           borderBottomWidth: 1,
           borderColor: borderColor,
-          paddingHorizontal: 12,
+          paddingHorizontal: 18,
           height: HEIGHT,
+          marginVertical: 2,
         }}
       >
         <Search size={16} color={mutedColor} style={{ marginRight: 8 }} />

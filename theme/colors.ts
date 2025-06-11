@@ -1,26 +1,26 @@
 const lightColors = {
   // Base colors
   background: '#FFFFFF',
-  foreground: '#0a0a0a',
+  foreground: '#000000',
 
   // Card colors
   card: '#F2F2F7',
-  cardForeground: '#0a0a0a',
+  cardForeground: '#000000',
 
   // Popover colors
   popover: '#F2F2F7',
-  popoverForeground: '#0a0a0a',
+  popoverForeground: '#000000',
 
   // Primary colors
   primary: '#18181b',
-  primaryForeground: '#fafafa',
+  primaryForeground: '#FFFFFF',
 
   // Secondary colors
   secondary: '#F2F2F7',
   secondaryForeground: '#18181b',
 
   // Muted colors
-  muted: '#F2F2F7',
+  muted: '#78788033',
   mutedForeground: '#71717a',
 
   // Accent colors
@@ -29,7 +29,7 @@ const lightColors = {
 
   // Destructive colors
   destructive: '#ef4444',
-  destructiveForeground: '#fafafa',
+  destructiveForeground: '#FFFFFF',
 
   // Border and input
   border: '#C6C6C8',
@@ -37,7 +37,7 @@ const lightColors = {
   ring: '#a1a1aa',
 
   // Text colors
-  text: '#0a0a0a',
+  text: '#000000',
   textMuted: '#71717a',
 
   // Legacy support for existing components
@@ -76,16 +76,16 @@ const lightColors = {
 
 const darkColors = {
   // Base colors
-  background: '#0a0a0a',
-  foreground: '#fafafa',
+  background: '#000000',
+  foreground: '#FFFFFF',
 
   // Card colors
   card: '#1C1C1E',
-  cardForeground: '#fafafa',
+  cardForeground: '#FFFFFF',
 
   // Popover colors
   popover: '#18181b',
-  popoverForeground: '#fafafa',
+  popoverForeground: '#FFFFFF',
 
   // Primary colors
   primary: '#e4e4e7',
@@ -93,19 +93,19 @@ const darkColors = {
 
   // Secondary colors
   secondary: '#1C1C1E',
-  secondaryForeground: '#fafafa',
+  secondaryForeground: '#FFFFFF',
 
   // Muted colors
-  muted: '#1C1C1E',
+  muted: '#78788033',
   mutedForeground: '#a1a1aa',
 
   // Accent colors
   accent: '#1C1C1E',
-  accentForeground: '#fafafa',
+  accentForeground: '#FFFFFF',
 
   // Destructive colors
   destructive: '#dc2626',
-  destructiveForeground: '#fafafa',
+  destructiveForeground: '#FFFFFF',
 
   // Border and input - using alpha values for better blending
   border: '#38383A',
@@ -113,14 +113,14 @@ const darkColors = {
   ring: '#71717a',
 
   // Text colors
-  text: '#fafafa',
+  text: '#FFFFFF',
   textMuted: '#a1a1aa',
 
   // Legacy support for existing components
-  tint: '#fafafa',
+  tint: '#FFFFFF',
   icon: '#a1a1aa',
   tabIconDefault: '#a1a1aa',
-  tabIconSelected: '#fafafa',
+  tabIconSelected: '#FFFFFF',
 
   // Default buttons, links, Send button, selected tabs
   blue: '#0A84FF',

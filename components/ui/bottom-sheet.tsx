@@ -221,21 +221,16 @@ export function BottomSheet({
                     marginHorizontal: 16,
                     marginTop: 16,
                     paddingBottom: 8,
-                    backgroundColor: cardColor,
                   }}
                 >
-                  <Text variant='subtitle' style={{ textAlign: 'center' }}>
+                  <Text variant='title' style={{ textAlign: 'center' }}>
                     {title}
                   </Text>
                 </View>
               )}
 
               {/* Content */}
-              <View
-                style={{ flex: 1, padding: 16, backgroundColor: cardColor }}
-              >
-                {children}
-              </View>
+              <View style={{ flex: 1, padding: 16 }}>{children}</View>
             </Animated.View>
           </GestureDetector>
         </Animated.View>

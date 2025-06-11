@@ -1,7 +1,7 @@
 // components/ui/radio.tsx
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { FONT_SIZE } from '@/theme/globals';
+import { CORNERS, FONT_SIZE } from '@/theme/globals';
 import React from 'react';
 import { TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 
@@ -50,7 +50,7 @@ export function RadioButton({
   const radioButtonStyle: ViewStyle = {
     width: 20,
     height: 20,
-    borderRadius: 999,
+    borderRadius: CORNERS,
     borderWidth: 2,
     borderColor: selected ? primaryColor : borderColor,
     backgroundColor: backgroundColor,
@@ -62,7 +62,7 @@ export function RadioButton({
   const innerCircleStyle: ViewStyle = {
     width: 10,
     height: 10,
-    borderRadius: 999,
+    borderRadius: CORNERS,
     backgroundColor: selected ? primaryColor : 'transparent',
   };
 

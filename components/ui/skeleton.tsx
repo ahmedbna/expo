@@ -1,6 +1,6 @@
 // components/ui/skeleton.tsx
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { CORNERS } from '@/theme/globals';
 import React, { useEffect, useRef } from 'react';
 import { Animated, ViewStyle } from 'react-native';
 
@@ -46,7 +46,7 @@ export function Skeleton({
           width: width as any, // Type assertion to bypass the strict typing
           height,
           backgroundColor: mutedColor,
-          borderRadius: BORDER_RADIUS,
+          borderRadius: CORNERS,
           opacity,
         },
         style,

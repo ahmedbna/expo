@@ -51,8 +51,7 @@ export function Textarea({
     fontSize: FONT_SIZE,
     lineHeight: 20,
     color: textColor,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    padding: 16,
     textAlignVertical: 'top' as const,
     minHeight: rows * 20 + 16, // Approximate line height + padding
   };

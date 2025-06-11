@@ -1,7 +1,7 @@
 // components/ui/button.tsx
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import {
   ActivityIndicator,
   TextStyle,
@@ -49,7 +49,7 @@ export function Button({
 
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: 999,
+      borderRadius: CORNERS,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',

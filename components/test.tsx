@@ -29,6 +29,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
+import { CORNERS } from '@/theme/globals';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
@@ -202,7 +203,7 @@ export const Test = () => {
 
           <CarouselTestComponent />
 
-          <Skeleton width={60} height={60} style={{ borderRadius: 999 }} />
+          <Skeleton width={60} height={60} style={{ borderRadius: CORNERS }} />
 
           <View>
             <Text variant='heading'>Hello</Text>

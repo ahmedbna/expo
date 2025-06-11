@@ -2,7 +2,7 @@
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { CORNERS } from '@/theme/globals';
 import { TextStyle, ViewStyle } from 'react-native';
 
 type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
@@ -30,8 +30,9 @@ export function Badge({
 
   const getBadgeStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      paddingHorizontal: 8,
-      borderRadius: BORDER_RADIUS,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      borderRadius: CORNERS,
     };
 
     switch (variant) {
@@ -53,7 +54,7 @@ export function Badge({
 
   const getTextStyle = (): TextStyle => {
     const baseTextStyle: TextStyle = {
-      fontSize: 12,
+      fontSize: 15,
       fontWeight: '500',
     };
 

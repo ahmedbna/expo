@@ -20,9 +20,12 @@ export const ThemeProvider = ({ children }: Props) => {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
+      primary: Colors.light.primary,
       background: Colors.light.background,
       card: Colors.light.card,
-      primary: Colors.light.primary,
+      text: Colors.light.text,
+      border: Colors.light.border,
+      notification: Colors.light.red,
     },
   };
 
@@ -30,9 +33,12 @@ export const ThemeProvider = ({ children }: Props) => {
     ...DarkTheme,
     colors: {
       ...DarkTheme.colors,
+      primary: Colors.dark.primary,
       background: Colors.dark.background,
       card: Colors.dark.card,
-      primary: Colors.dark.primary,
+      text: Colors.dark.text,
+      border: Colors.dark.border,
+      notification: Colors.dark.red,
     },
   };
 

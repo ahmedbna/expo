@@ -12,7 +12,7 @@ interface CardProps {
 
 export function Card({ children, style }: CardProps) {
   const cardColor = useThemeColor({}, 'card');
-  const borderColor = useThemeColor({}, 'border');
+  const foregroundColor = useThemeColor({}, 'foreground');
 
   return (
     <View
@@ -21,10 +21,10 @@ export function Card({ children, style }: CardProps) {
           width: '100%',
           backgroundColor: cardColor,
           borderRadius: BORDER_RADIUS,
-          borderWidth: 1,
-          borderColor: borderColor,
-          padding: 16,
-          shadowColor: '#000',
+          // borderWidth: 1,
+          // borderColor: borderColor,
+          padding: BORDER_RADIUS,
+          shadowColor: foregroundColor,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.05,
           shadowRadius: 3,

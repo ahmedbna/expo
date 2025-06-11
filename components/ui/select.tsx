@@ -2,7 +2,7 @@
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import { ChevronDown } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Modal, Pressable, TouchableOpacity, ViewStyle } from 'react-native';
@@ -49,10 +49,11 @@ export function Select({
     alignItems: 'center',
     justifyContent: 'space-between',
     height: HEIGHT,
-    paddingHorizontal: 12,
+    gap: 8,
+    paddingHorizontal: 32,
     borderWidth: 1,
     borderColor,
-    borderRadius: BORDER_RADIUS,
+    borderRadius: CORNERS,
     backgroundColor,
     opacity: disabled ? 0.5 : 1,
   };
@@ -107,11 +108,15 @@ export function Select({
               maxHeight: 300,
               width: '100%',
               maxWidth: 400,
+              padding: 8,
             }}
             onPress={(e) => e.stopPropagation()}
           >
             <ScrollView
-              style={{ maxHeight: 300, borderRadius: BORDER_RADIUS }}
+              style={{
+                maxHeight: 300,
+                borderRadius: BORDER_RADIUS,
+              }}
               showsVerticalScrollIndicator={false}
             >
               {options.map((option, index) => (

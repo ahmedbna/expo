@@ -23,7 +23,7 @@ export function Alert({ children, variant = 'default', style }: AlertProps) {
     <View
       style={[
         {
-          padding: 16,
+          padding: BORDER_RADIUS,
           borderRadius: BORDER_RADIUS,
           borderWidth: 1,
           borderColor:

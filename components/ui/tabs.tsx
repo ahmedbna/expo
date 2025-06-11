@@ -2,7 +2,7 @@
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
+import { CORNERS, FONT_SIZE } from '@/theme/globals';
 import React, { createContext, useContext, useState } from 'react';
 import {
   ScrollView,
@@ -91,7 +91,7 @@ export function TabsList({ children, style }: TabsListProps) {
       contentContainerStyle={{
         flexDirection: 'row',
         backgroundColor,
-        borderRadius: BORDER_RADIUS,
+        borderRadius: CORNERS,
         padding: 4,
         ...style,
       }}
@@ -125,7 +125,7 @@ export function TabsTrigger({
 
   const triggerStyle: ViewStyle = {
     paddingHorizontal: 12,
-    borderRadius: BORDER_RADIUS,
+    borderRadius: CORNERS,
     alignItems: 'center',
     justifyContent: 'center',
     minHeight: 36,

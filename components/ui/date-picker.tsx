@@ -5,7 +5,7 @@ import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import {
   Calendar,
   ChevronDown,
@@ -247,7 +247,7 @@ export function DatePicker({
         onPress={() => navigateMonth('prev')}
         style={{
           padding: 10,
-          borderRadius: BORDER_RADIUS,
+          borderRadius: CORNERS,
           backgroundColor: mutedColor,
         }}
       >
@@ -274,7 +274,7 @@ export function DatePicker({
             justifyContent: 'center',
             paddingHorizontal: 16,
             paddingVertical: 10,
-            borderRadius: BORDER_RADIUS,
+            borderRadius: CORNERS,
             backgroundColor: mutedColor,
           }}
         >
@@ -293,7 +293,7 @@ export function DatePicker({
             justifyContent: 'center',
             paddingHorizontal: 16,
             paddingVertical: 10,
-            borderRadius: BORDER_RADIUS,
+            borderRadius: CORNERS,
             backgroundColor: mutedColor,
           }}
         >
@@ -308,7 +308,7 @@ export function DatePicker({
         onPress={() => navigateMonth('next')}
         style={{
           padding: 10,
-          borderRadius: BORDER_RADIUS,
+          borderRadius: CORNERS,
           backgroundColor: mutedColor,
         }}
       >
@@ -479,7 +479,7 @@ export function DatePicker({
                     style={{
                       paddingVertical: 12,
                       paddingHorizontal: 16,
-                      borderRadius: BORDER_RADIUS,
+                      borderRadius: CORNERS,
                       backgroundColor: isSelected
                         ? primaryColor
                         : 'transparent',
@@ -523,7 +523,7 @@ export function DatePicker({
                   style={{
                     paddingVertical: 12,
                     paddingHorizontal: 16,
-                    borderRadius: BORDER_RADIUS,
+                    borderRadius: CORNERS,
                     backgroundColor:
                       minute === selectedMinutes ? primaryColor : 'transparent',
                     marginVertical: 2,
@@ -582,7 +582,7 @@ export function DatePicker({
                       style={{
                         paddingVertical: 12,
                         paddingHorizontal: 16,
-                        borderRadius: BORDER_RADIUS,
+                        borderRadius: CORNERS,
                         backgroundColor: isSelected
                           ? primaryColor
                           : 'transparent',
@@ -626,7 +626,7 @@ export function DatePicker({
             style={{
               paddingVertical: 16,
               paddingHorizontal: 20,
-              borderRadius: BORDER_RADIUS,
+              borderRadius: CORNERS,
               backgroundColor:
                 index === calendarData.month ? primaryColor : 'transparent',
               marginVertical: 2,
@@ -666,7 +666,7 @@ export function DatePicker({
             style={{
               paddingVertical: 16,
               paddingHorizontal: 20,
-              borderRadius: BORDER_RADIUS,
+              borderRadius: CORNERS,
               backgroundColor:
                 year === calendarData.year ? primaryColor : 'transparent',
               marginVertical: 2,
@@ -731,7 +731,7 @@ export function DatePicker({
     paddingHorizontal: 16,
     borderWidth: 1,
     borderColor: borderColor,
-    borderRadius: BORDER_RADIUS,
+    borderRadius: CORNERS,
     backgroundColor: cardColor,
     minHeight: HEIGHT,
   };

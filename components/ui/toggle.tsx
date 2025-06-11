@@ -1,7 +1,7 @@
 // components/ui/toggle.tsx
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS } from '@/theme/globals';
+import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import React from 'react';
 import { Pressable, TextStyle, ViewStyle } from 'react-native';
 
@@ -42,7 +42,7 @@ export function Toggle({
 
   const getToggleStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
-      borderRadius: BORDER_RADIUS,
+      borderRadius: CORNERS,
       alignItems: 'center',
       justifyContent: 'center',
       flexDirection: 'row',
@@ -53,13 +53,13 @@ export function Toggle({
     // Size variants
     switch (size) {
       case 'sm':
-        Object.assign(baseStyle, { height: 32, paddingHorizontal: 8 });
+        Object.assign(baseStyle, { height: 44, width: 44 });
         break;
       case 'lg':
-        Object.assign(baseStyle, { height: 44, paddingHorizontal: 16 });
+        Object.assign(baseStyle, { height: 54, width: 54 });
         break;
       default:
-        Object.assign(baseStyle, { height: 36, paddingHorizontal: 12 });
+        Object.assign(baseStyle, { height: HEIGHT, width: HEIGHT });
     }
 
     // State and variant styles
@@ -82,8 +82,8 @@ export function Toggle({
 
   const getTextStyle = (): TextStyle => {
     const baseTextStyle: TextStyle = {
-      fontSize: size === 'sm' ? 12 : size === 'lg' ? 16 : 14,
-      fontWeight: '500',
+      fontSize: size === 'sm' ? 14 : size === 'lg' ? 18 : FONT_SIZE,
+      fontWeight: '700',
     };
 
     if (pressed) {
