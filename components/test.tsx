@@ -120,6 +120,78 @@ export const Test = () => {
               placeholder='Enter password'
               secureTextEntry
             />
+
+            {/* Date only picker */}
+            <DatePicker
+              label='Select Date'
+              mode='date'
+              value={selectedDate}
+              onChange={setSelectedDate}
+              placeholder='Select a date'
+              variant='outline'
+            />
+            {selectedDate && (
+              <Text variant='caption'>
+                Selected: {selectedDate.toLocaleDateString()}
+              </Text>
+            )}
+
+            {/* Time only picker */}
+            <DatePicker
+              label='Time Picker'
+              mode='time'
+              value={selectedTime}
+              onChange={setSelectedTime}
+              timeFormat='24'
+              placeholder='Select a time'
+            />
+            {selectedTime && (
+              <Text variant='caption'>
+                Selected:{' '}
+                {selectedTime.toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            )}
+
+            {/* Date and time picker */}
+            <DatePicker
+              label='Date & Time Picker'
+              mode='datetime'
+              timeFormat='12'
+              value={selectedDateTime}
+              onChange={setSelectedDateTime}
+              placeholder='Select date and time'
+            />
+            {selectedDateTime && (
+              <Text variant='caption'>
+                Selected: {selectedDateTime.toLocaleDateString()} at{' '}
+                {selectedDateTime.toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })}
+              </Text>
+            )}
+
+            {/* Disabled picker */}
+            <DatePicker
+              mode='date'
+              label='Disabled Picker'
+              disabled
+              placeholder='This picker is disabled'
+            />
+
+            {/* With minimum and maximum dates */}
+            <DatePicker
+              mode='date'
+              label='With Date Constraints'
+              value={selectedDate}
+              onChange={setSelectedDate}
+              placeholder='Only future dates allowed'
+              minimumDate={new Date()}
+              maximumDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)} // 1 year from now
+            />
           </View>
 
           <AlertExamples />
@@ -240,87 +312,6 @@ export const Test = () => {
 
           <View>
             <Text variant='heading'>Hello</Text>
-          </View>
-
-          {/* Date only picker */}
-          <View style={{ gap: 8 }}>
-            <Text variant='subtitle'>Date Picker</Text>
-            <DatePicker
-              mode='date'
-              value={selectedDate}
-              onChange={setSelectedDate}
-              placeholder='Select a date'
-            />
-            {selectedDate && (
-              <Text variant='caption'>
-                Selected: {selectedDate.toLocaleDateString()}
-              </Text>
-            )}
-          </View>
-
-          {/* Time only picker */}
-          <View style={{ gap: 8 }}>
-            <Text variant='subtitle'>Time Picker</Text>
-            <DatePicker
-              mode='time'
-              value={selectedTime}
-              onChange={setSelectedTime}
-              timeFormat='24'
-              placeholder='Select a time'
-            />
-            {selectedTime && (
-              <Text variant='caption'>
-                Selected:{' '}
-                {selectedTime.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </Text>
-            )}
-          </View>
-
-          {/* Date and time picker */}
-          <View style={{ gap: 8 }}>
-            <Text variant='subtitle'>Date & Time Picker</Text>
-            <DatePicker
-              mode='datetime'
-              timeFormat='12'
-              value={selectedDateTime}
-              onChange={setSelectedDateTime}
-              placeholder='Select date and time'
-            />
-            {selectedDateTime && (
-              <Text variant='caption'>
-                Selected: {selectedDateTime.toLocaleDateString()} at{' '}
-                {selectedDateTime.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </Text>
-            )}
-          </View>
-
-          {/* Disabled picker */}
-          <View style={{ gap: 8 }}>
-            <Text variant='subtitle'>Disabled Picker</Text>
-            <DatePicker
-              mode='date'
-              disabled
-              placeholder='This picker is disabled'
-            />
-          </View>
-
-          {/* With minimum and maximum dates */}
-          <View style={{ gap: 8 }}>
-            <Text variant='subtitle'>With Date Constraints</Text>
-            <DatePicker
-              mode='date'
-              value={selectedDate}
-              onChange={setSelectedDate}
-              placeholder='Only future dates allowed'
-              minimumDate={new Date()}
-              maximumDate={new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)} // 1 year from now
-            />
           </View>
 
           <View style={{ gap: 16 }}>

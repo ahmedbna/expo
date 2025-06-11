@@ -1,6 +1,7 @@
 // components/ui/date-picker.tsx
 import { BottomSheet, useBottomSheet } from '@/components/ui/bottom-sheet';
 import { Button } from '@/components/ui/button';
+import { Icon } from '@/components/ui/icon';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
@@ -8,16 +9,18 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import {
   Calendar,
+  CalendarClock,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
 } from 'lucide-react-native';
 import React, { useCallback, useMemo, useState } from 'react';
-import { TouchableOpacity, ViewStyle } from 'react-native';
-import { Icon } from './icon';
+import { TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
 
 interface DatePickerProps {
+  label?: string;
+  error?: string;
   value?: Date;
   onChange?: (date: Date) => void;
   mode?: 'date' | 'time' | 'datetime';
@@ -27,6 +30,9 @@ interface DatePickerProps {
   minimumDate?: Date;
   maximumDate?: Date;
   timeFormat?: '12' | '24';
+  variant?: 'filled' | 'outline';
+  labelStyle?: TextStyle;
+  errorStyle?: TextStyle;
 }
 
 const MONTHS = [
@@ -51,7 +57,9 @@ const currentYear = new Date().getFullYear();
 const YEARS = Array.from({ length: 101 }, (_, i) => currentYear - 50 + i);
 
 export function DatePicker({
+  label,
   value,
+  error,
   onChange,
   mode = 'date',
   placeholder = 'Select date',
@@ -60,6 +68,9 @@ export function DatePicker({
   minimumDate,
   maximumDate,
   timeFormat = '24', // Default to 24-hour format
+  variant = 'filled',
+  labelStyle,
+  errorStyle,
 }: DatePickerProps) {
   const { isVisible, open, close } = useBottomSheet();
   const [currentDate, setCurrentDate] = useState(() => value || new Date());
@@ -75,8 +86,10 @@ export function DatePicker({
   const primaryColor = useThemeColor({}, 'primary');
   const primaryForegroundColor = useThemeColor({}, 'primaryForeground');
   const mutedColor = useThemeColor({}, 'muted');
+  const textMutedColor = useThemeColor({}, 'textMuted');
   const mutedForegroundColor = useThemeColor({}, 'mutedForeground');
   const textColor = useThemeColor({}, 'text');
+  const errorColor = useThemeColor({}, 'red');
 
   const formatDisplayValue = useCallback(() => {
     if (!value) return placeholder;
@@ -728,12 +741,11 @@ export function DatePicker({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: borderColor,
+    borderColor: variant === 'outline' ? borderColor : cardColor,
     borderRadius: CORNERS,
-    backgroundColor: cardColor,
+    backgroundColor: variant === 'outline' ? 'transparent' : cardColor,
     minHeight: HEIGHT,
   };
 
@@ -744,20 +756,40 @@ export function DatePicker({
         onPress={handleOpenPicker}
         disabled={disabled}
       >
+        <View style={{ marginRight: 8 }}>
+          {mode === 'time' ? (
+            <Icon IconComponent={Clock} size={20} strokeWidth={1} />
+          ) : mode === 'datetime' ? (
+            <Icon IconComponent={CalendarClock} size={20} strokeWidth={1} />
+          ) : (
+            <Icon IconComponent={Calendar} size={20} strokeWidth={1} />
+          )}
+        </View>
+
+        {/* Label on the right */}
+        {label && (
+          <Text
+            variant='caption'
+            style={[
+              {
+                color: error ? errorColor : textMutedColor,
+                marginRight: 8,
+              },
+              labelStyle,
+            ]}
+          >
+            {label}
+          </Text>
+        )}
+
         <Text
           style={{
-            color: value ? textColor : mutedForegroundColor,
+            color: value ? textColor : textMutedColor,
             fontSize: FONT_SIZE,
           }}
         >
           {formatDisplayValue()}
         </Text>
-
-        {mode === 'time' ? (
-          <Icon IconComponent={Clock} size={20} strokeWidth={1} />
-        ) : (
-          <Icon IconComponent={Calendar} size={20} strokeWidth={1} />
-        )}
       </TouchableOpacity>
 
       <BottomSheet

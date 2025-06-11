@@ -1,3 +1,5 @@
+import { Icon } from '@/components/ui/icon';
+import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import { LucideProps } from 'lucide-react-native';
@@ -10,8 +12,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { Icon } from './icon';
-import { Text } from './text';
 
 export interface InputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
@@ -50,7 +50,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     // Theme colors
     const cardColor = useThemeColor({}, 'card');
     const textColor = useThemeColor({}, 'text');
-    const mutedColor = useThemeColor({}, 'textMuted');
+    const textMutedColor = useThemeColor({}, 'textMuted');
     const borderColor = useThemeColor({}, 'border');
     const primaryColor = useThemeColor({}, 'primary');
     const errorColor = useThemeColor({}, 'red');
@@ -83,7 +83,7 @@ export const Input = forwardRef<TextInput, InputProps>(
             ...baseStyle,
             borderWidth: 1,
             borderColor: error ? errorColor : cardColor,
-            backgroundColor: disabled ? mutedColor + '20' : cardColor,
+            backgroundColor: disabled ? textMutedColor + '20' : cardColor,
           };
       }
     };
@@ -91,7 +91,7 @@ export const Input = forwardRef<TextInput, InputProps>(
     const getInputStyle = (): TextStyle => ({
       flex: 1,
       fontSize: FONT_SIZE,
-      color: disabled ? mutedColor : textColor,
+      color: disabled ? textMutedColor : textColor,
       paddingVertical: 0, // Remove default padding
       marginLeft: icon ? 8 : 0,
       marginRight: rightComponent || label ? 8 : 0,
@@ -129,7 +129,7 @@ export const Input = forwardRef<TextInput, InputProps>(
               variant='caption'
               style={[
                 {
-                  color: error ? errorColor : mutedColor,
+                  color: error ? errorColor : textMutedColor,
                   marginRight: 8,
                 },
                 labelStyle,
@@ -143,7 +143,7 @@ export const Input = forwardRef<TextInput, InputProps>(
           <TextInput
             ref={ref}
             style={[getInputStyle(), inputStyle]}
-            placeholderTextColor={error ? errorColor + 99 : mutedColor}
+            placeholderTextColor={error ? errorColor + 99 : textMutedColor}
             onFocus={handleFocus}
             onBlur={handleBlur}
             editable={!disabled}
