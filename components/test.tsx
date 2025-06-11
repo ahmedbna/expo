@@ -33,6 +33,7 @@ import { CORNERS } from '@/theme/globals';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { Camera } from 'lucide-react-native';
 import { useState } from 'react';
+import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -88,6 +89,8 @@ export const Test = () => {
           />
 
           <ModeToggle />
+
+          <AlertExamples />
 
           <Button size='sm'>Hello</Button>
           <Button>Hello</Button>

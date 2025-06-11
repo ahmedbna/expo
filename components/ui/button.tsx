@@ -12,6 +12,7 @@ import {
 type ButtonVariant =
   | 'default'
   | 'destructive'
+  | 'confirm'
   | 'outline'
   | 'secondary'
   | 'ghost'
@@ -44,6 +45,7 @@ export function Button({
   const secondaryColor = useThemeColor({}, 'secondary');
   const secondaryForegroundColor = useThemeColor({}, 'secondaryForeground');
   const destructiveColor = useThemeColor({}, 'red');
+  const greenColor = useThemeColor({}, 'green');
   const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
   const borderColor = useThemeColor({}, 'border');
 
@@ -78,6 +80,8 @@ export function Button({
     switch (variant) {
       case 'destructive':
         return { ...baseStyle, backgroundColor: destructiveColor };
+      case 'confirm':
+        return { ...baseStyle, backgroundColor: greenColor };
       case 'outline':
         return {
           ...baseStyle,
@@ -109,6 +113,8 @@ export function Button({
 
     switch (variant) {
       case 'destructive':
+        return { ...baseTextStyle, color: destructiveForegroundColor };
+      case 'confirm':
         return { ...baseTextStyle, color: destructiveForegroundColor };
       case 'outline':
         return { ...baseTextStyle, color: primaryColor };
