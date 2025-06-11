@@ -17,8 +17,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Icon } from '@/components/ui/icon';
-import { ExampleUsage, Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Select } from '@/components/ui/select';
@@ -31,7 +30,7 @@ import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { Camera } from 'lucide-react-native';
+import { Camera, Search } from 'lucide-react-native';
 import { useState } from 'react';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
@@ -90,6 +89,39 @@ export const Test = () => {
 
           <ModeToggle />
 
+          <View style={{ width: '100%', gap: 16 }}>
+            <Text variant='title'>Wi-Fi Network Setup</Text>
+
+            <Input variant='outline' label='Name' placeholder='Network Name' />
+
+            <Input
+              variant='outline'
+              label='Name'
+              placeholder='Network Name'
+              error='Name is Required'
+            />
+
+            <Input
+              icon={Search}
+              label='Security'
+              placeholder='WPA2/WPA3'
+              value='WPA2/WPA3'
+              disabled={true}
+            />
+
+            <Input
+              label='Password'
+              placeholder='Enter password'
+              secureTextEntry
+              error='Password must be 8 characters long'
+            />
+            <Input
+              label='Password'
+              placeholder='Enter password'
+              secureTextEntry
+            />
+          </View>
+
           <AlertExamples />
 
           <Button size='sm'>Hello</Button>
@@ -101,8 +133,6 @@ export const Test = () => {
           <Button variant='ghost'>Hello</Button>
           <Button variant='link'>Hello</Button>
           <Button variant='destructive'>Hello</Button>
-
-          <ExampleUsage />
 
           <SheetExample />
 
@@ -559,11 +589,6 @@ export const Test = () => {
             disabled={false}
             label='Checkbox'
           />
-
-          <View style={{ width: '100%' }}>
-            <Label>Input</Label>
-            <Input placeholder='Enter text here' />
-          </View>
 
           <Separator />
 

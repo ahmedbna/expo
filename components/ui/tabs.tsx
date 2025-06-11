@@ -2,7 +2,7 @@
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { CORNERS, FONT_SIZE } from '@/theme/globals';
+import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import React, { createContext, useContext, useState } from 'react';
 import {
   ScrollView,
@@ -138,7 +138,7 @@ export function TabsTrigger({
     borderRadius: CORNERS,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 40,
+    minHeight: HEIGHT - 8,
     backgroundColor: isActive ? backgroundColor : 'transparent',
     opacity: disabled ? 0.5 : 1,
     flex: 1, // This makes tabs distribute evenly when they fit
