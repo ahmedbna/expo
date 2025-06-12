@@ -218,11 +218,12 @@ export const GroupedInput = ({
   title,
   titleStyle,
 }: GroupedInputProps) => {
+  const border = useThemeColor({}, 'border');
+  const background = useThemeColor({}, 'card');
   const danger = useThemeColor({}, 'red');
 
   const childrenArray = React.Children.toArray(children);
 
-  // Collect all errors
   const errors = childrenArray
     .filter(
       (child): child is ReactElement<any> =>
@@ -241,27 +242,30 @@ export const GroupedInput = ({
         </Text>
       )}
 
-      {childrenArray.map((child, index) => {
-        const groupPosition =
-          childrenArray.length === 1
-            ? 'single'
-            : index === 0
-            ? 'first'
-            : index === childrenArray.length - 1
-            ? 'last'
-            : 'middle';
+      <View
+        style={{
+          backgroundColor: background,
+          borderColor: border,
+          borderWidth: 1,
+          borderRadius: BORDER_RADIUS,
+          overflow: 'hidden',
+        }}
+      >
+        {childrenArray.map((child, index) => (
+          <View
+            key={index}
+            style={{
+              borderBottomWidth: index !== childrenArray.length - 1 ? 1 : 0,
+              borderColor: border,
+            }}
+          >
+            {React.isValidElement(child)
+              ? React.cloneElement(child as ReactElement<any>)
+              : child}
+          </View>
+        ))}
+      </View>
 
-        if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, {
-            groupPosition,
-            key: index,
-          });
-        }
-
-        return child;
-      })}
-
-      {/* Render all errors below the group */}
       {errors.length > 0 && (
         <View style={{ marginTop: 6 }}>
           {errors.map((error, i) => (
@@ -295,6 +299,17 @@ export interface GroupedInputItemProps extends Omit<TextInputProps, 'style'> {
   groupPosition?: 'first' | 'middle' | 'last' | 'single';
 }
 
+export interface GroupedInputItemProps extends Omit<TextInputProps, 'style'> {
+  label?: string;
+  error?: string;
+  icon?: React.ComponentType<LucideProps>;
+  rightComponent?: React.ReactNode | (() => React.ReactNode);
+  inputStyle?: TextStyle;
+  labelStyle?: TextStyle;
+  errorStyle?: TextStyle;
+  disabled?: boolean;
+}
+
 export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
   (
     {
@@ -306,7 +321,6 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
       labelStyle,
       errorStyle,
       disabled,
-      groupPosition = 'single',
       onFocus,
       onBlur,
       ...props
@@ -315,43 +329,10 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
   ) => {
     const [isFocused, setIsFocused] = useState(false);
 
-    const card = useThemeColor({}, 'card');
     const text = useThemeColor({}, 'text');
     const muted = useThemeColor({}, 'textMuted');
-    const border = useThemeColor({}, 'border');
     const primary = useThemeColor({}, 'primary');
     const danger = useThemeColor({}, 'red');
-
-    const base: ViewStyle = {
-      flexDirection: 'row',
-      alignItems: 'center',
-      height: HEIGHT,
-      paddingHorizontal: 16,
-      backgroundColor: card,
-      borderColor: border,
-      borderWidth: 1,
-    };
-
-    const radiusStyle: ViewStyle = {
-      borderTopLeftRadius:
-        groupPosition === 'first' || groupPosition === 'single'
-          ? BORDER_RADIUS
-          : 0,
-      borderTopRightRadius:
-        groupPosition === 'first' || groupPosition === 'single'
-          ? BORDER_RADIUS
-          : 0,
-      borderBottomLeftRadius:
-        groupPosition === 'last' || groupPosition === 'single'
-          ? BORDER_RADIUS
-          : 0,
-      borderBottomRightRadius:
-        groupPosition === 'last' || groupPosition === 'single'
-          ? BORDER_RADIUS
-          : 0,
-      borderTopWidth:
-        groupPosition === 'middle' || groupPosition === 'last' ? 0 : 1,
-    };
 
     const handleFocus = (e: any) => {
       setIsFocused(true);
@@ -363,11 +344,8 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
       onBlur?.(e);
     };
 
-    // Render right component - supports both direct components and functions
     const renderRightComponent = () => {
       if (!rightComponent) return null;
-
-      // If it's a function, call it. Otherwise, render directly
       return typeof rightComponent === 'function'
         ? rightComponent()
         : rightComponent;
@@ -375,21 +353,28 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
 
     return (
       <Pressable
-        style={[base, radiusStyle, disabled && { opacity: 0.6 }]}
         onPress={() => ref && 'current' in ref && ref.current?.focus()}
         disabled={disabled}
+        style={{ opacity: disabled ? 0.6 : 1 }}
       >
-        {/* Wrap everything in a column inside the Pressable */}
-        <View style={{ flex: 1 }}>
-          {/* Top Row: Icon + Label + Input + RightComponent */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            height: HEIGHT,
+            paddingHorizontal: 16,
+            backgroundColor: 'transparent',
+          }}
+        >
           <View
             style={{
+              flex: 1,
               flexDirection: 'row',
               alignItems: 'center',
               gap: 8,
             }}
           >
-            {/* Label & Icon */}
+            {/* Icon & Label */}
             <View
               style={{
                 width: label ? 120 : 'auto',
