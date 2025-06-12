@@ -17,7 +17,7 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import { DatePicker } from '@/components/ui/date-picker';
 import { Icon } from '@/components/ui/icon';
-import { Input } from '@/components/ui/input';
+import { GroupedInput, GroupedInputItem, Input } from '@/components/ui/input';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Select } from '@/components/ui/select';
@@ -91,6 +91,22 @@ export const Test = () => {
           <ModeToggle />
 
           <View style={{ width: '100%', gap: 16 }}>
+            <GroupedInput title='Address'>
+              <GroupedInputItem
+                label='Street'
+                placeholder='CA, USA'
+                error='Street invaild'
+                icon={Search}
+                rightComponent={() => (
+                  <Pressable onPress={() => console.log('click')}>
+                    <Icon IconComponent={EyeOff} size={20} />
+                  </Pressable>
+                )}
+              />
+              <GroupedInputItem label='City' error='Something went wrong' />
+              <GroupedInputItem label='Postal Code' />
+            </GroupedInput>
+
             <Text variant='title'>Wi-Fi Network Setup</Text>
 
             <Input variant='outline' label='Name' placeholder='Network Name' />
