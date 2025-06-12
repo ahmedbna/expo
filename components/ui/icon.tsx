@@ -15,7 +15,7 @@ export function Icon({
   IconComponent,
   color,
   size = 24,
-  strokeWidth = 2,
+  strokeWidth = 1.8,
   ...rest
 }: Props) {
   const themedColor = useThemeColor(

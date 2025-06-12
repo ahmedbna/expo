@@ -756,40 +756,65 @@ export function DatePicker({
         onPress={handleOpenPicker}
         disabled={disabled}
       >
-        <View style={{ marginRight: 8 }}>
-          {mode === 'time' ? (
-            <Icon IconComponent={Clock} size={20} strokeWidth={1} />
-          ) : mode === 'datetime' ? (
-            <Icon IconComponent={CalendarClock} size={20} strokeWidth={1} />
-          ) : (
-            <Icon IconComponent={Calendar} size={20} strokeWidth={1} />
-          )}
-        </View>
-
-        {/* Label on the right */}
-        {label && (
-          <Text
-            variant='caption'
-            style={[
-              {
-                color: error ? errorColor : textMutedColor,
-                marginRight: 8,
-              },
-              labelStyle,
-            ]}
-          >
-            {label}
-          </Text>
-        )}
-
-        <Text
+        {/* Container for label and text with flex distribution */}
+        <View
           style={{
-            color: value ? textColor : textMutedColor,
-            fontSize: FONT_SIZE,
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
           }}
         >
-          {formatDisplayValue()}
-        </Text>
+          <View
+            style={{
+              width: label ? 120 : 'auto',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            {mode === 'time' ? (
+              <Icon IconComponent={Clock} size={20} strokeWidth={1} />
+            ) : mode === 'datetime' ? (
+              <Icon IconComponent={CalendarClock} size={20} strokeWidth={1} />
+            ) : (
+              <Icon IconComponent={Calendar} size={20} strokeWidth={1} />
+            )}
+
+            {/* Label takes 1/3 of available width when present */}
+            {label && (
+              <View style={{ flex: 1 }}>
+                <Text
+                  variant='caption'
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={[
+                    {
+                      color: error ? errorColor : textMutedColor,
+                    },
+                    labelStyle,
+                  ]}
+                >
+                  {label}
+                </Text>
+              </View>
+            )}
+          </View>
+
+          {/* Text takes 2/3 of available width when label is present, or full width when no label */}
+          <View style={{ flex: 1 }}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode='tail'
+              style={{
+                color: value ? textColor : textMutedColor,
+                fontSize: FONT_SIZE,
+              }}
+            >
+              {formatDisplayValue()}
+            </Text>
+          </View>
+        </View>
       </TouchableOpacity>
 
       <BottomSheet

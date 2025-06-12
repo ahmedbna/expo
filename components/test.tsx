@@ -30,8 +30,9 @@ import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { Camera, Search } from 'lucide-react-native';
+import { Camera, Eye, EyeOff, Lock, Pen, Search } from 'lucide-react-native';
 import { useState } from 'react';
+import { Pressable } from 'react-native';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { SheetExample } from './sheet-example';
@@ -93,9 +94,10 @@ export const Test = () => {
             <Text variant='title'>Wi-Fi Network Setup</Text>
 
             <Input variant='outline' label='Name' placeholder='Network Name' />
+            <Input label='Name' placeholder='Network Name' />
 
             <Input
-              variant='outline'
+              icon={Pen}
               label='Name'
               placeholder='Network Name'
               error='Name is Required'
@@ -110,20 +112,31 @@ export const Test = () => {
             />
 
             <Input
-              label='Password'
+              label='Password must be '
+              placeholder='Enter password'
+              secureTextEntry
+              rightComponent={() => (
+                <Pressable onPress={() => console.log('click')}>
+                  <Icon IconComponent={EyeOff} size={20} />
+                </Pressable>
+              )}
+            />
+
+            <Input
+              icon={Lock}
               placeholder='Enter password'
               secureTextEntry
               error='Password must be 8 characters long'
-            />
-            <Input
-              label='Password'
-              placeholder='Enter password'
-              secureTextEntry
+              rightComponent={() => (
+                <Pressable onPress={() => console.log('click')}>
+                  <Icon IconComponent={Eye} size={20} />
+                </Pressable>
+              )}
             />
 
             {/* Date only picker */}
             <DatePicker
-              label='Select Date'
+              // label='Select Date'
               mode='date'
               value={selectedDate}
               onChange={setSelectedDate}

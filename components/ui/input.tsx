@@ -17,7 +17,7 @@ export interface InputProps extends Omit<TextInputProps, 'style'> {
   label?: string;
   error?: string;
   icon?: React.ComponentType<LucideProps>;
-  rightComponent?: React.ReactNode;
+  rightComponent?: React.ReactNode | (() => React.ReactNode);
   containerStyle?: ViewStyle;
   inputStyle?: TextStyle;
   labelStyle?: TextStyle;
@@ -91,10 +91,8 @@ export const Input = forwardRef<TextInput, InputProps>(
     const getInputStyle = (): TextStyle => ({
       flex: 1,
       fontSize: FONT_SIZE,
-      color: disabled ? textMutedColor : textColor,
+      color: disabled ? textMutedColor : error ? errorColor : textColor,
       paddingVertical: 0, // Remove default padding
-      marginLeft: icon ? 8 : 0,
-      marginRight: rightComponent || label ? 8 : 0,
     });
 
     const handleFocus = (e: any) => {
@@ -107,6 +105,16 @@ export const Input = forwardRef<TextInput, InputProps>(
       onBlur?.(e);
     };
 
+    // Render right component - supports both direct components and functions
+    const renderRightComponent = () => {
+      if (!rightComponent) return null;
+
+      // If it's a function, call it. Otherwise, render directly
+      return typeof rightComponent === 'function'
+        ? rightComponent()
+        : rightComponent;
+    };
+
     return (
       <View style={containerStyle}>
         {/* Input Container */}
@@ -117,42 +125,67 @@ export const Input = forwardRef<TextInput, InputProps>(
               ref.current.focus();
             }
           }}
+          disabled={disabled}
         >
-          {/* Left Icon */}
-          {icon && (
-            <Icon IconComponent={icon} size={18} style={{ marginRight: 6 }} />
-          )}
-
-          {/* Label on the right */}
-          {label && (
-            <Text
-              variant='caption'
-              style={[
-                {
-                  color: error ? errorColor : textMutedColor,
-                  marginRight: 8,
-                },
-                labelStyle,
-              ]}
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            {/* Left section - Icon + Label (fixed width to simulate grid column) */}
+            <View
+              style={{
+                width: label ? 120 : 'auto',
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}
+              pointerEvents='none'
             >
-              {label}
-            </Text>
-          )}
+              {icon && (
+                <Icon
+                  IconComponent={icon}
+                  size={16}
+                  color={error ? errorColor : textMutedColor}
+                />
+              )}
+              {label && (
+                <Text
+                  variant='caption'
+                  numberOfLines={1}
+                  ellipsizeMode='tail'
+                  style={[
+                    {
+                      color: error ? errorColor : textMutedColor,
+                    },
+                    labelStyle,
+                  ]}
+                  pointerEvents='none'
+                >
+                  {label}
+                </Text>
+              )}
+            </View>
 
-          {/* Text Input */}
-          <TextInput
-            ref={ref}
-            style={[getInputStyle(), inputStyle]}
-            placeholderTextColor={error ? errorColor + 99 : textMutedColor}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            editable={!disabled}
-            selectionColor={primaryColor}
-            {...props}
-          />
+            {/* TextInput section - takes remaining space */}
+            <View style={{ flex: 1 }}>
+              <TextInput
+                ref={ref}
+                style={[getInputStyle(), inputStyle]}
+                placeholderTextColor={error ? errorColor + 99 : textMutedColor}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                editable={!disabled}
+                selectionColor={primaryColor}
+                {...props}
+              />
+            </View>
 
-          {/* Right Component */}
-          {/* {rightComponent && <View style={{ marginLeft: 8 }}>{rightComponent}</View>} */}
+            {/* Right Component */}
+            {renderRightComponent()}
+          </View>
         </Pressable>
 
         {/* Error Message */}
