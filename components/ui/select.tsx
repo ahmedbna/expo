@@ -49,8 +49,6 @@ export function Select({
   style,
   label,
   icon,
-  rightComponent,
-  inputStyle,
   labelStyle,
   errorStyle,
 }: SelectProps) {

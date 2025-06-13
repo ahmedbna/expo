@@ -4,7 +4,6 @@ Expo React Native CLI UI Library
 
 ## TODO
 
-- Picker
 - Mansory Grid
 - Image, Video, File Picker
 - Form with zod

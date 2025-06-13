@@ -43,15 +43,28 @@ import { useState } from 'react';
 import { Pressable } from 'react-native';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
+import { PickerExamples } from './picker-examples';
 import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Link } from './ui/link';
+import { Picker, PickerOption } from './ui/picker';
 import { Progress } from './ui/progress';
 import { RadioButton, RadioGroup } from './ui/radio';
 import { Textarea } from './ui/textarea';
 import { useToast } from './ui/toast';
 import { Toggle } from './ui/toggle';
 import { DataTableDemo } from './user-table';
+
+// Simple options array
+const countryOptions: PickerOption[] = [
+  { label: 'United States', value: 'us' },
+  { label: 'Canada', value: 'ca' },
+  { label: 'United Kingdom', value: 'uk' },
+  { label: 'Germany', value: 'de' },
+  { label: 'France', value: 'fr' },
+  { label: 'Japan', value: 'jp' },
+  { label: 'Australia', value: 'au' },
+];
 
 export const Test = () => {
   const bottomSheet = useBottomSheet();
@@ -68,6 +81,7 @@ export const Test = () => {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<Date | undefined>();
   const [selectedDateTime, setSelectedDateTime] = useState<Date | undefined>();
+  const [selectedCountry, setSelectedCountry] = useState('');
 
   const [selectedValue, setSelectedValue] = useState('option1');
 
@@ -98,6 +112,8 @@ export const Test = () => {
           />
 
           <ModeToggle />
+
+          <PickerExamples />
 
           <Link href='/'>Hello</Link>
 
@@ -177,6 +193,15 @@ export const Test = () => {
                   { label: 'Option 2', value: 'option2' },
                   { label: 'Option 3', value: 'option3' },
                 ]}
+              />
+
+              <Picker
+                options={countryOptions}
+                value={selectedCountry}
+                onValueChange={setSelectedCountry}
+                placeholder='Select a country'
+                variant='group'
+                label='Country'
               />
 
               <GroupedInputItem
