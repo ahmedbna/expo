@@ -109,6 +109,16 @@ export const Test = () => {
                   </Pressable>
                 )}
               />
+
+              <DatePicker
+                label='Select Date'
+                mode='date'
+                value={selectedDate}
+                onChange={setSelectedDate}
+                placeholder='Select a date'
+                variant='outline'
+              />
+
               <GroupedInputItem label='City' error='Something went wrong' />
               <GroupedInputItem label='Postal Code' />
 
