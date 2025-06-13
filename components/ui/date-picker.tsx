@@ -30,7 +30,7 @@ interface DatePickerProps {
   minimumDate?: Date;
   maximumDate?: Date;
   timeFormat?: '12' | '24';
-  variant?: 'filled' | 'outline';
+  variant?: 'filled' | 'outline' | 'group';
   labelStyle?: TextStyle;
   errorStyle?: TextStyle;
 }
@@ -741,12 +741,12 @@ export function DatePicker({
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    borderWidth: 1,
+    paddingHorizontal: variant === 'group' ? 0 : 16,
+    borderWidth: variant === 'group' ? 0 : 1,
     borderColor: variant === 'outline' ? borderColor : cardColor,
     borderRadius: CORNERS,
     backgroundColor: variant === 'outline' ? 'transparent' : cardColor,
-    minHeight: HEIGHT,
+    minHeight: variant === 'group' ? 'auto' : HEIGHT,
   };
 
   return (
@@ -756,7 +756,6 @@ export function DatePicker({
         onPress={handleOpenPicker}
         disabled={disabled}
       >
-        {/* Container for label and text with flex distribution */}
         <View
           style={{
             flex: 1,

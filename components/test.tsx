@@ -30,13 +30,22 @@ import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import { Camera, Eye, EyeOff, Lock, Pen, Search } from 'lucide-react-native';
+import {
+  Camera,
+  Eye,
+  EyeOff,
+  Lock,
+  Pen,
+  Search,
+  TextSelectIcon,
+} from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable } from 'react-native';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { Link } from './ui/link';
 import { Progress } from './ui/progress';
 import { RadioButton, RadioGroup } from './ui/radio';
 import { Textarea } from './ui/textarea';
@@ -90,6 +99,8 @@ export const Test = () => {
 
           <ModeToggle />
 
+          <Link href='/'>Hello</Link>
+
           <View style={{ width: '100%', gap: 16 }}>
             <Checkbox
               label='checkbox'
@@ -111,12 +122,12 @@ export const Test = () => {
               />
 
               <DatePicker
-                label='Select Date'
+                label='Brithday'
                 mode='date'
                 value={selectedDate}
                 onChange={setSelectedDate}
                 placeholder='Select a date'
-                variant='outline'
+                variant='group'
               />
 
               <GroupedInputItem label='City' error='Something went wrong' />
@@ -146,15 +157,38 @@ export const Test = () => {
                 onValueChange={setSwitchValue}
               />
 
+              <DatePicker
+                label='Brithday'
+                mode='date'
+                value={selectedDate}
+                onChange={setSelectedDate}
+                placeholder='Select a date'
+                variant='group'
+              />
+
               <Select
                 error=''
-                variant='outline'
-                value='option1'
+                variant='group'
+                label='Select'
+                icon={TextSelectIcon}
+                // value='option1'
                 options={[
                   { label: 'Option 1', value: 'option1' },
                   { label: 'Option 2', value: 'option2' },
                   { label: 'Option 3', value: 'option3' },
                 ]}
+              />
+
+              <GroupedInputItem
+                label='Street'
+                placeholder='CA, USA'
+                // error='Street invaild'
+                icon={Search}
+                rightComponent={() => (
+                  <Pressable onPress={() => console.log('click')}>
+                    <Icon IconComponent={EyeOff} size={20} />
+                  </Pressable>
+                )}
               />
             </GroupedInput>
 

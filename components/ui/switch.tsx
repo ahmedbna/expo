@@ -2,13 +2,13 @@
 import { useThemeColor } from '@/hooks/useThemeColor';
 import React from 'react';
 
+import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import {
   Switch as RNSwitch,
   SwitchProps as RNSwitchProps,
   TextStyle,
 } from 'react-native';
-import { Text } from './text';
-import { View } from './view';
 
 interface SwitchProps extends RNSwitchProps {
   label?: string;
@@ -20,6 +20,7 @@ export function Switch({ label, error, labelStyle, ...props }: SwitchProps) {
   const mutedColor = useThemeColor({}, 'muted');
   const primary = useThemeColor({}, 'primary');
   const danger = useThemeColor({}, 'red');
+  const muted = useThemeColor({}, 'textMuted');
 
   return (
     <View
@@ -37,7 +38,7 @@ export function Switch({ label, error, labelStyle, ...props }: SwitchProps) {
           ellipsizeMode='tail'
           style={[
             {
-              color: error ? danger : primary,
+              color: error ? danger : muted,
             },
             labelStyle,
           ]}

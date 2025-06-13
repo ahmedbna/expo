@@ -1,11 +1,19 @@
 // components/ui/select.tsx
+import { Icon } from '@/components/ui/icon';
 import { ScrollView } from '@/components/ui/scroll-view';
 import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
-import { ChevronDown } from 'lucide-react-native';
+import { ChevronDown, LucideProps } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { Modal, Pressable, TouchableOpacity, ViewStyle } from 'react-native';
+import {
+  Modal,
+  Pressable,
+  TextStyle,
+  TouchableOpacity,
+  ViewStyle,
+} from 'react-native';
 
 export interface SelectOption {
   label: string;
@@ -17,10 +25,17 @@ interface SelectProps {
   value?: string;
   placeholder?: string;
   error?: string;
-  variant?: 'outline' | 'filled';
+  variant?: 'outline' | 'filled' | 'group';
   onValueChange?: (value: string) => void;
   disabled?: boolean;
   style?: ViewStyle;
+
+  label?: string;
+  icon?: React.ComponentType<LucideProps>;
+  rightComponent?: React.ReactNode | (() => React.ReactNode);
+  inputStyle?: TextStyle;
+  labelStyle?: TextStyle;
+  errorStyle?: TextStyle;
 }
 
 export function Select({
@@ -32,12 +47,18 @@ export function Select({
   onValueChange,
   disabled = false,
   style,
+  label,
+  icon,
+  rightComponent,
+  inputStyle,
+  labelStyle,
+  errorStyle,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
   const borderColor = useThemeColor({}, 'border');
-  const textColor = useThemeColor({}, 'text');
-  const mutedColor = useThemeColor({}, 'mutedForeground');
+  const text = useThemeColor({}, 'text');
+  const muted = useThemeColor({}, 'mutedForeground');
   const cardColor = useThemeColor({}, 'card');
   const danger = useThemeColor({}, 'red');
 
@@ -49,16 +70,15 @@ export function Select({
   };
 
   const triggerStyle: ViewStyle = {
+    width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    height: HEIGHT,
-    gap: 8,
-    paddingHorizontal: 32,
-    borderWidth: variant === 'outline' ? 1 : 0,
-    borderColor: error ? danger : borderColor,
+    paddingHorizontal: variant === 'group' ? 0 : 16,
+    borderWidth: variant === 'group' ? 0 : 1,
+    borderColor: variant === 'outline' ? borderColor : cardColor,
     borderRadius: CORNERS,
     backgroundColor: variant === 'outline' ? 'transparent' : cardColor,
+    minHeight: variant === 'group' ? 'auto' : HEIGHT,
     opacity: disabled ? 0.5 : 1,
   };
 
@@ -70,21 +90,71 @@ export function Select({
         disabled={disabled}
         activeOpacity={0.8}
       >
-        <Text
+        {/* Icon & Label */}
+        <View
           style={{
-            fontSize: FONT_SIZE,
-            color: selectedOption ? textColor : mutedColor,
+            width: label ? 128 : 'auto',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 8,
+          }}
+          pointerEvents='none'
+        >
+          {icon && (
+            <Icon
+              IconComponent={icon}
+              size={16}
+              color={error ? danger : muted}
+            />
+          )}
+          {label && (
+            <Text
+              variant='caption'
+              numberOfLines={1}
+              ellipsizeMode='tail'
+              style={[
+                {
+                  color: error ? danger : muted,
+                },
+                labelStyle,
+              ]}
+              pointerEvents='none'
+            >
+              {label}
+            </Text>
+          )}
+        </View>
+
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           }}
         >
-          {selectedOption ? selectedOption.label : placeholder}
-        </Text>
-        <ChevronDown
-          size={16}
-          color={mutedColor}
-          style={{
-            transform: [{ rotate: isOpen ? '180deg' : '0deg' }],
-          }}
-        />
+          <Text
+            style={{
+              fontSize: FONT_SIZE,
+              color: selectedOption
+                ? text
+                : disabled
+                ? muted
+                : error
+                ? danger
+                : muted,
+            }}
+          >
+            {selectedOption ? selectedOption.label : placeholder}
+          </Text>
+          <ChevronDown
+            size={16}
+            color={error ? danger : muted}
+            style={{
+              transform: [{ rotate: isOpen ? '180deg' : '0deg' }],
+            }}
+          />
+        </View>
       </TouchableOpacity>
 
       <Modal
@@ -142,7 +212,7 @@ export function Select({
                   <Text
                     style={{
                       fontSize: FONT_SIZE,
-                      color: textColor,
+                      color: text,
                       fontWeight: value === option.value ? '500' : '400',
                     }}
                   >

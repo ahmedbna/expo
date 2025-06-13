@@ -1,3 +1,4 @@
+import { Text } from '@/components/ui/text';
 import { Link as ERLink, Href } from 'expo-router';
 import { openBrowserAsync } from 'expo-web-browser';
 import { type ComponentProps } from 'react';
@@ -5,9 +6,10 @@ import { Platform } from 'react-native';
 
 type Props = Omit<ComponentProps<typeof ERLink>, 'href'> & {
   href: Href & string;
+  children: React.ReactNode;
 };
 
-export function Link({ href, ...rest }: Props) {
+export function Link({ href, children, ...rest }: Props) {
   return (
     <ERLink
       target='_blank'
@@ -21,6 +23,12 @@ export function Link({ href, ...rest }: Props) {
           await openBrowserAsync(href);
         }
       }}
-    />
+    >
+      {typeof children === 'string' ? (
+        <Text variant='link'>{children}</Text>
+      ) : (
+        children
+      )}
+    </ERLink>
   );
 }

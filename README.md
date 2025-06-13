@@ -4,11 +4,21 @@ Expo React Native CLI UI Library
 
 ## TODO
 
+- Picker
 - Mansory Grid
 - Image, Video, File Picker
 - Form with zod
 - Chip
 - Searchbar
+- Action sheet
+- Share
+- Toast
+- Image
+- ImageBackground
+- Camera
+- Audio
+- Video
+- Expo DocumentPicker
 
 ## Get started
 
