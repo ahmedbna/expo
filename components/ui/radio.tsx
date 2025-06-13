@@ -43,7 +43,6 @@ export function RadioButton({
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'textMuted');
-  const backgroundColor = useThemeColor({}, 'background');
 
   const isDisabled = disabled || option.disabled;
 
@@ -51,9 +50,9 @@ export function RadioButton({
     width: BORDER_RADIUS,
     height: BORDER_RADIUS,
     borderRadius: CORNERS,
-    borderWidth: 1,
+    borderWidth: 1.5,
     borderColor: selected ? primaryColor : borderColor,
-    backgroundColor: backgroundColor,
+    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
@@ -69,7 +68,7 @@ export function RadioButton({
   const containerStyle: ViewStyle = {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 4,
     paddingHorizontal: 4,
     opacity: isDisabled ? 0.5 : 1,
   };
@@ -133,9 +132,3 @@ export function RadioGroup({
     </View>
   );
 }
-
-// Compound component pattern for better API
-RadioGroup.Button = RadioButton;
-
-// Export default as RadioGroup
-export default RadioGroup;

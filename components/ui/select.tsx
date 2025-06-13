@@ -16,6 +16,8 @@ interface SelectProps {
   options: SelectOption[];
   value?: string;
   placeholder?: string;
+  error?: string;
+  variant?: 'outline' | 'filled';
   onValueChange?: (value: string) => void;
   disabled?: boolean;
   style?: ViewStyle;
@@ -24,6 +26,8 @@ interface SelectProps {
 export function Select({
   options,
   value,
+  error,
+  variant = 'filled',
   placeholder = 'Select an option...',
   onValueChange,
   disabled = false,
@@ -31,11 +35,11 @@ export function Select({
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const backgroundColor = useThemeColor({}, 'background');
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'mutedForeground');
   const cardColor = useThemeColor({}, 'card');
+  const danger = useThemeColor({}, 'red');
 
   const selectedOption = options.find((option) => option.value === value);
 
@@ -51,10 +55,10 @@ export function Select({
     height: HEIGHT,
     gap: 8,
     paddingHorizontal: 32,
-    borderWidth: 1,
-    borderColor,
+    borderWidth: variant === 'outline' ? 1 : 0,
+    borderColor: error ? danger : borderColor,
     borderRadius: CORNERS,
-    backgroundColor,
+    backgroundColor: variant === 'outline' ? 'transparent' : cardColor,
     opacity: disabled ? 0.5 : 1,
   };
 

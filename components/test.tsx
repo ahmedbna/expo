@@ -38,7 +38,7 @@ import { CarouselTestComponent } from './carousel-examples';
 import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Progress } from './ui/progress';
-import RadioGroup, { RadioButton } from './ui/radio';
+import { RadioButton, RadioGroup } from './ui/radio';
 import { Textarea } from './ui/textarea';
 import { useToast } from './ui/toast';
 import { Toggle } from './ui/toggle';
@@ -91,11 +91,17 @@ export const Test = () => {
           <ModeToggle />
 
           <View style={{ width: '100%', gap: 16 }}>
+            <Checkbox
+              label='checkbox'
+              checked={checked}
+              onCheckedChange={setChecked}
+            />
+
             <GroupedInput title='Address'>
               <GroupedInputItem
                 label='Street'
                 placeholder='CA, USA'
-                error='Street invaild'
+                // error='Street invaild'
                 icon={Search}
                 rightComponent={() => (
                   <Pressable onPress={() => console.log('click')}>
@@ -105,6 +111,53 @@ export const Test = () => {
               />
               <GroupedInputItem label='City' error='Something went wrong' />
               <GroupedInputItem label='Postal Code' />
+
+              <View>
+                <Checkbox
+                  label='Checkbox'
+                  checked={checked}
+                  onCheckedChange={setChecked}
+                />
+                <Checkbox
+                  label='Checkbox'
+                  checked={true}
+                  onCheckedChange={setChecked}
+                />
+                <Checkbox
+                  label='Checkbox'
+                  checked={false}
+                  onCheckedChange={setChecked}
+                />
+              </View>
+
+              <Switch
+                label='Switch'
+                value={switchValue}
+                onValueChange={setSwitchValue}
+              />
+
+              <Select
+                error=''
+                variant='outline'
+                value='option1'
+                options={[
+                  { label: 'Option 1', value: 'option1' },
+                  { label: 'Option 2', value: 'option2' },
+                  { label: 'Option 3', value: 'option3' },
+                ]}
+              />
+            </GroupedInput>
+
+            <GroupedInput title='Radio'>
+              <RadioGroup
+                options={[
+                  { label: 'Option 1', value: 'option1' },
+                  { label: 'Option 2', value: 'option2' },
+                  { label: 'Option 3', value: 'option3' },
+                ]}
+                value={selectedValue}
+                onValueChange={setSelectedValue}
+              />
             </GroupedInput>
 
             <Text variant='title'>Wi-Fi Network Setup</Text>

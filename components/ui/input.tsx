@@ -255,6 +255,10 @@ export const GroupedInput = ({
           <View
             key={index}
             style={{
+              minHeight: HEIGHT,
+              paddingVertical: 12,
+              paddingHorizontal: 16,
+              justifyContent: 'center',
               borderBottomWidth: index !== childrenArray.length - 1 ? 1 : 0,
               borderColor: border,
             }}
@@ -361,8 +365,6 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
           style={{
             flexDirection: 'row',
             alignItems: 'center',
-            height: HEIGHT,
-            paddingHorizontal: 16,
             backgroundColor: 'transparent',
           }}
         >
