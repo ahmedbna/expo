@@ -364,20 +364,17 @@ export function Picker({
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             justifyContent: 'flex-end',
             alignItems: 'center',
-            paddingBottom: 32,
-            paddingHorizontal: 8,
           }}
           onPress={() => setIsOpen(false)}
         >
           <Pressable
             style={{
               backgroundColor: cardColor,
-              borderRadius: BORDER_RADIUS,
-              borderWidth: 1,
-              borderColor,
+              borderTopStartRadius: BORDER_RADIUS,
+              borderTopEndRadius: BORDER_RADIUS,
               maxHeight: '70%',
               width: '100%',
-              padding: 0,
+              paddingBottom: 32,
               overflow: 'hidden',
             }}
             onPress={(e) => e.stopPropagation()}
@@ -386,8 +383,7 @@ export function Picker({
             {(modalTitle || multiple) && (
               <View
                 style={{
-                  paddingHorizontal: 16,
-                  paddingVertical: 12,
+                  padding: 16,
                   borderBottomWidth: 1,
                   borderBottomColor: borderColor,
                   flexDirection: 'row',
@@ -395,7 +391,8 @@ export function Picker({
                   justifyContent: 'space-between',
                 }}
               >
-                <Text variant='subtitle'>{modalTitle || 'Select Options'}</Text>
+                <Text variant='title'>{modalTitle || 'Select Options'}</Text>
+
                 {multiple && (
                   <TouchableOpacity onPress={() => setIsOpen(false)}>
                     <Text
