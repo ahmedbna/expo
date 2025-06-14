@@ -5,10 +5,14 @@ import { BORDER_RADIUS, CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import { LucideProps } from 'lucide-react-native';
 import React, { forwardRef, ReactElement, useState } from 'react';
 import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   TextInput,
   TextInputProps,
   TextStyle,
+  TouchableWithoutFeedback,
   View,
   ViewStyle,
 } from 'react-native';
@@ -24,6 +28,8 @@ export interface InputProps extends Omit<TextInputProps, 'style'> {
   errorStyle?: TextStyle;
   variant?: 'filled' | 'outline';
   disabled?: boolean;
+  enableKeyboardAvoiding?: boolean; // New prop to control keyboard avoiding
+  keyboardAvoidingStyle?: ViewStyle; // Style for KeyboardAvoidingView
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
@@ -39,6 +45,8 @@ export const Input = forwardRef<TextInput, InputProps>(
       errorStyle,
       variant = 'filled',
       disabled = false,
+      enableKeyboardAvoiding = true,
+      keyboardAvoidingStyle,
       onFocus,
       onBlur,
       ...props
@@ -111,7 +119,7 @@ export const Input = forwardRef<TextInput, InputProps>(
         : rightComponent;
     };
 
-    return (
+    const renderInputContent = () => (
       <View style={containerStyle}>
         {/* Input Container */}
         <Pressable
@@ -202,6 +210,22 @@ export const Input = forwardRef<TextInput, InputProps>(
         )}
       </View>
     );
+
+    // Conditionally wrap with KeyboardAvoidingView
+    if (enableKeyboardAvoiding) {
+      return (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={[{ flex: 1 }, keyboardAvoidingStyle]}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ flex: 1 }}>{renderInputContent()}</View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      );
+    }
+
+    return renderInputContent();
   }
 );
 
@@ -210,6 +234,8 @@ export interface GroupedInputProps {
   containerStyle?: ViewStyle;
   title?: string;
   titleStyle?: TextStyle;
+  enableKeyboardAvoiding?: boolean; // New prop
+  keyboardAvoidingStyle?: ViewStyle; // Style for KeyboardAvoidingView
 }
 
 export const GroupedInput = ({
@@ -217,6 +243,8 @@ export const GroupedInput = ({
   containerStyle,
   title,
   titleStyle,
+  enableKeyboardAvoiding = true,
+  keyboardAvoidingStyle,
 }: GroupedInputProps) => {
   const border = useThemeColor({}, 'border');
   const background = useThemeColor({}, 'card');
@@ -231,7 +259,7 @@ export const GroupedInput = ({
     )
     .map((child) => child.props.error);
 
-  return (
+  const renderGroupedContent = () => (
     <View style={containerStyle}>
       {!!title && (
         <Text
@@ -264,7 +292,10 @@ export const GroupedInput = ({
             }}
           >
             {React.isValidElement(child)
-              ? React.cloneElement(child as ReactElement<any>)
+              ? React.cloneElement(child as ReactElement<any>, {
+                  // Disable keyboard avoiding for individual items in grouped input
+                  enableKeyboardAvoiding: false,
+                })
               : child}
           </View>
         ))}
@@ -289,6 +320,22 @@ export const GroupedInput = ({
       )}
     </View>
   );
+
+  // Conditionally wrap with KeyboardAvoidingView
+  if (enableKeyboardAvoiding) {
+    return (
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={[{ flex: 1 }, keyboardAvoidingStyle]}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{ flex: 1 }}>{renderGroupedContent()}</View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    );
+  }
+
+  return renderGroupedContent();
 };
 
 export interface GroupedInputItemProps extends Omit<TextInputProps, 'style'> {
@@ -300,18 +347,7 @@ export interface GroupedInputItemProps extends Omit<TextInputProps, 'style'> {
   labelStyle?: TextStyle;
   errorStyle?: TextStyle;
   disabled?: boolean;
-  groupPosition?: 'first' | 'middle' | 'last' | 'single';
-}
-
-export interface GroupedInputItemProps extends Omit<TextInputProps, 'style'> {
-  label?: string;
-  error?: string;
-  icon?: React.ComponentType<LucideProps>;
-  rightComponent?: React.ReactNode | (() => React.ReactNode);
-  inputStyle?: TextStyle;
-  labelStyle?: TextStyle;
-  errorStyle?: TextStyle;
-  disabled?: boolean;
+  enableKeyboardAvoiding?: boolean; // New prop
 }
 
 export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
@@ -325,6 +361,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
       labelStyle,
       errorStyle,
       disabled,
+      enableKeyboardAvoiding = false, // Default false since it's usually handled by GroupedInput
       onFocus,
       onBlur,
       ...props
@@ -355,7 +392,7 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
         : rightComponent;
     };
 
-    return (
+    const renderItemContent = () => (
       <Pressable
         onPress={() => ref && 'current' in ref && ref.current?.focus()}
         disabled={disabled}
@@ -439,5 +476,21 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
         </View>
       </Pressable>
     );
+
+    // Conditionally wrap with KeyboardAvoidingView (rarely used for GroupedInputItem)
+    if (enableKeyboardAvoiding) {
+      return (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={{ flex: 1 }}
+        >
+          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <View style={{ flex: 1 }}>{renderItemContent()}</View>
+          </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      );
+    }
+
+    return renderItemContent();
   }
 );
