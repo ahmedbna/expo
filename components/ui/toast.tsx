@@ -1,6 +1,5 @@
 // components/ui/toast.tsx
 import { Text } from '@/components/ui/text';
-import { useThemeColor } from '@/hooks/useThemeColor';
 import { AlertCircle, Check, Info, X } from 'lucide-react-native';
 import React, {
   createContext,
@@ -23,7 +22,6 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
 
 export type ToastVariant = 'default' | 'success' | 'error' | 'warning' | 'info';
 
@@ -74,112 +72,74 @@ export function Toast({
 
   // Dynamic Island colors (dark theme optimized)
   const backgroundColor = '#1C1C1E'; // iOS Dynamic Island background
-  const textColor = useThemeColor({}, 'text');
   const mutedTextColor = '#8E8E93'; // iOS secondary text color
-  const primaryColor = useThemeColor({}, 'primary');
-  const destructiveColor = useThemeColor({}, 'destructive');
-
-  const expandToast = () => {
-    if (!hasContent) return;
-
-    setIsExpanded(true);
-
-    Animated.parallel([
-      Animated.spring(width, {
-        toValue: EXPANDED_WIDTH,
-        tension: 80,
-        friction: 8,
-        useNativeDriver: false,
-      }),
-      Animated.spring(height, {
-        toValue: EXPANDED_HEIGHT,
-        tension: 80,
-        friction: 8,
-        useNativeDriver: false,
-      }),
-      Animated.spring(borderRadius, {
-        toValue: 20,
-        tension: 80,
-        friction: 8,
-        useNativeDriver: false,
-      }),
-      Animated.timing(contentOpacity, {
-        toValue: 1,
-        duration: 300,
-        delay: 150,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
 
   useEffect(() => {
     const hasContentToShow = Boolean(title || description || action);
     setHasContent(hasContentToShow);
 
-    // Initial animation - appears as compact Dynamic Island
-    Animated.parallel([
-      Animated.spring(translateY, {
-        toValue: 0,
-        tension: 100,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 400,
-        useNativeDriver: true,
-      }),
-      Animated.spring(scale, {
-        toValue: 1,
-        tension: 100,
-        friction: 8,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      // Auto-expand after initial animation completes if there's content
-      if (hasContentToShow) {
-        setTimeout(() => {
-          expandToast();
-        }, 500);
-      }
-    });
+    if (hasContentToShow) {
+      // If there's content, start directly with expanded state
+      width.setValue(EXPANDED_WIDTH);
+      height.setValue(EXPANDED_HEIGHT);
+      borderRadius.setValue(20);
+      setIsExpanded(true);
+
+      // Single smooth animation for expanded toast
+      Animated.parallel([
+        Animated.spring(translateY, {
+          toValue: 0,
+          tension: 120,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scale, {
+          toValue: 1,
+          tension: 120,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(contentOpacity, {
+          toValue: 1,
+          duration: 300,
+          delay: 100, // Slight delay for content to appear after container
+          useNativeDriver: true,
+        }),
+      ]).start();
+    } else {
+      // If no content, show compact Dynamic Island
+      Animated.parallel([
+        Animated.spring(translateY, {
+          toValue: 0,
+          tension: 120,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 200,
+          useNativeDriver: true,
+        }),
+        Animated.spring(scale, {
+          toValue: 1,
+          tension: 120,
+          friction: 8,
+          useNativeDriver: true,
+        }),
+      ]).start();
+    }
 
     return () => {
       translateY.setValue(-100);
       opacity.setValue(0);
       scale.setValue(0.8);
     };
-  }, []); // Remove dependencies to run only once on mount
-
-  const collapseToast = () => {
-    setIsExpanded(false);
-
-    Animated.parallel([
-      Animated.timing(contentOpacity, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }),
-      Animated.spring(width, {
-        toValue: DYNAMIC_ISLAND_WIDTH,
-        tension: 80,
-        friction: 8,
-        useNativeDriver: false,
-      }),
-      Animated.spring(height, {
-        toValue: DYNAMIC_ISLAND_HEIGHT,
-        tension: 80,
-        friction: 8,
-        useNativeDriver: false,
-      }),
-      Animated.spring(borderRadius, {
-        toValue: 18.5,
-        tension: 80,
-        friction: 8,
-        useNativeDriver: false,
-      }),
-    ]).start();
-  };
+  }, [title, description, action]); // Added dependencies to handle content changes
 
   const getVariantColor = () => {
     switch (variant) {
@@ -217,23 +177,24 @@ export function Toast({
     Animated.parallel([
       Animated.spring(translateY, {
         toValue: -100,
-        tension: 100,
+        tension: 120,
         friction: 8,
         useNativeDriver: true,
       }),
       Animated.timing(opacity, {
         toValue: 0,
-        duration: 300,
+        duration: 250,
         useNativeDriver: true,
       }),
       Animated.spring(scale, {
         toValue: 0.8,
-        tension: 100,
+        tension: 120,
         friction: 8,
         useNativeDriver: true,
       }),
     ]).start(() => {
-      onDismiss(id);
+      // Defer the state update to avoid useInsertionEffect timing issues
+      setTimeout(() => onDismiss(id), 0);
     });
   };
 
@@ -261,26 +222,19 @@ export function Toast({
             useNativeDriver: true,
           }),
         ]).start(() => {
-          runOnJS(onDismiss)(id);
+          // Defer the state update to avoid useInsertionEffect timing issues
+          setTimeout(() => onDismiss(id), 0);
         });
       } else {
         // Snap back with spring animation
         Animated.spring(translateX, {
           toValue: 0,
-          tension: 100,
+          tension: 120,
           friction: 8,
           useNativeDriver: true,
         }).start();
       }
     });
-
-  const tapGesture = Gesture.Tap().onEnd(() => {
-    if (hasContent) {
-      runOnJS(isExpanded ? collapseToast : expandToast)();
-    }
-  });
-
-  const combinedGesture = Gesture.Simultaneous(panGesture, tapGesture);
 
   const getTopPosition = () => {
     const statusBarHeight = Platform.OS === 'ios' ? 59 : 20;
@@ -310,7 +264,7 @@ export function Toast({
   };
 
   return (
-    <GestureDetector gesture={combinedGesture}>
+    <GestureDetector gesture={panGesture}>
       <Animated.View
         style={[
           toastStyle,
@@ -336,92 +290,95 @@ export function Toast({
           )}
 
           {/* Expanded state - full content */}
-          <Animated.View
-            style={[
-              {
-                opacity: contentOpacity,
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                paddingHorizontal: 16,
-                paddingVertical: 12,
-                flexDirection: 'row',
-                alignItems: 'center',
-              },
-            ]}
-            pointerEvents={isExpanded ? 'auto' : 'none'}
-          >
-            {getIcon() && <View style={{ marginRight: 12 }}>{getIcon()}</View>}
-
-            <View style={{ flex: 1, minWidth: 0 }}>
-              {title && (
-                <Text
-                  variant='subtitle'
-                  style={{
-                    color: '#FFFFFF',
-                    fontSize: 15,
-                    fontWeight: '600',
-                    marginBottom: description ? 2 : 0,
-                  }}
-                  numberOfLines={1}
-                  ellipsizeMode='tail'
-                >
-                  {title}
-                </Text>
+          {isExpanded && (
+            <Animated.View
+              style={[
+                {
+                  opacity: contentOpacity,
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  paddingHorizontal: 16,
+                  paddingVertical: 12,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                },
+              ]}
+            >
+              {getIcon() && (
+                <View style={{ marginRight: 12 }}>{getIcon()}</View>
               )}
-              {description && (
-                <Text
-                  variant='caption'
-                  style={{
-                    color: mutedTextColor,
-                    fontSize: 13,
-                    fontWeight: '400',
-                  }}
-                  numberOfLines={2}
-                  ellipsizeMode='tail'
-                >
-                  {description}
-                </Text>
-              )}
-            </View>
 
-            {action && (
+              <View style={{ flex: 1, minWidth: 0 }}>
+                {title && (
+                  <Text
+                    variant='subtitle'
+                    style={{
+                      color: '#FFFFFF',
+                      fontSize: 15,
+                      fontWeight: '600',
+                      marginBottom: description ? 2 : 0,
+                    }}
+                    numberOfLines={1}
+                    ellipsizeMode='tail'
+                  >
+                    {title}
+                  </Text>
+                )}
+                {description && (
+                  <Text
+                    variant='caption'
+                    style={{
+                      color: mutedTextColor,
+                      fontSize: 13,
+                      fontWeight: '400',
+                    }}
+                    numberOfLines={2}
+                    ellipsizeMode='tail'
+                  >
+                    {description}
+                  </Text>
+                )}
+              </View>
+
+              {action && (
+                <TouchableOpacity
+                  onPress={action.onPress}
+                  style={{
+                    marginLeft: 12,
+                    paddingHorizontal: 12,
+                    paddingVertical: 6,
+                    backgroundColor: getVariantColor(),
+                    borderRadius: 12,
+                  }}
+                >
+                  <Text
+                    variant='caption'
+                    style={{
+                      color: '#FFFFFF',
+                      fontSize: 12,
+                      fontWeight: '600',
+                    }}
+                  >
+                    {action.label}
+                  </Text>
+                </TouchableOpacity>
+              )}
+
               <TouchableOpacity
-                onPress={action.onPress}
+                onPress={dismiss}
                 style={{
-                  marginLeft: 12,
-                  paddingHorizontal: 12,
-                  paddingVertical: 6,
-                  backgroundColor: getVariantColor(),
-                  borderRadius: 12,
+                  marginLeft: 8,
+                  padding: 4,
+                  borderRadius: 8,
                 }}
               >
-                <Text
-                  variant='caption'
-                  style={{
-                    color: '#FFFFFF',
-                    fontSize: 12,
-                    fontWeight: '600',
-                  }}
-                >
-                  {action.label}
-                </Text>
+                <X size={14} color={mutedTextColor} />
               </TouchableOpacity>
-            )}
-
-            <TouchableOpacity
-              onPress={dismiss}
-              style={{
-                marginLeft: 8,
-                padding: 4,
-                borderRadius: 8,
-              }}
-            >
-              <X size={14} color={mutedTextColor} />
-            </TouchableOpacity>
-          </Animated.View>
+            </Animated.View>
+          )}
         </Animated.View>
       </Animated.View>
     </GestureDetector>
@@ -456,7 +413,7 @@ export function ToastProvider({ children, maxToasts = 3 }: ToastProviderProps) {
       const newToast: ToastData = {
         ...toastData,
         id,
-        duration: toastData.duration ?? 4000, // Shorter duration for Dynamic Island
+        duration: toastData.duration ?? 4000,
       };
 
       setToasts((prev) => {
