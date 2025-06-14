@@ -48,6 +48,7 @@ import { ComboboxExamples } from './combobox-example';
 import { PickerExamples } from './picker-examples';
 import { ShareExamples } from './share-examples';
 import { SheetExample } from './sheet-example';
+import ToggleExamples from './toggle-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Link } from './ui/link';
 import { Picker, PickerOption } from './ui/picker';
@@ -133,6 +134,8 @@ export const Test = () => {
             onSuggestionPress={(suggestion) => setSearchQuery(suggestion)}
             maxSuggestions={3}
           />
+
+          <ToggleExamples />
 
           <ShareExamples />
 

@@ -15,7 +15,6 @@ Expo React Native CLI UI Library
 - Image, Video, File Picker
 - Expo DocumentPicker
 - Form with zod
-  -Toggle Group
 
 ## Bugs
 
