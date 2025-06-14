@@ -44,6 +44,7 @@ import { Pressable } from 'react-native';
 import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
+import { ComboboxExamples } from './combobox-example';
 import { PickerExamples } from './picker-examples';
 import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
@@ -134,7 +135,8 @@ export const Test = () => {
             onSuggestionPress={(suggestion) => setSearchQuery(suggestion)}
             maxSuggestions={3}
           />
-          {/* </View> */}
+
+          <ComboboxExamples />
 
           <ActionSheetExample />
 
