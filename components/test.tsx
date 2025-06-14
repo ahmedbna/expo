@@ -123,9 +123,6 @@ export const Test = () => {
             onSearch={(query) => console.log('Searching:', query)}
           />
 
-          {/* // With custom styling and loading */}
-          <SearchBar variant='rounded' size='lg' loading={loading} />
-
           {/* <View style={{ width: '100%' }}> */}
           <SearchBarWithSuggestions
             placeholder='Search products...'

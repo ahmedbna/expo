@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
@@ -8,7 +9,6 @@ import {
 import { FONT_SIZE } from '@/theme/globals';
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from './ui/button';
 
 export function SheetExample() {
   const [sheetOpen, setSheetOpen] = useState(false);

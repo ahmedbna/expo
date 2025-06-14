@@ -15,12 +15,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-type SearchBarVariant = 'default' | 'minimal' | 'rounded';
-type SearchBarSize = 'default' | 'sm' | 'lg';
-
 interface SearchBarProps extends Omit<TextInputProps, 'style'> {
-  variant?: SearchBarVariant;
-  size?: SearchBarSize;
   loading?: boolean;
   onSearch?: (query: string) => void;
   onClear?: () => void;
@@ -33,8 +28,6 @@ interface SearchBarProps extends Omit<TextInputProps, 'style'> {
 }
 
 export function SearchBar({
-  variant = 'default',
-  size = 'default',
   loading = false,
   onSearch,
   onClear,
@@ -50,14 +43,14 @@ export function SearchBar({
   ...props
 }: SearchBarProps) {
   const [internalValue, setInternalValue] = useState(value || '');
-  const [isFocused, setIsFocused] = useState(false);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const inputRef = useRef<TextInput>(null);
 
   // Theme colors
   const cardColor = useThemeColor({}, 'card');
   const textColor = useThemeColor({}, 'text');
-  const placeholderColor = useThemeColor({}, 'textMuted');
+  const muted = useThemeColor({}, 'textMuted');
+  const icon = useThemeColor({}, 'icon');
 
   // Handle text change with debouncing
   const handleTextChange = useCallback(
@@ -91,111 +84,38 @@ export function SearchBar({
   }, [onChangeText, onClear, onSearch]);
 
   // Get container style based on variant and size
-  const getContainerStyle = (): ViewStyle => {
-    const baseStyle: ViewStyle = {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: cardColor,
-    };
-
-    // Size variants
-    switch (size) {
-      case 'sm':
-        Object.assign(baseStyle, {
-          height: 40,
-          paddingHorizontal: 12,
-        });
-        break;
-      case 'lg':
-        Object.assign(baseStyle, {
-          height: 56,
-          paddingHorizontal: 20,
-        });
-        break;
-      default:
-        Object.assign(baseStyle, {
-          height: HEIGHT,
-          paddingHorizontal: 16,
-        });
-    }
-
-    // Variant styles
-    switch (variant) {
-      case 'minimal':
-        return {
-          ...baseStyle,
-          backgroundColor: 'transparent',
-          borderWidth: 0,
-          borderBottomWidth: 1,
-          borderRadius: 0,
-        };
-      case 'rounded':
-        return {
-          ...baseStyle,
-          borderRadius: CORNERS,
-        };
-      default:
-        return {
-          ...baseStyle,
-          borderRadius: 12,
-        };
-    }
+  const baseStyle: ViewStyle = {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: cardColor,
+    height: HEIGHT,
+    paddingHorizontal: 16,
+    borderRadius: CORNERS,
   };
 
-  // Get input style
-  const getInputStyle = (): TextStyle => {
-    const baseStyle: TextStyle = {
-      flex: 1,
-      fontSize: FONT_SIZE,
-      color: textColor,
-      marginHorizontal: 8,
-    };
-
-    if (size === 'sm') {
-      baseStyle.fontSize = 15;
-    } else if (size === 'lg') {
-      baseStyle.fontSize = 18;
-    }
-
-    return baseStyle;
-  };
-
-  // Get icon size based on component size
-  const getIconSize = () => {
-    switch (size) {
-      case 'sm':
-        return 18;
-      case 'lg':
-        return 24;
-      default:
-        return 20;
-    }
+  const baseInputStyle = {
+    flex: 1,
+    fontSize: FONT_SIZE,
+    color: textColor,
+    marginHorizontal: 8,
   };
 
   const displayValue = value !== undefined ? value : internalValue;
   const showClear = showClearButton && displayValue.length > 0;
 
   return (
-    <View style={[getContainerStyle(), containerStyle]}>
+    <View style={[baseStyle, containerStyle]}>
       {/* Left Icon */}
-      {leftIcon || (
-        <Icon
-          IconComponent={Search}
-          size={getIconSize()}
-          color={placeholderColor}
-        />
-      )}
+      {leftIcon || <Icon IconComponent={Search} size={16} color={muted} />}
 
       {/* Text Input */}
       <TextInput
         ref={inputRef}
-        style={[getInputStyle(), inputStyle]}
+        style={[baseInputStyle, inputStyle]}
         placeholder={placeholder}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={muted}
         value={displayValue}
         onChangeText={handleTextChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         {...props}
       />
 
@@ -203,7 +123,7 @@ export function SearchBar({
       {loading && (
         <ActivityIndicator
           size='small'
-          color={placeholderColor}
+          color={muted}
           style={{ marginRight: 4 }}
         />
       )}
@@ -213,15 +133,14 @@ export function SearchBar({
         <TouchableOpacity
           onPress={handleClear}
           style={{
+            backgroundColor: icon,
             padding: 4,
+            borderRadius: CORNERS,
+            opacity: 0.6,
           }}
           activeOpacity={0.7}
         >
-          <Icon
-            IconComponent={X}
-            size={getIconSize()}
-            color={placeholderColor}
-          />
+          <Icon IconComponent={X} size={16} color={cardColor} strokeWidth={2} />
         </TouchableOpacity>
       )}
 
