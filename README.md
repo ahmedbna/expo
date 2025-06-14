@@ -9,15 +9,17 @@ Expo React Native CLI UI Library
 - Form with zod
 - Chip
 - Searchbar
-- Action sheet
 - Share
-- Toast
 - Image
 - ImageBackground
 - Camera
 - Audio
 - Video
 - Expo DocumentPicker
+
+## Bugs
+
+- Toast swipe crash
 
 ## Get started
 

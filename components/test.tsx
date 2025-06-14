@@ -41,6 +41,7 @@ import {
 } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable } from 'react-native';
+import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { PickerExamples } from './picker-examples';
@@ -110,6 +111,8 @@ export const Test = () => {
               { label: 'Option 3', value: 'option3' },
             ]}
           />
+
+          <ActionSheetExample />
 
           <ModeToggle />
 
