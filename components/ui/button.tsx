@@ -9,7 +9,7 @@ import {
   ViewStyle,
 } from 'react-native';
 
-type ButtonVariant =
+export type ButtonVariant =
   | 'default'
   | 'destructive'
   | 'confirm'
@@ -43,10 +43,8 @@ export function Button({
   const primaryColor = useThemeColor({}, 'primary');
   const primaryForegroundColor = useThemeColor({}, 'primaryForeground');
   const secondaryColor = useThemeColor({}, 'secondary');
-  const secondaryForegroundColor = useThemeColor({}, 'secondaryForeground');
   const destructiveColor = useThemeColor({}, 'red');
   const greenColor = useThemeColor({}, 'green');
-  const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
   const borderColor = useThemeColor({}, 'border');
 
   const getButtonStyle = (): ViewStyle => {
@@ -105,36 +103,8 @@ export function Button({
     }
   };
 
-  const getTextStyle = (): TextStyle => {
-    const baseTextStyle: TextStyle = {
-      fontSize: FONT_SIZE,
-      fontWeight: '500',
-    };
-
-    switch (variant) {
-      case 'destructive':
-        return { ...baseTextStyle, color: destructiveForegroundColor };
-      case 'confirm':
-        return { ...baseTextStyle, color: destructiveForegroundColor };
-      case 'outline':
-        return { ...baseTextStyle, color: primaryColor };
-      case 'secondary':
-        return { ...baseTextStyle, color: secondaryForegroundColor };
-      case 'ghost':
-        return { ...baseTextStyle, color: primaryColor };
-      case 'link':
-        return {
-          ...baseTextStyle,
-          color: primaryColor,
-          textDecorationLine: 'underline',
-        };
-      default:
-        return { ...baseTextStyle, color: primaryForegroundColor };
-    }
-  };
-
   const buttonStyle = getButtonStyle();
-  const finalTextStyle = getTextStyle();
+  const finalTextStyle = getButtonTextStyle(variant);
 
   return (
     <TouchableOpacity
@@ -161,4 +131,39 @@ export function Button({
       )}
     </TouchableOpacity>
   );
+}
+
+export function getButtonTextStyle(
+  variant: ButtonVariant = 'default'
+): TextStyle {
+  const primaryColor = useThemeColor({}, 'primary');
+  const primaryForegroundColor = useThemeColor({}, 'primaryForeground');
+  const secondaryForegroundColor = useThemeColor({}, 'secondaryForeground');
+  const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
+
+  const baseTextStyle: TextStyle = {
+    fontSize: FONT_SIZE,
+    fontWeight: '500',
+  };
+
+  switch (variant) {
+    case 'destructive':
+      return { ...baseTextStyle, color: destructiveForegroundColor };
+    case 'confirm':
+      return { ...baseTextStyle, color: destructiveForegroundColor };
+    case 'outline':
+      return { ...baseTextStyle, color: primaryColor };
+    case 'secondary':
+      return { ...baseTextStyle, color: secondaryForegroundColor };
+    case 'ghost':
+      return { ...baseTextStyle, color: primaryColor };
+    case 'link':
+      return {
+        ...baseTextStyle,
+        color: primaryColor,
+        textDecorationLine: 'underline',
+      };
+    default:
+      return { ...baseTextStyle, color: primaryForegroundColor };
+  }
 }

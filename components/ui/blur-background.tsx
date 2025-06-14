@@ -1,5 +1,4 @@
-// TabBarBackground.tsx
-
+// components/ui/blur-background.tsx
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import { BlurView } from 'expo-blur';
 import { Platform, StyleSheet } from 'react-native';

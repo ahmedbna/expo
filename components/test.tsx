@@ -46,6 +46,7 @@ import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
 import { PickerExamples } from './picker-examples';
+import { ShareExamples } from './share-examples';
 import { SheetExample } from './sheet-example';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Link } from './ui/link';
@@ -132,6 +133,8 @@ export const Test = () => {
             onSuggestionPress={(suggestion) => setSearchQuery(suggestion)}
             maxSuggestions={3}
           />
+
+          <ShareExamples />
 
           <ComboboxExamples />
 

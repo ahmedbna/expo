@@ -5,16 +5,17 @@ Expo React Native CLI UI Library
 ## TODO
 
 - Mansory Grid
-- Image, Video, File Picker
-- Form with zod
-- Chip
-- Share
-- Image
-- ImageBackground
+- Input OTP
+- Popover
 - Camera
 - Audio
 - Video
+- Image
+- ImageBackground
+- Image, Video, File Picker
 - Expo DocumentPicker
+- Form with zod
+  -Toggle Group
 
 ## Bugs
 
