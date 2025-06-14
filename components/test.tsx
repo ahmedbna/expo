@@ -51,6 +51,7 @@ import { Link } from './ui/link';
 import { Picker, PickerOption } from './ui/picker';
 import { Progress } from './ui/progress';
 import { RadioButton, RadioGroup } from './ui/radio';
+import { SearchBar, SearchBarWithSuggestions } from './ui/searchbar';
 import { Textarea } from './ui/textarea';
 import { useToast } from './ui/toast';
 import { Toggle } from './ui/toggle';
@@ -74,6 +75,9 @@ export const Test = () => {
   const cardColor = useThemeColor({}, 'card');
 
   const { toast, success, error, warning, info } = useToast();
+
+  const [loading, setLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const [checked, setChecked] = useState(false);
   const [switchValue, setSwitchValue] = useState(false);
@@ -111,6 +115,26 @@ export const Test = () => {
               { label: 'Option 3', value: 'option3' },
             ]}
           />
+
+          {/* // Basic usage */}
+          <SearchBar
+            placeholder='Search products...'
+            onSearch={(query) => console.log('Searching:', query)}
+          />
+
+          {/* // With custom styling and loading */}
+          <SearchBar variant='rounded' size='lg' loading={loading} />
+
+          {/* <View style={{ width: '100%' }}> */}
+          <SearchBarWithSuggestions
+            placeholder='Search products...'
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            suggestions={['Apple', 'Banana', 'Cherry']}
+            onSuggestionPress={(suggestion) => setSearchQuery(suggestion)}
+            maxSuggestions={3}
+          />
+          {/* </View> */}
 
           <ActionSheetExample />
 
