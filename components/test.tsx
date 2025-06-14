@@ -113,6 +113,61 @@ export const Test = () => {
 
           <ModeToggle />
 
+          <Button
+            onPress={() =>
+              success('Success!', 'Your action was completed successfully.')
+            }
+          >
+            Show Success Toast
+          </Button>
+
+          <Button
+            variant='destructive'
+            onPress={() =>
+              error('Error!', 'Something went wrong. Please try again.')
+            }
+          >
+            Show Error Toast
+          </Button>
+
+          <Button
+            variant='outline'
+            onPress={() =>
+              warning('Warning!', 'Please check your input before proceeding.')
+            }
+          >
+            Show Warning Toast
+          </Button>
+
+          <Button
+            variant='secondary'
+            onPress={() =>
+              info('Info', 'Here is some useful information for you.')
+            }
+          >
+            Show Info Toast
+          </Button>
+
+          <Button
+            variant='ghost'
+            onPress={() =>
+              toast({
+                title: 'Custom Toast',
+                description: 'This is a custom toast with an action.',
+                variant: 'default',
+                duration: 10000, // 10 seconds
+                action: {
+                  label: 'Undo',
+                  onPress: () => {
+                    console.log('Undo pressed!');
+                  },
+                },
+              })
+            }
+          >
+            Show Custom Toast with Action
+          </Button>
+
           <PickerExamples />
 
           <Link href='/'>Hello</Link>
@@ -358,61 +413,6 @@ export const Test = () => {
           <Button variant='destructive'>Hello</Button>
 
           <SheetExample />
-
-          <Button
-            onPress={() =>
-              success('Success!', 'Your action was completed successfully.')
-            }
-          >
-            Show Success Toast
-          </Button>
-
-          <Button
-            variant='destructive'
-            onPress={() =>
-              error('Error!', 'Something went wrong. Please try again.')
-            }
-          >
-            Show Error Toast
-          </Button>
-
-          <Button
-            variant='outline'
-            onPress={() =>
-              warning('Warning!', 'Please check your input before proceeding.')
-            }
-          >
-            Show Warning Toast
-          </Button>
-
-          <Button
-            variant='secondary'
-            onPress={() =>
-              info('Info', 'Here is some useful information for you.')
-            }
-          >
-            Show Info Toast
-          </Button>
-
-          <Button
-            variant='ghost'
-            onPress={() =>
-              toast({
-                title: 'Custom Toast',
-                description: 'This is a custom toast with an action.',
-                variant: 'default',
-                duration: 10000, // 10 seconds
-                action: {
-                  label: 'Undo',
-                  onPress: () => {
-                    console.log('Undo pressed!');
-                  },
-                },
-              })
-            }
-          >
-            Show Custom Toast with Action
-          </Button>
 
           {/* <LoadingSpinnerExample /> */}
 
