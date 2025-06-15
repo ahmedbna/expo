@@ -158,6 +158,7 @@ export function PopoverContent({
   maxHeight = 400,
 }: PopoverContentProps) {
   const { isOpen, setIsOpen, triggerLayout } = usePopover();
+  const [contentSize, setContentSize] = useState({ width: 0, height: 0 });
   const popoverColor = useThemeColor({}, 'popover');
   const borderColor = useThemeColor({}, 'border');
 
@@ -170,91 +171,142 @@ export function PopoverContent({
     const screenDimensions = Dimensions.get('window');
     const { x, y, width, height } = triggerLayout;
 
+    // Use actual content size if available, otherwise use maxWidth/maxHeight
+    const contentWidth = contentSize.width || maxWidth;
+    const contentHeight = Math.min(
+      contentSize.height || maxHeight,
+      screenDimensions.height * 0.8
+    );
+
     let top = 0;
     let left = 0;
+    let actualSide = side;
 
-    // Calculate based on side
+    // Initial position calculation based on preferred side
     switch (side) {
       case 'top':
-        top = y - sideOffset;
+        top = y - contentHeight - sideOffset;
         break;
       case 'bottom':
         top = y + height + sideOffset;
         break;
       case 'left':
-        left = x - sideOffset;
+        left = x - contentWidth - sideOffset;
         break;
       case 'right':
         left = x + width + sideOffset;
         break;
     }
 
-    // Calculate based on align
+    // Calculate alignment for vertical sides (top/bottom)
     if (side === 'top' || side === 'bottom') {
       switch (align) {
         case 'start':
           left = x + alignOffset;
           break;
         case 'center':
-          left = x + width / 2 + alignOffset;
+          left = x + width / 2 - contentWidth / 2 + alignOffset;
           break;
         case 'end':
-          left = x + width + alignOffset;
+          left = x + width - contentWidth + alignOffset;
           break;
       }
-    } else {
+    }
+    // Calculate alignment for horizontal sides (left/right)
+    else {
       switch (align) {
         case 'start':
           top = y + alignOffset;
           break;
         case 'center':
-          top = y + height / 2 + alignOffset;
+          top = y + height / 2 - contentHeight / 2 + alignOffset;
           break;
         case 'end':
-          top = y + height + alignOffset;
+          top = y + height - contentHeight + alignOffset;
           break;
       }
     }
 
-    // Adjust for screen boundaries
-    const contentWidth = maxWidth;
-    const contentHeight = Math.min(maxHeight, screenDimensions.height * 0.8);
+    // Screen boundary adjustments with side flipping
+    const padding = 16;
 
-    // Horizontal boundary adjustments
-    if (left + contentWidth > screenDimensions.width - 16) {
-      left = screenDimensions.width - contentWidth - 16;
-    }
-    if (left < 16) {
-      left = 16;
-    }
-
-    // Vertical boundary adjustments
-    if (top + contentHeight > screenDimensions.height - 16) {
-      if (side === 'bottom') {
-        // Try to place above trigger
-        top = y - contentHeight - sideOffset;
-      } else {
-        top = screenDimensions.height - contentHeight - 16;
-      }
-    }
-    if (top < 16) {
-      if (side === 'top') {
-        // Try to place below trigger
+    // Check if we need to flip sides due to space constraints
+    if (side === 'top' && top < padding) {
+      // Not enough space on top, try bottom
+      const bottomSpace = screenDimensions.height - (y + height + sideOffset);
+      if (bottomSpace >= contentHeight) {
+        actualSide = 'bottom';
         top = y + height + sideOffset;
       } else {
-        top = 16;
+        // Keep top but adjust position
+        top = padding;
       }
+    } else if (
+      side === 'bottom' &&
+      top + contentHeight > screenDimensions.height - padding
+    ) {
+      // Not enough space on bottom, try top
+      const topSpace = y - sideOffset;
+      if (topSpace >= contentHeight) {
+        actualSide = 'top';
+        top = y - contentHeight - sideOffset;
+      } else {
+        // Keep bottom but adjust position
+        top = screenDimensions.height - contentHeight - padding;
+      }
+    } else if (side === 'left' && left < padding) {
+      // Not enough space on left, try right
+      const rightSpace = screenDimensions.width - (x + width + sideOffset);
+      if (rightSpace >= contentWidth) {
+        actualSide = 'right';
+        left = x + width + sideOffset;
+      } else {
+        // Keep left but adjust position
+        left = padding;
+      }
+    } else if (
+      side === 'right' &&
+      left + contentWidth > screenDimensions.width - padding
+    ) {
+      // Not enough space on right, try left
+      const leftSpace = x - sideOffset;
+      if (leftSpace >= contentWidth) {
+        actualSide = 'left';
+        left = x - contentWidth - sideOffset;
+      } else {
+        // Keep right but adjust position
+        left = screenDimensions.width - contentWidth - padding;
+      }
+    }
+
+    // Final boundary adjustments (without side flipping)
+    if (left < padding) {
+      left = padding;
+    } else if (left + contentWidth > screenDimensions.width - padding) {
+      left = screenDimensions.width - contentWidth - padding;
+    }
+
+    if (top < padding) {
+      top = padding;
+    } else if (top + contentHeight > screenDimensions.height - padding) {
+      top = screenDimensions.height - contentHeight - padding;
     }
 
     return {
-      top,
-      left,
+      top: Math.max(padding, top),
+      left: Math.max(padding, left),
       maxWidth,
-      maxHeight: contentHeight,
+      maxHeight: Math.min(maxHeight, screenDimensions.height - 2 * padding),
+      actualSide,
     };
   };
 
   const position = getPosition();
+
+  const handleContentLayout = (event: any) => {
+    const { width, height } = event.nativeEvent.layout;
+    setContentSize({ width, height });
+  };
 
   return (
     <Modal
@@ -270,10 +322,14 @@ export function PopoverContent({
             {
               backgroundColor: popoverColor,
               borderColor: borderColor,
-              ...position,
+              top: position.top,
+              left: position.left,
+              maxWidth: position.maxWidth,
+              maxHeight: position.maxHeight,
             },
             style,
           ]}
+          onLayout={handleContentLayout}
           onStartShouldSetResponder={() => true}
         >
           {children}
@@ -374,6 +430,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 6,
     elevation: 8,
+    minWidth: 200, // Ensure minimum width
   },
   header: {
     paddingHorizontal: 16,
