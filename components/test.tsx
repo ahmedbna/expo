@@ -43,6 +43,7 @@ import { useState } from 'react';
 import { Pressable } from 'react-native';
 import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
+import { CameraExample } from './camera-examples';
 import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
 import { InputOTPExamples } from './otp-examples';
@@ -142,6 +143,8 @@ export const Test = () => {
             onSuggestionPress={(suggestion) => setSearchQuery(suggestion)}
             maxSuggestions={3}
           />
+
+          <CameraExample />
 
           <InputOTPExamples />
 

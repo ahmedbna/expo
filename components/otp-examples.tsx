@@ -5,9 +5,9 @@ import {
   InputOTPWithSeparator,
 } from '@/components/ui/input-otp';
 import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import React, { useRef, useState } from 'react';
 import { Alert, Pressable } from 'react-native';
-import { View } from './ui/view';
 
 export function InputOTPExamples() {
   const [otp, setOtp] = useState('');

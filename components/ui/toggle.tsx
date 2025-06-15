@@ -1,4 +1,5 @@
 // components/ui/toggle.tsx
+import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -6,7 +7,6 @@ import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import { LucideProps } from 'lucide-react-native';
 import React from 'react';
 import { TextStyle, TouchableOpacity, ViewStyle } from 'react-native';
-import { Icon } from './icon';
 
 type ToggleVariant = 'default' | 'outline';
 type ToggleSize = 'default' | 'icon';

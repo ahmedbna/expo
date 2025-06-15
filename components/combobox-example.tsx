@@ -9,11 +9,11 @@ import {
   ComboboxList,
   ComboboxTrigger,
 } from '@/components/ui/combobox';
+import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { Building, Check, Star } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
-import { Text } from './ui/text';
 
 const frameworks = [
   {
