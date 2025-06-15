@@ -9,7 +9,13 @@ import {
   Zap,
   ZapOff,
 } from 'lucide-react-native';
-import React, { forwardRef, useRef, useState } from 'react';
+import React, {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import {
   ActivityIndicator,
   Animated,
@@ -62,9 +68,9 @@ export const Camera = forwardRef<CameraView, CameraProps>(
     const primaryColor = useThemeColor({}, 'primary');
     const cardColor = useThemeColor({}, 'card');
 
-    React.useImperativeHandle(ref, () => cameraRef.current as CameraView);
+    useImperativeHandle(ref, () => cameraRef.current as CameraView);
 
-    React.useEffect(() => {
+    useEffect(() => {
       Animated.timing(fadeAnim, {
         toValue: 1,
         duration: 300,
