@@ -1,10 +1,8 @@
 // components/ui/share.tsx
-import {
-  Button,
-  ButtonVariant,
-  getButtonTextStyle,
-} from '@/components/ui/button';
+import { Button, ButtonVariant } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
+import { useThemeColor } from '@/hooks/useThemeColor';
+import { FONT_SIZE } from '@/theme/globals';
 import { Share as ShareIcon } from 'lucide-react-native';
 import React, { useCallback, useMemo } from 'react';
 import {
@@ -12,6 +10,7 @@ import {
   Platform,
   Share as RNShare,
   ShareOptions,
+  TextStyle,
   View,
 } from 'react-native';
 
@@ -64,6 +63,11 @@ export function ShareButton({
   iconSize = 18,
   validateContent = true,
 }: ShareButtonProps) {
+  const primaryColor = useThemeColor({}, 'primary');
+  const primaryForegroundColor = useThemeColor({}, 'primaryForeground');
+  const secondaryForegroundColor = useThemeColor({}, 'secondaryForeground');
+  const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
+
   // Validate content requirements
   const isContentValid = useMemo(() => {
     if (!validateContent) return true;
@@ -155,6 +159,34 @@ export function ShareButton({
 
   const isButtonDisabled = disabled || loading || !isContentValid;
 
+  const getButtonTextStyle = (): TextStyle => {
+    const baseTextStyle: TextStyle = {
+      fontSize: FONT_SIZE,
+      fontWeight: '500',
+    };
+
+    switch (variant) {
+      case 'destructive':
+        return { ...baseTextStyle, color: destructiveForegroundColor };
+      case 'confirm':
+        return { ...baseTextStyle, color: destructiveForegroundColor };
+      case 'outline':
+        return { ...baseTextStyle, color: primaryColor };
+      case 'secondary':
+        return { ...baseTextStyle, color: secondaryForegroundColor };
+      case 'ghost':
+        return { ...baseTextStyle, color: primaryColor };
+      case 'link':
+        return {
+          ...baseTextStyle,
+          color: primaryColor,
+          textDecorationLine: 'underline',
+        };
+      default:
+        return { ...baseTextStyle, color: primaryForegroundColor };
+    }
+  };
+
   // Create button content with proper layout
   const buttonContent = () => {
     if (!showIcon || loading) {
@@ -162,9 +194,7 @@ export function ShareButton({
     }
 
     if (!children) {
-      return (
-        <ShareIcon size={iconSize} color={getButtonTextStyle(variant).color} />
-      );
+      return <ShareIcon size={iconSize} color={getButtonTextStyle().color} />;
     }
 
     // Handle string children properly with correct styling

@@ -47,12 +47,19 @@ import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
 import { InputOTPExamples } from './otp-examples';
 import { PickerExamples } from './picker-examples';
+import { PopoverExamples } from './popover-example';
 import { ShareExamples } from './share-examples';
 import { SheetExample } from './sheet-example';
 import ToggleExamples from './toggle-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
 import { Link } from './ui/link';
 import { Picker, PickerOption } from './ui/picker';
+import {
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
+} from './ui/popover';
 import { Progress } from './ui/progress';
 import { RadioButton, RadioGroup } from './ui/radio';
 import { SearchBar, SearchBarWithSuggestions } from './ui/searchbar';
@@ -138,7 +145,20 @@ export const Test = () => {
 
           <InputOTPExamples />
 
-          {/* <OTPFormExample /> */}
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button>Hello Popover</Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverBody>
+                <Text>This is a basic popover content.</Text>
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
+
+          <PopoverExamples />
+
+          {/* <PopoverScreen /> */}
 
           <ToggleExamples />
 
