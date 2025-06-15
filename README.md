@@ -5,7 +5,6 @@ Expo React Native CLI UI Library
 ## TODO
 
 - Mansory Grid
-- Popover
 - Camera
 - Audio
 - Video
