@@ -45,6 +45,7 @@ import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
+import { InputOTPExamples } from './otp-examples';
 import { PickerExamples } from './picker-examples';
 import { ShareExamples } from './share-examples';
 import { SheetExample } from './sheet-example';
@@ -134,6 +135,10 @@ export const Test = () => {
             onSuggestionPress={(suggestion) => setSearchQuery(suggestion)}
             maxSuggestions={3}
           />
+
+          <InputOTPExamples />
+
+          {/* <OTPFormExample /> */}
 
           <ToggleExamples />
 
