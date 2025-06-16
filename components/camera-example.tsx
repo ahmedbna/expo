@@ -38,8 +38,6 @@ export function CameraExample() {
         facing='back'
         enableTorch={true}
         showControls={true}
-        aspectRatio='4:3'
-        quality='high'
         style={{ flex: 1 }}
       />
     );

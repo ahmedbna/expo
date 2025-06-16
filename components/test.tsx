@@ -43,7 +43,7 @@ import { useState } from 'react';
 import { Pressable } from 'react-native';
 import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
-import { CameraExample } from './camera-examples';
+import { CameraExample } from './camera-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
 import { InputOTPExamples } from './otp-examples';
