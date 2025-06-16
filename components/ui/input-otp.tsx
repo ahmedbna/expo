@@ -9,9 +9,7 @@ import React, {
   useState,
 } from 'react';
 import {
-  KeyboardAvoidingView,
   NativeSyntheticEvent,
-  Platform,
   Pressable,
   TextInput,
   TextInputKeyPressEventData,
@@ -41,10 +39,6 @@ export interface InputOTPProps
   slotStyle?: ViewStyle;
   /** Error style */
   errorStyle?: TextStyle;
-  /** Whether to enable keyboard avoiding behavior */
-  enableKeyboardAvoiding?: boolean;
-  /** Keyboard avoiding view style */
-  keyboardAvoidingStyle?: ViewStyle;
   /** Whether to mask the input (show dots instead of numbers) */
   masked?: boolean;
   /** Separator component between slots */
@@ -72,8 +66,6 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
       containerStyle,
       slotStyle,
       errorStyle,
-      enableKeyboardAvoiding = false, // Changed default to false
-      keyboardAvoidingStyle,
       masked = false,
       separator,
       showCursor = true,
@@ -286,17 +278,6 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
         )}
       </View>
     );
-
-    if (enableKeyboardAvoiding) {
-      return (
-        <KeyboardAvoidingView
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={keyboardAvoidingStyle}
-        >
-          {renderContent()}
-        </KeyboardAvoidingView>
-      );
-    }
 
     return renderContent();
   }
