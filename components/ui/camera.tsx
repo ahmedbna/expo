@@ -1,4 +1,6 @@
 // components/ui/camera.tsx
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
 import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
@@ -34,9 +36,8 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { PinchGestureHandler, State } from 'react-native-gesture-handler';
-import { Button } from './button';
-import { Text } from './text';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Progress } from './progress';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
@@ -85,8 +86,10 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
     const timerInterval = useRef<number | null>(null);
     const settingsAnim = useRef(new Animated.Value(0)).current;
     const zoomTextAnim = useRef(new Animated.Value(0)).current;
+    const zoomControlsAnim = useRef(new Animated.Value(0)).current;
     const baseZoom = useRef(0);
     const lastZoom = useRef(0);
+    const longPressTimer = useRef<NodeJS.Timeout | null>(null);
 
     const [permission, requestPermission] = useCameraPermissions();
     const [facing, setFacing] = useState<CameraType>(initialFacing);
@@ -103,6 +106,15 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
     const [showSettings, setShowSettings] = useState(false);
     const [zoom, setZoom] = useState(0);
     const [aspectRatioIndex, setAspectRatioIndex] = useState(1); // 0: 16:9, 1: 4:3, 2: 1:1
+    const [zoomControls, setZoomControls] = useState(false);
+    const [availableZoomFactors, setAvailableZoomFactors] = useState<number[]>([
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1.0, // Zoom levels: 1x, 2x, 3x, 4x, 5x
+    ]);
+    const [currentZoomIndex, setCurrentZoomIndex] = useState(0);
 
     // Theme colors
     const backgroundColor = useThemeColor({}, 'background');
@@ -110,6 +122,36 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
     const primaryColor = useThemeColor({}, 'primary');
     const cardColor = useThemeColor({}, 'card');
     const destructiveColor = useThemeColor({}, 'destructive');
+
+    // Modern gesture handler for pinch-to-zoom
+    const pinchGesture = Gesture.Pinch()
+      .onUpdate((event) => {
+        const newZoom = Math.min(
+          Math.max(baseZoom.current + (event.scale - 1) * 0.5, 0),
+          1
+        );
+        setZoom(newZoom);
+      })
+      .onEnd(() => {
+        baseZoom.current = zoom;
+        showZoomIndicator();
+      });
+
+    // Double tap gesture for quick zoom
+    const doubleTapGesture = Gesture.Tap()
+      .numberOfTaps(2)
+      .onEnd(() => {
+        const newZoom = zoom > 0 ? 0 : 0.5;
+        setZoom(newZoom);
+        baseZoom.current = newZoom;
+        showZoomIndicator();
+      });
+
+    // Combined gestures
+    const composedGestures = Gesture.Simultaneous(
+      pinchGesture,
+      doubleTapGesture
+    );
 
     // @ts-ignore
     useImperativeHandle(ref, () => {
@@ -145,8 +187,21 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         if (timerInterval.current) {
           clearInterval(timerInterval.current);
         }
+        if (longPressTimer.current) {
+          clearTimeout(longPressTimer.current);
+        }
       };
     }, []);
+
+    // Auto-hide zoom controls after 3 seconds
+    useEffect(() => {
+      if (zoomControls) {
+        const timer = setTimeout(() => {
+          hideZoomControls();
+        }, 3000);
+        return () => clearTimeout(timer);
+      }
+    }, [zoomControls]);
 
     const getCameraHeight = () => {
       const currentAspectRatio = aspectRatios[aspectRatioIndex];
@@ -159,6 +214,25 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         default:
           return (screenWidth * 4) / 3;
       }
+    };
+
+    const showZoomControls = () => {
+      setZoomControls(true);
+      Animated.timing(zoomControlsAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }).start();
+    };
+
+    const hideZoomControls = () => {
+      Animated.timing(zoomControlsAnim, {
+        toValue: 0,
+        duration: 200,
+        useNativeDriver: true,
+      }).start(() => {
+        setZoomControls(false);
+      });
     };
 
     const startTimer = (seconds: number) => {
@@ -337,27 +411,9 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
       ]).start();
     };
 
-    const onPinchGestureEvent = (event: any) => {
-      const { scale } = event.nativeEvent;
-      const newZoom = Math.min(
-        Math.max(baseZoom.current + (scale - 1) * 0.5, 0),
-        1
-      );
-      setZoom(newZoom);
-    };
-
-    const onPinchStateChange = (event: any) => {
-      if (event.nativeEvent.oldState === State.ACTIVE) {
-        baseZoom.current = zoom;
-        showZoomIndicator();
-      }
-    };
-
-    const onDoubleTap = () => {
-      const newZoom = zoom > 0 ? 0 : 0.5;
-      setZoom(newZoom);
-      baseZoom.current = newZoom;
-      showZoomIndicator();
+    const handleZoomSliderChange = (value: number) => {
+      setZoom(value / 100); // Convert from 0-100 to 0-1
+      baseZoom.current = value / 100;
     };
 
     const formatTime = (seconds: number) => {
@@ -371,6 +427,26 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
     const getTimerButtonText = () => {
       if (selectedTimer === 0) return 'OFF';
       return `${selectedTimer}s`;
+    };
+
+    const getZoomFactor = () => {
+      return zoom === 0 ? '1×' : `${(1 + zoom * 4).toFixed(0)}×`;
+    };
+
+    // New zoom button handlers
+    const handleZoomButtonTap = () => {
+      // Cycle through available zoom levels
+      const nextIndex = (currentZoomIndex + 1) % availableZoomFactors.length;
+      const nextZoom = availableZoomFactors[nextIndex];
+
+      setCurrentZoomIndex(nextIndex);
+      setZoom(nextZoom);
+      baseZoom.current = nextZoom;
+      showZoomIndicator();
+
+      // if (soundEnabled) {
+      //   Vibration.vibrate([1]); // Light haptic feedback
+      // }
     };
 
     if (!permission) {
@@ -429,10 +505,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         ]}
       >
         <View style={[styles.cameraContainer, { height: getCameraHeight() }]}>
-          <PinchGestureHandler
-            onGestureEvent={onPinchGestureEvent}
-            onHandlerStateChange={onPinchStateChange}
-          >
+          <GestureDetector gesture={composedGestures}>
             <Animated.View style={styles.camera}>
               <CameraView
                 ref={cameraRef}
@@ -459,10 +532,41 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                   style={[styles.zoomIndicator, { opacity: zoomTextAnim }]}
                   pointerEvents='none'
                 >
-                  <Text style={styles.zoomText}>
-                    {zoom === 0 ? '1×' : `${(1 + zoom * 4).toFixed(1)}×`}
-                  </Text>
+                  <Text style={styles.zoomText}>{getZoomFactor()}</Text>
                 </Animated.View>
+
+                {/* Zoom Controls */}
+                {zoomControls && (
+                  <Animated.View
+                    style={[
+                      styles.zoomControls,
+                      {
+                        opacity: zoomControlsAnim,
+                        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                      },
+                    ]}
+                    pointerEvents={zoomControls ? 'auto' : 'none'}
+                  >
+                    <View style={styles.sliderContainer}>
+                      <Text style={[styles.zoomValue, { color: 'white' }]}>
+                        1×
+                      </Text>
+                      <Progress
+                        interactive
+                        value={zoom * 100}
+                        onValueChange={handleZoomSliderChange}
+                        style={styles.zoomSlider}
+                        height={6}
+                      />
+                      <Text style={[styles.zoomValue, { color: 'white' }]}>
+                        5×
+                      </Text>
+                    </View>
+                    <Text style={[styles.currentZoomText, { color: 'white' }]}>
+                      {getZoomFactor()}
+                    </Text>
+                  </Animated.View>
+                )}
 
                 {/* Timer Overlay */}
                 {isTimerActive && (
@@ -662,6 +766,29 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                         <SwitchCamera size={24} color={textColor} />
                       </TouchableOpacity>
 
+                      {/* New Zoom Control Button */}
+                      <TouchableOpacity
+                        style={[
+                          styles.controlButton,
+                          {
+                            backgroundColor: zoomControls
+                              ? primaryColor
+                              : cardColor,
+                          },
+                        ]}
+                        onPress={handleZoomButtonTap}
+                        activeOpacity={0.7}
+                      >
+                        <Text
+                          style={{
+                            fontWeight: 600,
+                            color: zoomControls ? cardColor : textColor,
+                          }}
+                        >
+                          {getZoomFactor()}
+                        </Text>
+                      </TouchableOpacity>
+
                       {/* Mode Toggle Button */}
                       {enableVideo && (
                         <TouchableOpacity
@@ -737,7 +864,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                 )}
               </CameraView>
             </Animated.View>
-          </PinchGestureHandler>
+          </GestureDetector>
         </View>
       </Animated.View>
     );
@@ -791,7 +918,7 @@ const styles = StyleSheet.create({
   },
   settingsPanel: {
     position: 'absolute',
-    top: 80,
+    top: 76,
     left: 20,
     right: 20,
     borderRadius: BORDER_RADIUS,
@@ -823,7 +950,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     right: 20,
     top: '50%',
-    transform: [{ translateY: -88 }],
+    transform: [{ translateY: -120 }],
     gap: 16,
     zIndex: 1,
   },
@@ -1002,6 +1129,36 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 16,
     fontSize: FONT_SIZE,
+  },
+  zoomControls: {
+    position: 'absolute',
+    right: 20,
+    top: '25%',
+    padding: 12,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 100,
+  },
+  sliderContainer: {
+    height: 200,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    transform: [{ rotate: '-90deg' }], // rotate to make it vertical
+  },
+  zoomSlider: {
+    width: 160, // becomes height visually due to rotate
+    borderRadius: 999,
+  },
+  zoomValue: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  currentZoomText: {
+    marginTop: 12,
+    fontSize: 12,
+    fontWeight: '600',
   },
 });
 
