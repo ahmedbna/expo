@@ -3,7 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
-import { CameraType, CameraView, useCameraPermissions } from 'expo-camera';
+import {
+  CameraMode,
+  CameraRatio,
+  CameraType,
+  CameraView,
+  useCameraPermissions,
+} from 'expo-camera';
 import {
   Camera as CameraIcon,
   Circle,
@@ -46,7 +52,6 @@ export interface CameraProps {
   facing?: CameraType;
   enableTorch?: boolean;
   showControls?: boolean;
-  aspectRatios?: Array<'string'>;
   timerOptions?: Array<number>;
   enableVideo?: boolean;
   maxVideoDuration?: number; // in seconds
@@ -75,7 +80,6 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
       enableVideo = true,
       maxVideoDuration = 60,
       timerOptions = [0, 3, 10],
-      aspectRatios = ['16:9', '4:3', '1:1'],
       facing: initialFacing = 'back',
     },
     ref
@@ -89,15 +93,16 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
     const zoomControlsAnim = useRef(new Animated.Value(0)).current;
     const baseZoom = useRef(0);
     const lastZoom = useRef(0);
-    const longPressTimer = useRef<NodeJS.Timeout | null>(null);
+
+    const aspectRatios: Array<CameraRatio> = ['16:9', '4:3', '1:1'];
 
     const [permission, requestPermission] = useCameraPermissions();
-    const [facing, setFacing] = useState<CameraType>(initialFacing);
     const [torch, setTorch] = useState(false);
     const [isCapturing, setIsCapturing] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [recordingTime, setRecordingTime] = useState(0);
-    const [mode, setMode] = useState<'photo' | 'video'>('photo');
+    const [mode, setMode] = useState<CameraMode>('picture');
+    const [facing, setFacing] = useState<CameraType>(initialFacing);
     const [showGrid, setShowGrid] = useState(false);
     const [timerSeconds, setTimerSeconds] = useState(0);
     const [selectedTimer, setSelectedTimer] = useState<number>(0);
@@ -187,9 +192,6 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         if (timerInterval.current) {
           clearInterval(timerInterval.current);
         }
-        if (longPressTimer.current) {
-          clearTimeout(longPressTimer.current);
-        }
       };
     }, []);
 
@@ -249,7 +251,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
             }
             // Execute the actual capture/recording
             setTimeout(() => {
-              if (mode === 'photo') {
+              if (mode === 'picture') {
                 handleActualCapture();
               } else {
                 handleStartRecording();
@@ -281,14 +283,14 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
           Vibration.vibrate(50);
         }
 
-        const photo = await cameraRef.current.takePictureAsync({
+        const picture = await cameraRef.current.takePictureAsync({
           quality: 1,
           base64: false,
           exif: true,
         });
 
-        if (photo && onCapture) {
-          onCapture(photo.uri);
+        if (picture && onCapture) {
+          onCapture(picture.uri);
         }
       } catch (error) {
         console.error('Error taking picture:', error);
@@ -339,7 +341,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
       if (selectedTimer > 0) {
         startTimer(selectedTimer);
       } else {
-        if (mode === 'photo') {
+        if (mode === 'picture') {
           handleActualCapture();
         } else {
           handleStartRecording();
@@ -379,7 +381,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
 
     const toggleMode = () => {
       if (!isRecording && !isCapturing) {
-        setMode((current) => (current === 'photo' ? 'video' : 'photo'));
+        setMode((current) => (current === 'picture' ? 'video' : 'picture'));
       }
     };
 
@@ -481,7 +483,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
               variant='body'
               style={[styles.permissionText, { color: textColor }]}
             >
-              We need access to your camera to take photos and videos
+              We need access to your camera to take pictures and videos
             </Text>
             <Button
               variant='default'
@@ -509,6 +511,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
             <Animated.View style={styles.camera}>
               <CameraView
                 ref={cameraRef}
+                mode={mode}
                 style={styles.camera}
                 facing={facing}
                 enableTorch={torch}
@@ -800,7 +803,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                           disabled={isRecording || isCapturing}
                           activeOpacity={0.7}
                         >
-                          {mode === 'photo' ? (
+                          {mode === 'picture' ? (
                             <Video size={24} color={textColor} />
                           ) : (
                             <Circle size={24} color={textColor} />
@@ -829,7 +832,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                             styles.capturingButton,
                         ]}
                         onPress={
-                          mode === 'photo'
+                          mode === 'picture'
                             ? handleCapture
                             : isRecording
                             ? handleStopRecording

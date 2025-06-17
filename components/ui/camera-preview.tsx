@@ -41,6 +41,7 @@ export function CameraPreview() {
     capturedMedia?.type === 'video' ? capturedMedia.uri : null,
     (player) => {
       if (capturedMedia?.type === 'video') {
+        player.play();
         player.loop = true;
         player.muted = false;
         // Don't auto-play initially, let user control
