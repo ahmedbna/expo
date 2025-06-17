@@ -43,7 +43,6 @@ import { useState } from 'react';
 import { Pressable } from 'react-native';
 import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
-import { CameraExample } from './camera-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
 import { InputOTPExamples } from './otp-examples';
@@ -53,6 +52,7 @@ import { ShareExamples } from './share-examples';
 import { SheetExample } from './sheet-example';
 import ToggleExamples from './toggle-examples';
 import { Alert, AlertDescription, AlertTitle } from './ui/alert';
+import { CameraPreview } from './ui/camera-preview';
 import { Link } from './ui/link';
 import { Picker, PickerOption } from './ui/picker';
 import {
@@ -144,7 +144,7 @@ export const Test = () => {
             maxSuggestions={3}
           />
 
-          <CameraExample />
+          <CameraPreview />
 
           <InputOTPExamples />
 
