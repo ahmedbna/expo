@@ -87,7 +87,8 @@ export function AudioPlayer({
   };
 
   const handleBackFiveSeconds = () => {
-    player.seekTo(0);
+    const newPosition = Math.max(0, position - 5);
+    player.seekTo(newPosition);
   };
 
   const handleRestart = () => {
@@ -159,20 +160,22 @@ export function AudioPlayer({
             size='icon'
             onPress={handleBackFiveSeconds}
             style={styles.controlButton}
+            disabled={!player.isLoaded}
           >
             <RotateCcw size={18} color={textColor} />
           </Button>
 
           <Button
-            variant='destructive'
             size='icon'
+            variant='destructive'
             onPress={handlePlayPause}
             disabled={!player.isLoaded}
+            style={styles.playButton}
           >
             {player.playing ? (
-              <Pause size={20} color='white' />
+              <Pause size={24} color='white' />
             ) : (
-              <Play size={20} color='white' />
+              <Play size={24} color='white' />
             )}
           </Button>
 
@@ -181,6 +184,7 @@ export function AudioPlayer({
             size='icon'
             onPress={handleRestart}
             style={styles.controlButton}
+            disabled={!player.isLoaded}
           >
             <Square fill={textColor} size={18} color={textColor} />
           </Button>
@@ -232,7 +236,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 16,
+    gap: 12,
     marginBottom: 8,
   },
   controlButton: {
@@ -240,14 +244,8 @@ const styles = StyleSheet.create({
     height: 40,
   },
   playButton: {
-    width: 48,
-    height: 48,
-  },
-  volumeContainer: {
-    width: 40,
-    height: 40,
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 56,
+    height: 56,
   },
   timerContainer: {
     alignItems: 'center',
