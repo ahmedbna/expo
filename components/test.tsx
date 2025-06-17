@@ -43,6 +43,7 @@ import { useState } from 'react';
 import { Pressable } from 'react-native';
 import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
+import { AudioExample } from './audio-example';
 import { CarouselTestComponent } from './carousel-examples';
 import { ComboboxExamples } from './combobox-example';
 import { InputOTPExamples } from './otp-examples';
@@ -133,6 +134,8 @@ export const Test = () => {
             placeholder='Search products...'
             onSearch={(query) => console.log('Searching:', query)}
           />
+
+          <AudioExample />
 
           {/* <View style={{ width: '100%' }}> */}
           <SearchBarWithSuggestions
