@@ -53,7 +53,18 @@ export function AudioWaveform({
   // Generate sample data if none provided
   const waveformData = data || generateSampleWaveform(barCount);
 
-  // Animate bars when playing
+  // Update animated values when data changes (for real-time updates)
+  useEffect(() => {
+    if (data && !animated) {
+      // Direct update without animation for real-time data
+      animatedBars.forEach((bar, index) => {
+        const value = waveformData[index] || 0.2;
+        bar.setValue(value);
+      });
+    }
+  }, [data, animated, waveformData]);
+
+  // Animate bars when playing (only if animated is true)
   useEffect(() => {
     if (isPlaying && animated) {
       const animateWaveform = () => {
@@ -70,8 +81,14 @@ export function AudioWaveform({
 
       const interval = setInterval(animateWaveform, 300);
       return () => clearInterval(interval);
+    } else if (!animated) {
+      // For real-time data, use the actual values without animation
+      animatedBars.forEach((bar, index) => {
+        const value = waveformData[index] || 0.2;
+        bar.setValue(value);
+      });
     } else {
-      // Reset to static state
+      // Reset to static state with animation
       animatedBars.forEach((bar, index) => {
         Animated.timing(bar, {
           toValue: waveformData[index] || 0.3,
@@ -118,12 +135,10 @@ export function AudioWaveform({
                     backgroundColor: isActive
                       ? finalActiveColor
                       : finalInactiveColor,
-                    height: animated
-                      ? animatedValue.interpolate({
-                          inputRange: [0, 1],
-                          outputRange: [4, height * 0.8],
-                        })
-                      : (waveformData[index] || 0.3) * height * 0.8,
+                    height: animatedValue.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [4, height * 0.8],
+                    }),
                   },
                 ]}
               />

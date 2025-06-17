@@ -61,9 +61,6 @@ export function AudioRecorder({
     Array.from({ length: 30 }, () => 0.2)
   );
 
-  // Store the current metering levels
-  const meteringLevelsRef = useRef<number[]>([]);
-
   // Theme colors
   const primaryColor = useThemeColor({}, 'primary');
   const secondaryColor = useThemeColor({}, 'secondary');
@@ -123,66 +120,44 @@ export function AudioRecorder({
     }
   }, [isRecording]);
 
-  // Start metering when recording starts
+  // Real-time waveform updates during recording
   useEffect(() => {
     if (isRecording) {
-      // Start metering interval to get audio levels
       meteringInterval.current = setInterval(async () => {
         try {
-          // Get the current metering level from the recorder
-          const meteringResult = recorder.getStatus();
+          // Try to get metering data from recorder
+          const status = recorder.getStatus();
+          let level = 0.3; // Default fallback level
 
-          if (meteringResult && meteringResult.metering !== undefined) {
-            const level = meteringResult.metering;
-
-            // Convert metering level to a normalized value (0-1)
-            // Expo Audio metering is typically in dB, ranging from -160 to 0
-            const normalizedLevel = Math.max(0, Math.min(1, (level + 50) / 50));
-
-            // Add some variation to make it look more dynamic
-            const adjustedLevel = Math.max(
-              0.1,
-              normalizedLevel + (Math.random() - 0.5) * 0.2
-            );
-
-            // Update the metering levels array (keep only recent values)
-            meteringLevelsRef.current = [
-              ...meteringLevelsRef.current,
-              adjustedLevel,
-            ].slice(-30);
-
-            // Update waveform data with recent metering levels
-            setWaveformData((prev) => {
-              const newData = [...prev];
-              newData.shift(); // Remove first element
-              newData.push(adjustedLevel); // Add new level
-              return newData;
-            });
+          if (status && typeof status.metering === 'number') {
+            // Convert dB to normalized value (typical range -160 to 0 dB)
+            const dbLevel = status.metering;
+            level = Math.max(0.1, Math.min(1.0, (dbLevel + 50) / 50));
           } else {
-            // Fallback: generate more realistic random data if metering is not available
-            const baseLevel = 0.3 + Math.random() * 0.4;
-            const variation = (Math.random() - 0.5) * 0.3;
-            const level = Math.max(0.1, Math.min(0.8, baseLevel + variation));
-
-            setWaveformData((prev) => {
-              const newData = [...prev];
-              newData.shift();
-              newData.push(level);
-              return newData;
-            });
+            // Generate more realistic simulated audio levels
+            const time = Date.now() / 1000;
+            const baseLevel = 0.3 + Math.sin(time * 2) * 0.2; // Sine wave base
+            const variation = (Math.random() - 0.5) * 0.4; // Random variation
+            const spike = Math.random() < 0.1 ? Math.random() * 0.3 : 0; // Occasional spikes
+            level = Math.max(0.1, Math.min(0.9, baseLevel + variation + spike));
           }
-        } catch (error) {
-          console.log('Metering not available, using simulated data');
-          // Fallback to simulated data
-          const level = 0.2 + Math.random() * 0.6;
-          setWaveformData((prev) => {
-            const newData = [...prev];
-            newData.shift();
-            newData.push(level);
+
+          // Update waveform data by shifting array and adding new value
+          setWaveformData((prevData) => {
+            const newData = [...prevData.slice(1), level];
             return newData;
           });
+        } catch (error) {
+          console.log('Using simulated audio data');
+          // Fallback to realistic simulated data
+          const time = Date.now() / 1000;
+          const baseLevel = 0.4 + Math.sin(time * 3) * 0.2;
+          const noise = (Math.random() - 0.5) * 0.3;
+          const level = Math.max(0.15, Math.min(0.85, baseLevel + noise));
+
+          setWaveformData((prevData) => [...prevData.slice(1), level]);
         }
-      }, 100); // Update every 100ms for smooth animation
+      }, 80); // Update every 80ms for smooth animation
 
       return () => {
         if (meteringInterval.current) {
@@ -193,7 +168,6 @@ export function AudioRecorder({
     } else {
       // Reset to quiet state when not recording
       setWaveformData(Array.from({ length: 30 }, () => 0.2));
-      meteringLevelsRef.current = [];
 
       if (meteringInterval.current) {
         clearInterval(meteringInterval.current);
@@ -342,20 +316,20 @@ export function AudioRecorder({
         <View style={{ height: 36 }} />
       )}
 
-      {/* Waveform Visualization using AudioWaveform component */}
+      {/* Waveform Visualization */}
       {showWaveform && (
         <View style={styles.waveformContainer}>
           <AudioWaveform
             data={waveformData}
-            isPlaying={isRecording}
+            isPlaying={false} // Disable built-in animation
             progress={0}
             height={60}
             barCount={30}
             barWidth={4}
             barGap={2}
-            activeColor={isRecording ? primaryColor : redColor}
+            activeColor={isRecording ? redColor : primaryColor}
             inactiveColor={mutedColor}
-            animated={isRecording}
+            animated={false} // Disable built-in animation to use real-time data
           />
         </View>
       )}
@@ -482,8 +456,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 24,
-  },
-  infoContainer: {
-    marginTop: 8,
   },
 });
