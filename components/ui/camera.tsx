@@ -12,7 +12,6 @@ import {
 } from 'expo-camera';
 import {
   Camera as CameraIcon,
-  Circle,
   Grid3X3,
   Settings,
   SwitchCamera,
@@ -47,6 +46,11 @@ import { Progress } from './progress';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
+export type CaptureSuccess = {
+  type: CameraMode;
+  uri: string;
+  cameraHeight: number;
+};
 export interface CameraProps {
   style?: ViewStyle;
   facing?: CameraType;
@@ -56,8 +60,8 @@ export interface CameraProps {
   enableVideo?: boolean;
   maxVideoDuration?: number; // in seconds
   onClose?: () => void;
-  onCapture?: (uri: string) => void;
-  onVideoCapture?: (uri: string) => void;
+  onCapture?: ({ type, uri, cameraHeight }: CaptureSuccess) => void;
+  onVideoCapture?: ({ type, uri, cameraHeight }: CaptureSuccess) => void;
 }
 
 export interface CameraRef extends CameraView {
@@ -195,16 +199,6 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
       };
     }, []);
 
-    // Auto-hide zoom controls after 3 seconds
-    useEffect(() => {
-      if (zoomControls) {
-        const timer = setTimeout(() => {
-          hideZoomControls();
-        }, 3000);
-        return () => clearTimeout(timer);
-      }
-    }, [zoomControls]);
-
     const getCameraHeight = () => {
       const currentAspectRatio = aspectRatios[aspectRatioIndex];
       switch (currentAspectRatio) {
@@ -216,25 +210,6 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         default:
           return (screenWidth * 4) / 3;
       }
-    };
-
-    const showZoomControls = () => {
-      setZoomControls(true);
-      Animated.timing(zoomControlsAnim, {
-        toValue: 1,
-        duration: 200,
-        useNativeDriver: true,
-      }).start();
-    };
-
-    const hideZoomControls = () => {
-      Animated.timing(zoomControlsAnim, {
-        toValue: 0,
-        duration: 200,
-        useNativeDriver: true,
-      }).start(() => {
-        setZoomControls(false);
-      });
     };
 
     const startTimer = (seconds: number) => {
@@ -290,7 +265,11 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         });
 
         if (picture && onCapture) {
-          onCapture(picture.uri);
+          onCapture({
+            type: 'picture',
+            uri: picture.uri,
+            cameraHeight: getCameraHeight(),
+          });
         }
       } catch (error) {
         console.error('Error taking picture:', error);
@@ -326,7 +305,11 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         });
 
         if (video && onVideoCapture) {
-          onVideoCapture(video.uri);
+          onVideoCapture({
+            type: 'video',
+            uri: video.uri,
+            cameraHeight: getCameraHeight(),
+          });
         }
       } catch (error) {
         console.error('Error starting recording:', error);
@@ -517,6 +500,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                 enableTorch={torch}
                 animateShutter={true}
                 zoom={zoom}
+                ratio={aspectRatios[aspectRatioIndex]}
               >
                 {/* Grid Overlay */}
                 {showGrid && (
@@ -806,7 +790,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                           {mode === 'picture' ? (
                             <Video size={24} color={textColor} />
                           ) : (
-                            <Circle size={24} color={textColor} />
+                            <CameraIcon size={24} color={textColor} />
                           )}
                         </TouchableOpacity>
                       )}

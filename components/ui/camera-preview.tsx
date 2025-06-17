@@ -1,13 +1,13 @@
 // components/ui/camera-preview.tsx
 import { Button } from '@/components/ui/button';
-import { Camera } from '@/components/ui/camera';
+import { Camera, CaptureSuccess } from '@/components/ui/camera';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useEvent } from 'expo';
 import * as MediaLibrary from 'expo-media-library';
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { Save, Trash2, Upload, X } from 'lucide-react-native';
+import { Download, Upload, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {
   Alert,
@@ -22,9 +22,10 @@ const { width: screenWidth } = Dimensions.get('window');
 
 export function CameraPreview() {
   const [showCamera, setShowCamera] = useState(false);
+  const [cameraHeight, setCameraHeight] = useState((screenWidth * 4) / 3);
   const [capturedMedia, setCapturedMedia] = useState<{
     uri: string;
-    type: 'photo' | 'video';
+    type: 'picture' | 'video';
   } | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const [mediaLibraryPermission, requestMediaLibraryPermission] =
@@ -44,7 +45,6 @@ export function CameraPreview() {
         player.play();
         player.loop = true;
         player.muted = false;
-        // Don't auto-play initially, let user control
       }
     }
   );
@@ -61,14 +61,16 @@ export function CameraPreview() {
     }
   }, [capturedMedia?.uri, capturedMedia?.type, player]);
 
-  const handleCapture = (uri: string) => {
-    setCapturedMedia({ uri, type: 'photo' });
+  const handleCapture = (results: CaptureSuccess) => {
+    setCameraHeight(results.cameraHeight);
+    setCapturedMedia({ type: results.type, uri: results.uri });
     setShowCamera(false);
     setShowPreview(true);
   };
 
-  const handleVideoCapture = (uri: string) => {
-    setCapturedMedia({ uri, type: 'video' });
+  const handleVideoCapture = (results: CaptureSuccess) => {
+    setCameraHeight(results.cameraHeight);
+    setCapturedMedia({ type: results.type, uri: results.uri });
     setShowCamera(false);
     setShowPreview(true);
   };
@@ -81,15 +83,6 @@ export function CameraPreview() {
 
   const handleCloseCamera = () => {
     setShowCamera(false);
-  };
-
-  const handleDiscardMedia = () => {
-    // Stop video if playing
-    if (capturedMedia?.type === 'video' && isPlaying) {
-      player.pause();
-    }
-    setCapturedMedia(null);
-    setShowPreview(false);
   };
 
   const handleRetakeMedia = () => {
@@ -112,20 +105,20 @@ export function CameraPreview() {
         if (!permission.granted) {
           Alert.alert(
             'Permission Required',
-            'Please grant permission to save media to your photo library.'
+            'Please grant permission to save media to your picture library.'
           );
           return;
         }
       }
 
       // Save to media library
-      const asset = await MediaLibrary.saveToLibraryAsync(capturedMedia.uri);
+      await MediaLibrary.saveToLibraryAsync(capturedMedia.uri);
 
       Alert.alert(
         'Success!',
         `${
-          capturedMedia.type === 'photo' ? 'Photo' : 'Video'
-        } saved to your photo library.`,
+          capturedMedia.type === 'picture' ? 'Photo' : 'Video'
+        } saved to your picture library.`,
         [
           {
             text: 'OK',
@@ -142,7 +135,7 @@ export function CameraPreview() {
       );
     } catch (error) {
       console.error('Error saving to album:', error);
-      Alert.alert('Error', 'Failed to save media to your photo library.');
+      Alert.alert('Error', 'Failed to save media to your picture library.');
     }
   };
 
@@ -168,7 +161,7 @@ export function CameraPreview() {
     Alert.alert(
       'Upload Action',
       `${
-        capturedMedia.type === 'photo' ? 'Photo' : 'Video'
+        capturedMedia.type === 'picture' ? 'Photo' : 'Video'
       } ready for processing.\n\nCheck console for media details.`,
       [
         {
@@ -185,25 +178,20 @@ export function CameraPreview() {
             if (capturedMedia?.type === 'video' && isPlaying) {
               player.pause();
             }
-            setCapturedMedia(null);
-            setShowPreview(false);
+            // setCapturedMedia(null);
+            // setShowPreview(false);
           },
         },
       ]
     );
   };
 
-  const getCameraHeight = () => {
-    // Match the camera's aspect ratio calculation
-    return (screenWidth * 4) / 3; // Default 4:3 aspect ratio
-  };
-
   // Preview Mode
   if (showPreview && capturedMedia) {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor }]}>
-        <View style={[styles.previewContainer, { height: getCameraHeight() }]}>
-          {capturedMedia.type === 'photo' ? (
+        <View style={[styles.previewContainer, { height: cameraHeight }]}>
+          {capturedMedia.type === 'picture' ? (
             <Image
               source={{ uri: capturedMedia.uri }}
               style={styles.previewMedia}
@@ -212,7 +200,7 @@ export function CameraPreview() {
           ) : (
             <VideoView
               player={player}
-              style={styles.previewMedia}
+              style={[styles.previewMedia]}
               allowsFullscreen
               allowsPictureInPicture
               nativeControls
@@ -221,67 +209,57 @@ export function CameraPreview() {
 
           {/* Top Floating Buttons */}
           <View style={styles.topFloatingButtons}>
-            <TouchableOpacity
-              style={[
-                styles.floatingButton,
-                { backgroundColor: destructiveColor },
-              ]}
-              onPress={handleDiscardMedia}
-              activeOpacity={0.8}
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
             >
-              <Trash2 size={24} color='white' />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.floatingButton,
+                  { backgroundColor: cardColor, opacity: 0.9 },
+                ]}
+                onPress={handleRetakeMedia}
+                activeOpacity={0.8}
+              >
+                <X size={24} color={textColor} />
+              </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[
-                styles.floatingButton,
-                { backgroundColor: cardColor, opacity: 0.9 },
-              ]}
-              onPress={handleRetakeMedia}
-              activeOpacity={0.8}
-            >
-              <X size={24} color={textColor} />
-            </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  gap: 16,
+                }}
+              >
+                <TouchableOpacity
+                  style={[
+                    styles.floatingButton,
+                    { backgroundColor: cardColor, opacity: 0.9 },
+                  ]}
+                  onPress={handleSaveToAlbum}
+                  activeOpacity={0.8}
+                >
+                  <Download size={24} color={textColor} />
+                </TouchableOpacity>
 
-            <TouchableOpacity
-              style={[styles.floatingButton, { backgroundColor: primaryColor }]}
-              onPress={handleSaveToAlbum}
-              activeOpacity={0.8}
-            >
-              <Save size={24} color='white' />
-            </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.floatingButton,
+                    { backgroundColor: cardColor, opacity: 0.9 },
+                  ]}
+                  onPress={handleUploadAction}
+                  activeOpacity={0.8}
+                >
+                  <Upload size={24} color={textColor} />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
-        </View>
-
-        {/* Bottom Action Button */}
-        <View style={styles.bottomActionContainer}>
-          <TouchableOpacity
-            style={[styles.uploadButton, { backgroundColor: primaryColor }]}
-            onPress={handleUploadAction}
-            activeOpacity={0.8}
-          >
-            <Upload size={24} color='white' style={styles.uploadIcon} />
-            <Text style={styles.uploadButtonText}>
-              Process {capturedMedia.type === 'photo' ? 'Photo' : 'Video'}
-            </Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* Media Info */}
-        <View style={styles.mediaInfo}>
-          <Text style={[styles.mediaInfoText, { color: textColor }]}>
-            {capturedMedia.type === 'photo' ? '📸 Photo' : '🎥 Video'} captured
-          </Text>
-          <Text
-            style={[
-              styles.mediaInfoSubtext,
-              { color: textColor, opacity: 0.7 },
-            ]}
-          >
-            {capturedMedia.type === 'video'
-              ? 'Tap play button on video to preview'
-              : 'Tap the buttons above to save or discard'}
-          </Text>
         </View>
       </SafeAreaView>
     );
@@ -326,7 +304,7 @@ export function CameraPreview() {
             <Text variant='subtitle' style={styles.lastCaptureTitle}>
               Last Capture:
             </Text>
-            {capturedMedia.type === 'photo' ? (
+            {capturedMedia.type === 'picture' ? (
               <Image
                 source={{ uri: capturedMedia.uri }}
                 style={styles.thumbnailImage}
@@ -473,7 +451,7 @@ const styles = StyleSheet.create({
   },
   topFloatingButtons: {
     position: 'absolute',
-    top: 20,
+    bottom: 40,
     left: 20,
     right: 20,
     flexDirection: 'row',
