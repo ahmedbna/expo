@@ -10,7 +10,7 @@ import {
   RecordingPresets,
   useAudioRecorder,
 } from 'expo-audio';
-import { Circle, Mic, Save, Square, Trash2 } from 'lucide-react-native';
+import { Circle, Download, Mic, Square, Trash2 } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Alert,
@@ -61,6 +61,9 @@ export function AudioRecorder({
     Array.from({ length: 30 }, () => 0.2)
   );
 
+  // Store the current metering levels
+  const meteringLevelsRef = useRef<number[]>([]);
+
   // Theme colors
   const primaryColor = useThemeColor({}, 'primary');
   const secondaryColor = useThemeColor({}, 'secondary');
@@ -72,6 +75,7 @@ export function AudioRecorder({
   // Animation values
   const recordingPulse = useRef(new Animated.Value(1)).current;
   const durationInterval = useRef<number | null>(null);
+  const meteringInterval = useRef<number | null>(null);
 
   // Request permissions on mount
   useEffect(() => {
@@ -119,25 +123,84 @@ export function AudioRecorder({
     }
   }, [isRecording]);
 
-  // Simulate waveform data during recording
+  // Start metering when recording starts
   useEffect(() => {
-    let waveformInterval: number;
-
     if (isRecording) {
-      waveformInterval = setInterval(() => {
-        setWaveformData((prev) => prev.map(() => Math.random() * 0.8 + 0.2));
-      }, 100);
-    } else {
-      // Reset to quiet state
-      setWaveformData(Array.from({ length: 30 }, () => 0.2));
-    }
+      // Start metering interval to get audio levels
+      meteringInterval.current = setInterval(async () => {
+        try {
+          // Get the current metering level from the recorder
+          const meteringResult = recorder.getStatus();
 
-    return () => {
-      if (waveformInterval) {
-        clearInterval(waveformInterval);
+          if (meteringResult && meteringResult.metering !== undefined) {
+            const level = meteringResult.metering;
+
+            // Convert metering level to a normalized value (0-1)
+            // Expo Audio metering is typically in dB, ranging from -160 to 0
+            const normalizedLevel = Math.max(0, Math.min(1, (level + 50) / 50));
+
+            // Add some variation to make it look more dynamic
+            const adjustedLevel = Math.max(
+              0.1,
+              normalizedLevel + (Math.random() - 0.5) * 0.2
+            );
+
+            // Update the metering levels array (keep only recent values)
+            meteringLevelsRef.current = [
+              ...meteringLevelsRef.current,
+              adjustedLevel,
+            ].slice(-30);
+
+            // Update waveform data with recent metering levels
+            setWaveformData((prev) => {
+              const newData = [...prev];
+              newData.shift(); // Remove first element
+              newData.push(adjustedLevel); // Add new level
+              return newData;
+            });
+          } else {
+            // Fallback: generate more realistic random data if metering is not available
+            const baseLevel = 0.3 + Math.random() * 0.4;
+            const variation = (Math.random() - 0.5) * 0.3;
+            const level = Math.max(0.1, Math.min(0.8, baseLevel + variation));
+
+            setWaveformData((prev) => {
+              const newData = [...prev];
+              newData.shift();
+              newData.push(level);
+              return newData;
+            });
+          }
+        } catch (error) {
+          console.log('Metering not available, using simulated data');
+          // Fallback to simulated data
+          const level = 0.2 + Math.random() * 0.6;
+          setWaveformData((prev) => {
+            const newData = [...prev];
+            newData.shift();
+            newData.push(level);
+            return newData;
+          });
+        }
+      }, 100); // Update every 100ms for smooth animation
+
+      return () => {
+        if (meteringInterval.current) {
+          clearInterval(meteringInterval.current);
+          meteringInterval.current = null;
+        }
+      };
+    } else {
+      // Reset to quiet state when not recording
+      setWaveformData(Array.from({ length: 30 }, () => 0.2));
+      meteringLevelsRef.current = [];
+
+      if (meteringInterval.current) {
+        clearInterval(meteringInterval.current);
+        meteringInterval.current = null;
       }
-    };
-  }, [isRecording]);
+    }
+  }, [isRecording, recorder]);
 
   // Auto-stop recording when max duration is reached
   useEffect(() => {
@@ -175,7 +238,13 @@ export function AudioRecorder({
       setIsRecording(true);
       startDurationTimer();
 
-      await recorder.prepareToRecordAsync();
+      // Enable metering in recording options
+      const meteringOptions = {
+        ...recordingOptions,
+        isMeteringEnabled: true,
+      };
+
+      await recorder.prepareToRecordAsync(meteringOptions);
       await recorder.record();
 
       onRecordingStart?.();
@@ -260,7 +329,7 @@ export function AudioRecorder({
       style={[styles.container, { backgroundColor: secondaryColor }, style]}
     >
       {/* Recording Status */}
-      {isRecording && (
+      {isRecording ? (
         <View style={styles.recordingStatus}>
           <View style={styles.recordingIndicator}>
             <Circle size={8} color={redColor} fill={redColor} />
@@ -269,6 +338,8 @@ export function AudioRecorder({
             </Text>
           </View>
         </View>
+      ) : (
+        <View style={{ height: 36 }} />
       )}
 
       {/* Waveform Visualization using AudioWaveform component */}
@@ -331,7 +402,7 @@ export function AudioRecorder({
             onPress={handleStopRecording}
             style={[styles.stopButton, { backgroundColor: redColor }]}
           >
-            <Square size={20} color='white' />
+            <Square size={24} fill='white' color='white' />
           </Button>
         )}
 
@@ -351,24 +422,12 @@ export function AudioRecorder({
               onPress={handleSaveRecording}
               style={[styles.saveButton, { backgroundColor: greenColor }]}
             >
-              <Save size={20} color='white' />
+              <Download size={20} color='white' />
               <Text style={{ color: 'white', marginLeft: 8 }}>Save</Text>
             </Button>
           </View>
         )}
       </View>
-
-      {/* Recording Info */}
-      {recordingUri && (
-        <View style={styles.infoContainer}>
-          <Text
-            variant='caption'
-            style={{ color: mutedColor, textAlign: 'center' }}
-          >
-            Recording completed • {formatTime(duration)}
-          </Text>
-        </View>
-      )}
     </View>
   );
 }
@@ -381,7 +440,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   recordingStatus: {
-    marginBottom: 16,
+    height: 36,
   },
   recordingIndicator: {
     flexDirection: 'row',
