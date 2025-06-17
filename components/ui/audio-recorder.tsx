@@ -53,15 +53,12 @@ export function AudioRecorder({
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [duration, setDuration] = useState(0);
   const [recordingUri, setRecordingUri] = useState<string | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   // Theme colors
   const primaryColor = useThemeColor({}, 'primary');
   const secondaryColor = useThemeColor({}, 'secondary');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'textMuted');
-  const backgroundColor = useThemeColor({}, 'background');
-  const borderColor = useThemeColor({}, 'border');
   const redColor = useThemeColor({}, 'red');
   const greenColor = useThemeColor({}, 'green');
 
@@ -171,10 +168,10 @@ export function AudioRecorder({
     }
 
     try {
-      await recorder.prepareToRecordAsync();
-      await recorder.record();
       setDuration(0);
       setRecordingUri(null);
+      await recorder.prepareToRecordAsync();
+      await recorder.record();
       onRecordingStart?.();
     } catch (error) {
       console.error('Error starting recording:', error);
