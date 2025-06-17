@@ -45,7 +45,7 @@ export function AudioPlayer({
 
   // Theme colors
   const primaryColor = useThemeColor({}, 'primary');
-  const red = useThemeColor({}, 'destructive');
+  const redColor = useThemeColor({}, 'destructive');
   const secondaryColor = useThemeColor({}, 'secondary');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'textMuted');
@@ -120,7 +120,7 @@ export function AudioPlayer({
             barCount={40}
             barWidth={3}
             barGap={2}
-            activeColor={primaryColor}
+            activeColor={redColor}
             inactiveColor={mutedColor}
             animated={player.playing}
           />

@@ -353,7 +353,7 @@ export function AudioRecorder({
             barCount={30}
             barWidth={4}
             barGap={2}
-            activeColor={isRecording ? primaryColor : mutedColor}
+            activeColor={isRecording ? primaryColor : redColor}
             inactiveColor={mutedColor}
             animated={isRecording}
           />
