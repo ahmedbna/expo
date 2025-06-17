@@ -7,7 +7,7 @@ import { CORNERS } from '@/theme/globals';
 import { AudioSource, useAudioPlayer } from 'expo-audio';
 import { Pause, Play, RotateCcw, Volume2 } from 'lucide-react-native';
 import { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
+import { StyleSheet, View, ViewStyle } from 'react-native';
 
 export interface AudioPlayerProps {
   source: AudioSource;
@@ -18,8 +18,6 @@ export interface AudioPlayerProps {
   autoPlay?: boolean;
   onPlaybackStatusUpdate?: (status: any) => void;
 }
-
-const { width: screenWidth } = Dimensions.get('window');
 
 export function AudioPlayer({
   source,
