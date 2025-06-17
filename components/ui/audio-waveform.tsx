@@ -22,6 +22,7 @@ export interface AudioWaveformProps {
   activeColor?: string;
   inactiveColor?: string;
   animated?: boolean;
+  showProgress?: boolean; // New prop to enable progress visualization
 }
 
 export function AudioWaveform({
@@ -37,6 +38,7 @@ export function AudioWaveform({
   activeColor,
   inactiveColor,
   animated = true,
+  showProgress = false,
 }: AudioWaveformProps) {
   // Theme colors
   const primaryColor = useThemeColor({}, 'destructive');
@@ -48,6 +50,11 @@ export function AudioWaveform({
   // Animation values for each bar
   const animatedBars = useRef(
     Array.from({ length: barCount }, () => new Animated.Value(0.2))
+  ).current;
+
+  // Animation values for playing effect
+  const playingAnimations = useRef(
+    Array.from({ length: barCount }, () => new Animated.Value(1))
   ).current;
 
   // Generate sample data if none provided
@@ -64,15 +71,27 @@ export function AudioWaveform({
     }
   }, [data, animated, waveformData]);
 
-  // Animate bars when playing (only if animated is true)
+  // Initialize bar heights
   useEffect(() => {
-    if (isPlaying && animated) {
+    animatedBars.forEach((bar, index) => {
+      const value = waveformData[index] || 0.2;
+      bar.setValue(value);
+    });
+  }, [waveformData]);
+
+  // Simplified animation system - no shaking
+  useEffect(() => {
+    if (isPlaying && animated && !showProgress) {
+      // Only animate for recording/non-progress waveforms
       const animateWaveform = () => {
         animatedBars.forEach((bar, index) => {
-          const delay = index * 50;
+          const delay = index * 20;
+          const variation = 0.9 + Math.sin(Date.now() / 1000 + index) * 0.1;
+          const targetValue = waveformData[index] * variation;
+
           Animated.timing(bar, {
-            toValue: waveformData[index] || Math.random() * 0.8 + 0.2,
-            duration: 200 + Math.random() * 300,
+            toValue: Math.max(0.1, Math.min(1, targetValue)),
+            duration: 300,
             delay,
             useNativeDriver: false,
           }).start();
@@ -81,23 +100,13 @@ export function AudioWaveform({
 
       const interval = setInterval(animateWaveform, 300);
       return () => clearInterval(interval);
-    } else if (!animated) {
-      // For real-time data, use the actual values without animation
-      animatedBars.forEach((bar, index) => {
-        const value = waveformData[index] || 0.2;
-        bar.setValue(value);
-      });
     } else {
-      // Reset to static state with animation
-      animatedBars.forEach((bar, index) => {
-        Animated.timing(bar, {
-          toValue: waveformData[index] || 0.3,
-          duration: 200,
-          useNativeDriver: false,
-        }).start();
+      // Reset all animations to static state
+      playingAnimations.forEach((animation) => {
+        animation.setValue(1);
       });
     }
-  }, [isPlaying, animated, waveformData]);
+  }, [isPlaying, animated, showProgress, waveformData]);
 
   const handleBarPress = (index: number) => {
     if (onSeek) {
@@ -112,7 +121,19 @@ export function AudioWaveform({
     <View style={[styles.container, { height }, style]}>
       <View style={[styles.waveform, { width: totalWidth }]}>
         {animatedBars.map((animatedValue, index) => {
-          const isActive = index < (barCount * progress) / 100;
+          const progressRatio = progress / 100;
+          const barProgress = index / barCount;
+          const isActive = showProgress ? barProgress <= progressRatio : false;
+          const isPastProgress = showProgress
+            ? barProgress > progressRatio
+            : false;
+
+          // Calculate opacity for smooth fade effect
+          let opacity = 1;
+          if (showProgress && isPastProgress) {
+            const distanceFromProgress = barProgress - progressRatio;
+            opacity = Math.max(0.4, 1 - distanceFromProgress * 1.5);
+          }
 
           return (
             <TouchableOpacity
@@ -132,12 +153,14 @@ export function AudioWaveform({
                   styles.bar,
                   {
                     width: barWidth,
-                    backgroundColor: isActive
-                      ? finalActiveColor
-                      : finalInactiveColor,
+                    backgroundColor:
+                      isActive || !showProgress
+                        ? finalActiveColor
+                        : finalInactiveColor,
+                    opacity: opacity,
                     height: animatedValue.interpolate({
                       inputRange: [0, 1],
-                      outputRange: [4, height * 0.8],
+                      outputRange: [4, height * 0.9],
                     }),
                   },
                 ]}
@@ -146,17 +169,41 @@ export function AudioWaveform({
           );
         })}
       </View>
+
+      {/* Progress indicator line */}
+      {showProgress && (
+        <View
+          style={[
+            styles.progressLine,
+            {
+              left: (progress / 100) * totalWidth,
+              height: height * 0.9,
+              backgroundColor: finalActiveColor,
+            },
+          ]}
+        />
+      )}
     </View>
   );
 }
 
-// Generate sample waveform data
+// Generate sample waveform data with more realistic patterns
 function generateSampleWaveform(barCount: number): number[] {
   return Array.from({ length: barCount }, (_, i) => {
-    // Create a more realistic waveform pattern
-    const base = Math.sin((i / barCount) * Math.PI * 4) * 0.3 + 0.5;
-    const noise = (Math.random() - 0.5) * 0.3;
-    return Math.max(0.1, Math.min(1, base + noise));
+    // Create multiple overlapping waves for more realistic pattern
+    const wave1 = Math.sin((i / barCount) * Math.PI * 4) * 0.3;
+    const wave2 = Math.sin((i / barCount) * Math.PI * 8) * 0.15;
+    const wave3 = Math.sin((i / barCount) * Math.PI * 2) * 0.2;
+    const noise = (Math.random() - 0.5) * 0.2;
+    const base = 0.4;
+
+    // Add occasional peaks for realism
+    const peak = Math.random() < 0.1 ? Math.random() * 0.3 : 0;
+
+    return Math.max(
+      0.1,
+      Math.min(0.95, base + wave1 + wave2 + wave3 + noise + peak)
+    );
   });
 }
 
@@ -164,6 +211,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'center',
+    position: 'relative',
   },
   waveform: {
     flexDirection: 'row',
@@ -176,7 +224,14 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   bar: {
-    borderRadius: 2,
+    borderRadius: 1.5,
     minHeight: 4,
+  },
+  progressLine: {
+    position: 'absolute',
+    width: 2,
+    borderRadius: 1,
+    opacity: 0.8,
+    top: '10%',
   },
 });

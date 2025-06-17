@@ -5,8 +5,8 @@ import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { AudioSource, useAudioPlayer } from 'expo-audio';
-import { Pause, Play, RotateCcw, Volume2 } from 'lucide-react-native';
-import { useEffect, useState } from 'react';
+import { Pause, Play, RotateCcw, Square } from 'lucide-react-native';
+import { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 
 export interface AudioPlayerProps {
@@ -32,12 +32,15 @@ export function AudioPlayer({
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
 
-  // Sample waveform data - in a real app, you'd generate this from the audio file
+  // Enhanced waveform data - more bars for smoother visualization
   const [waveformData] = useState<number[]>(
-    Array.from({ length: 40 }, (_, i) => {
-      const base = Math.sin((i / 40) * Math.PI * 3) * 0.4 + 0.5;
-      const noise = (Math.random() - 0.5) * 0.2;
-      return Math.max(0.1, Math.min(1, base + noise));
+    Array.from({ length: 60 }, (_, i) => {
+      // Create more varied and realistic waveform pattern
+      const base1 = Math.sin((i / 60) * Math.PI * 6) * 0.4 + 0.5;
+      const base2 = Math.sin((i / 60) * Math.PI * 2.5) * 0.3 + 0.4;
+      const noise = (Math.random() - 0.5) * 0.25;
+      const peak = Math.random() < 0.15 ? Math.random() * 0.4 : 0; // Occasional peaks
+      return Math.max(0.15, Math.min(0.95, (base1 + base2) / 2 + noise + peak));
     })
   );
 
@@ -70,7 +73,7 @@ export function AudioPlayer({
           });
         }
       }
-    }, 100);
+    }, 100); // Balanced update frequency - smooth but not excessive
 
     return () => clearInterval(interval);
   }, [player, onPlaybackStatusUpdate]);
@@ -83,16 +86,23 @@ export function AudioPlayer({
     }
   };
 
+  const handleBackFiveSeconds = () => {
+    player.seekTo(0);
+  };
+
   const handleRestart = () => {
     player.seekTo(0);
   };
 
-  const handleWaveformSeek = (seekPosition: number) => {
-    if (duration > 0) {
-      const newPosition = (seekPosition / 100) * duration;
-      player.seekTo(newPosition);
-    }
-  };
+  const handleWaveformSeek = useCallback(
+    (seekPosition: number) => {
+      if (duration > 0) {
+        const newPosition = (seekPosition / 100) * duration;
+        player.seekTo(newPosition);
+      }
+    },
+    [duration, player]
+  );
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -106,7 +116,7 @@ export function AudioPlayer({
     <View
       style={[styles.container, { backgroundColor: secondaryColor }, style]}
     >
-      {/* Waveform Visualization using AudioWaveform component */}
+      {/* Waveform Visualization with live progress */}
       {showWaveform && (
         <View style={styles.waveformContainer}>
           <AudioWaveform
@@ -114,13 +124,14 @@ export function AudioPlayer({
             isPlaying={player.playing}
             progress={progressPercentage}
             onSeek={handleWaveformSeek}
-            height={60}
-            barCount={40}
-            barWidth={3}
-            barGap={2}
+            height={80}
+            barCount={60}
+            barWidth={2.5}
+            barGap={1.5}
             activeColor={redColor}
             inactiveColor={mutedColor}
-            animated={player.playing}
+            animated={true}
+            showProgress={true} // Enable progress visualization
           />
         </View>
       )}
@@ -146,7 +157,7 @@ export function AudioPlayer({
           <Button
             variant='ghost'
             size='icon'
-            onPress={handleRestart}
+            onPress={handleBackFiveSeconds}
             style={styles.controlButton}
           >
             <RotateCcw size={18} color={textColor} />
@@ -165,9 +176,14 @@ export function AudioPlayer({
             )}
           </Button>
 
-          <View style={styles.volumeContainer}>
-            <Volume2 size={18} color={mutedColor} />
-          </View>
+          <Button
+            variant='ghost'
+            size='icon'
+            onPress={handleRestart}
+            style={styles.controlButton}
+          >
+            <Square fill={textColor} size={18} color={textColor} />
+          </Button>
         </View>
       )}
 
