@@ -39,7 +39,7 @@ export function AudioWaveform({
   animated = true,
 }: AudioWaveformProps) {
   // Theme colors
-  const primaryColor = useThemeColor({}, 'primary');
+  const primaryColor = useThemeColor({}, 'destructive');
   const mutedColor = useThemeColor({}, 'textMuted');
 
   const finalActiveColor = activeColor || primaryColor;

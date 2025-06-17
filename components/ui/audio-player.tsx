@@ -1,18 +1,13 @@
 // components/ui/audio-player.tsx
+import { AudioWaveform } from '@/components/ui/audio-waveform';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { AudioSource, useAudioPlayer } from 'expo-audio';
 import { Pause, Play, RotateCcw, Volume2 } from 'lucide-react-native';
-import { useEffect, useRef, useState } from 'react';
-import {
-  Animated,
-  Dimensions,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from 'react-native';
+import { useEffect, useState } from 'react';
+import { Dimensions, StyleSheet, View, ViewStyle } from 'react-native';
 
 export interface AudioPlayerProps {
   source: AudioSource;
@@ -39,18 +34,22 @@ export function AudioPlayer({
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
 
+  // Sample waveform data - in a real app, you'd generate this from the audio file
+  const [waveformData] = useState<number[]>(
+    Array.from({ length: 40 }, (_, i) => {
+      const base = Math.sin((i / 40) * Math.PI * 3) * 0.4 + 0.5;
+      const noise = (Math.random() - 0.5) * 0.2;
+      return Math.max(0.1, Math.min(1, base + noise));
+    })
+  );
+
   // Theme colors
   const primaryColor = useThemeColor({}, 'primary');
+  const red = useThemeColor({}, 'destructive');
   const secondaryColor = useThemeColor({}, 'secondary');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'textMuted');
-  const backgroundColor = useThemeColor({}, 'background');
   const borderColor = useThemeColor({}, 'border');
-
-  // Animation values for waveform
-  const waveformBars = useRef(
-    Array.from({ length: 20 }, () => new Animated.Value(0.3))
-  ).current;
 
   useEffect(() => {
     if (autoPlay && player.isLoaded && !player.playing) {
@@ -78,33 +77,6 @@ export function AudioPlayer({
     return () => clearInterval(interval);
   }, [player, onPlaybackStatusUpdate]);
 
-  // Animate waveform bars
-  useEffect(() => {
-    if (player.playing) {
-      const animateWaveform = () => {
-        waveformBars.forEach((bar, index) => {
-          Animated.timing(bar, {
-            toValue: Math.random() * 0.8 + 0.2,
-            duration: 200 + Math.random() * 300,
-            useNativeDriver: false,
-          }).start();
-        });
-      };
-
-      const waveformInterval = setInterval(animateWaveform, 150);
-      return () => clearInterval(waveformInterval);
-    } else {
-      // Reset bars when paused
-      waveformBars.forEach((bar) => {
-        Animated.timing(bar, {
-          toValue: 0.3,
-          duration: 200,
-          useNativeDriver: false,
-        }).start();
-      });
-    }
-  }, [player.playing]);
-
   const handlePlayPause = () => {
     if (player.playing) {
       player.pause();
@@ -114,7 +86,14 @@ export function AudioPlayer({
   };
 
   const handleRestart = () => {
-    player.seekTo(-player.currentTime || 0);
+    player.seekTo(0);
+  };
+
+  const handleWaveformSeek = (seekPosition: number) => {
+    if (duration > 0) {
+      const newPosition = (seekPosition / 100) * duration;
+      player.seekTo(newPosition);
+    }
   };
 
   const formatTime = (seconds: number) => {
@@ -129,29 +108,22 @@ export function AudioPlayer({
     <View
       style={[styles.container, { backgroundColor: secondaryColor }, style]}
     >
-      {/* Waveform Visualization */}
+      {/* Waveform Visualization using AudioWaveform component */}
       {showWaveform && (
         <View style={styles.waveformContainer}>
-          <View style={styles.waveform}>
-            {waveformBars.map((bar, index) => (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.waveformBar,
-                  {
-                    backgroundColor:
-                      index < (waveformBars.length * progressPercentage) / 100
-                        ? primaryColor
-                        : mutedColor,
-                    height: bar.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [4, 32],
-                    }),
-                  },
-                ]}
-              />
-            ))}
-          </View>
+          <AudioWaveform
+            data={waveformData}
+            isPlaying={player.playing}
+            progress={progressPercentage}
+            onSeek={handleWaveformSeek}
+            height={60}
+            barCount={40}
+            barWidth={3}
+            barGap={2}
+            activeColor={primaryColor}
+            inactiveColor={mutedColor}
+            animated={player.playing}
+          />
         </View>
       )}
 
@@ -183,11 +155,10 @@ export function AudioPlayer({
           </Button>
 
           <Button
-            variant='default'
+            variant='destructive'
             size='icon'
             onPress={handlePlayPause}
             disabled={!player.isLoaded}
-            style={[styles.playButton, { backgroundColor: primaryColor }]}
           >
             {player.playing ? (
               <Pause size={20} color='white' />
@@ -232,18 +203,6 @@ const styles = StyleSheet.create({
   waveformContainer: {
     alignItems: 'center',
     marginBottom: 12,
-  },
-  waveform: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 40,
-    gap: 2,
-  },
-  waveformBar: {
-    width: 3,
-    borderRadius: 2,
-    minHeight: 4,
   },
   progressContainer: {
     height: 4,

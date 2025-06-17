@@ -1,4 +1,5 @@
 // components/ui/audio-recorder.tsx
+import { AudioWaveform } from '@/components/ui/audio-waveform';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -53,6 +54,12 @@ export function AudioRecorder({
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [duration, setDuration] = useState(0);
   const [recordingUri, setRecordingUri] = useState<string | null>(null);
+  const [isRecording, setIsRecording] = useState(false);
+
+  // Waveform data for real-time visualization
+  const [waveformData, setWaveformData] = useState<number[]>(
+    Array.from({ length: 30 }, () => 0.2)
+  );
 
   // Theme colors
   const primaryColor = useThemeColor({}, 'primary');
@@ -64,44 +71,32 @@ export function AudioRecorder({
 
   // Animation values
   const recordingPulse = useRef(new Animated.Value(1)).current;
-  const waveformBars = useRef(
-    Array.from({ length: 15 }, () => new Animated.Value(0.2))
-  ).current;
+  const durationInterval = useRef<number | null>(null);
 
   // Request permissions on mount
   useEffect(() => {
     (async () => {
-      const status = await AudioModule.requestRecordingPermissionsAsync();
-      setPermissionGranted(status.granted);
+      try {
+        const status = await AudioModule.requestRecordingPermissionsAsync();
+        setPermissionGranted(status.granted);
 
-      if (!status.granted) {
-        Alert.alert(
-          'Permission Required',
-          'Please grant microphone permission to record audio.',
-          [{ text: 'OK' }]
-        );
+        if (!status.granted) {
+          Alert.alert(
+            'Permission Required',
+            'Please grant microphone permission to record audio.',
+            [{ text: 'OK' }]
+          );
+        }
+      } catch (error) {
+        console.error('Error requesting permissions:', error);
+        setPermissionGranted(false);
       }
     })();
   }, []);
 
-  // Update duration during recording
-  useEffect(() => {
-    let interval: number;
-
-    if (recorder.isRecording) {
-      interval = setInterval(() => {
-        setDuration((prev) => prev + 0.1);
-      }, 100);
-    }
-
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [recorder.isRecording]);
-
   // Recording pulse animation
   useEffect(() => {
-    if (recorder.isRecording) {
+    if (isRecording) {
       const pulse = Animated.loop(
         Animated.sequence([
           Animated.timing(recordingPulse, {
@@ -122,41 +117,48 @@ export function AudioRecorder({
     } else {
       recordingPulse.setValue(1);
     }
-  }, [recorder.isRecording]);
+  }, [isRecording]);
 
-  // Waveform animation during recording
+  // Simulate waveform data during recording
   useEffect(() => {
-    if (recorder.isRecording) {
-      const animateWaveform = () => {
-        waveformBars.forEach((bar, index) => {
-          Animated.timing(bar, {
-            toValue: Math.random() * 0.9 + 0.1,
-            duration: 100 + Math.random() * 200,
-            useNativeDriver: false,
-          }).start();
-        });
-      };
+    let waveformInterval: number;
 
-      const waveformInterval = setInterval(animateWaveform, 100);
-      return () => clearInterval(waveformInterval);
+    if (isRecording) {
+      waveformInterval = setInterval(() => {
+        setWaveformData((prev) => prev.map(() => Math.random() * 0.8 + 0.2));
+      }, 100);
     } else {
-      // Reset bars when not recording
-      waveformBars.forEach((bar) => {
-        Animated.timing(bar, {
-          toValue: 0.2,
-          duration: 200,
-          useNativeDriver: false,
-        }).start();
-      });
+      // Reset to quiet state
+      setWaveformData(Array.from({ length: 30 }, () => 0.2));
     }
-  }, [recorder.isRecording]);
+
+    return () => {
+      if (waveformInterval) {
+        clearInterval(waveformInterval);
+      }
+    };
+  }, [isRecording]);
 
   // Auto-stop recording when max duration is reached
   useEffect(() => {
-    if (maxDuration && duration >= maxDuration && recorder.isRecording) {
+    if (maxDuration && duration >= maxDuration && isRecording) {
       handleStopRecording();
     }
-  }, [duration, maxDuration, recorder.isRecording]);
+  }, [duration, maxDuration, isRecording]);
+
+  const startDurationTimer = () => {
+    setDuration(0);
+    durationInterval.current = setInterval(() => {
+      setDuration((prev) => prev + 0.1);
+    }, 100);
+  };
+
+  const stopDurationTimer = () => {
+    if (durationInterval.current) {
+      clearInterval(durationInterval.current);
+      durationInterval.current = null;
+    }
+  };
 
   const handleStartRecording = async () => {
     if (!permissionGranted) {
@@ -168,27 +170,40 @@ export function AudioRecorder({
     }
 
     try {
-      setDuration(0);
+      console.log('Starting recording...');
       setRecordingUri(null);
+      setIsRecording(true);
+      startDurationTimer();
+
       await recorder.prepareToRecordAsync();
       await recorder.record();
+
       onRecordingStart?.();
+      console.log('Recording started successfully');
     } catch (error) {
       console.error('Error starting recording:', error);
+      setIsRecording(false);
+      stopDurationTimer();
       Alert.alert('Error', 'Failed to start recording. Please try again.');
     }
   };
 
   const handleStopRecording = async () => {
     try {
+      console.log('Stopping recording...');
+      setIsRecording(false);
+      stopDurationTimer();
+
       await recorder.stop();
       const uri = recorder.uri;
-      setRecordingUri(uri);
-      onRecordingStop?.();
+      console.log('Recording stopped, URI:', uri);
 
-      if (uri && onRecordingComplete) {
-        onRecordingComplete(uri);
+      if (uri) {
+        setRecordingUri(uri);
+        onRecordingComplete?.(uri);
       }
+
+      onRecordingStop?.();
     } catch (error) {
       console.error('Error stopping recording:', error);
       Alert.alert('Error', 'Failed to stop recording. Please try again.');
@@ -245,7 +260,7 @@ export function AudioRecorder({
       style={[styles.container, { backgroundColor: secondaryColor }, style]}
     >
       {/* Recording Status */}
-      {recorder.isRecording && (
+      {isRecording && (
         <View style={styles.recordingStatus}>
           <View style={styles.recordingIndicator}>
             <Circle size={8} color={redColor} fill={redColor} />
@@ -256,28 +271,21 @@ export function AudioRecorder({
         </View>
       )}
 
-      {/* Waveform Visualization */}
+      {/* Waveform Visualization using AudioWaveform component */}
       {showWaveform && (
         <View style={styles.waveformContainer}>
-          <View style={styles.waveform}>
-            {waveformBars.map((bar, index) => (
-              <Animated.View
-                key={index}
-                style={[
-                  styles.waveformBar,
-                  {
-                    backgroundColor: recorder.isRecording
-                      ? primaryColor
-                      : mutedColor,
-                    height: bar.interpolate({
-                      inputRange: [0, 1],
-                      outputRange: [4, 48],
-                    }),
-                  },
-                ]}
-              />
-            ))}
-          </View>
+          <AudioWaveform
+            data={waveformData}
+            isPlaying={isRecording}
+            progress={0}
+            height={60}
+            barCount={30}
+            barWidth={4}
+            barGap={2}
+            activeColor={isRecording ? primaryColor : mutedColor}
+            inactiveColor={mutedColor}
+            animated={isRecording}
+          />
         </View>
       )}
 
@@ -287,7 +295,7 @@ export function AudioRecorder({
           <Text
             variant='title'
             style={{
-              color: recorder.isRecording ? redColor : textColor,
+              color: isRecording ? redColor : textColor,
               fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
             }}
           >
@@ -303,7 +311,7 @@ export function AudioRecorder({
 
       {/* Controls */}
       <View style={styles.controlsContainer}>
-        {!recorder.isRecording && !recordingUri && (
+        {!isRecording && !recordingUri && (
           <Animated.View style={{ transform: [{ scale: recordingPulse }] }}>
             <Button
               variant='default'
@@ -316,7 +324,7 @@ export function AudioRecorder({
           </Animated.View>
         )}
 
-        {recorder.isRecording && (
+        {isRecording && (
           <Button
             variant='default'
             size='lg'
@@ -327,7 +335,7 @@ export function AudioRecorder({
           </Button>
         )}
 
-        {recordingUri && !recorder.isRecording && (
+        {recordingUri && !isRecording && (
           <View style={styles.playbackControls}>
             <Button
               variant='outline'
@@ -383,18 +391,6 @@ const styles = StyleSheet.create({
   waveformContainer: {
     alignItems: 'center',
     marginBottom: 16,
-  },
-  waveform: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: 60,
-    gap: 3,
-  },
-  waveformBar: {
-    width: 4,
-    borderRadius: 2,
-    minHeight: 4,
   },
   timerContainer: {
     alignItems: 'center',

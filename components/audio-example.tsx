@@ -39,11 +39,6 @@ export function AudioExample() {
 
   const handleRecordingComplete = (uri: string) => {
     setRecordedAudioUri(uri);
-    Alert.alert(
-      'Recording Complete',
-      'Your audio has been recorded successfully!',
-      [{ text: 'OK' }]
-    );
   };
 
   const handleWaveformSeek = (position: number) => {
