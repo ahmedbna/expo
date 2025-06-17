@@ -55,10 +55,14 @@ export function CameraPreview() {
 
   // Effect to handle player source changes
   useEffect(() => {
-    if (capturedMedia?.type === 'video' && capturedMedia.uri) {
-      // Replace the player source when we have a new video
-      player.replace(capturedMedia.uri);
-    }
+    const replaceUri = async () => {
+      if (capturedMedia?.type === 'video' && capturedMedia.uri) {
+        // Replace the player source when we have a new video
+        await player.replaceAsync(capturedMedia.uri);
+      }
+    };
+
+    replaceUri();
   }, [capturedMedia?.uri, capturedMedia?.type, player]);
 
   const handleCapture = (results: CaptureSuccess) => {

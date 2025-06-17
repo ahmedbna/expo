@@ -500,6 +500,7 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
                 enableTorch={torch}
                 animateShutter={true}
                 zoom={zoom}
+                mirror={true}
                 ratio={aspectRatios[aspectRatioIndex]}
               >
                 {/* Grid Overlay */}
