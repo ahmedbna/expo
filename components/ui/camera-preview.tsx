@@ -1,6 +1,7 @@
 // components/ui/camera-preview.tsx
 import { Button } from '@/components/ui/button';
 import { Camera, CaptureSuccess } from '@/components/ui/camera';
+import { Image } from '@/components/ui/image';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
@@ -9,13 +10,7 @@ import * as MediaLibrary from 'expo-media-library';
 import { useVideoPlayer, VideoView } from 'expo-video';
 import { Download, Upload, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
-import {
-  Alert,
-  Dimensions,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+import { Alert, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const { width: screenWidth } = Dimensions.get('window');
@@ -35,7 +30,6 @@ export function CameraPreview() {
   const cardColor = useThemeColor({}, 'card');
   const textColor = useThemeColor({}, 'text');
   const primaryColor = useThemeColor({}, 'primary');
-  const destructiveColor = useThemeColor({}, 'destructive');
 
   // Create video player only when we have a video to play
   const player = useVideoPlayer(
@@ -196,11 +190,7 @@ export function CameraPreview() {
       <SafeAreaView style={[styles.container, { backgroundColor }]}>
         <View style={[styles.previewContainer, { height: cameraHeight }]}>
           {capturedMedia.type === 'picture' ? (
-            <Image
-              source={{ uri: capturedMedia.uri }}
-              style={styles.previewMedia}
-              resizeMode='cover'
-            />
+            <Image source={{ uri: capturedMedia.uri }} />
           ) : (
             <VideoView
               player={player}

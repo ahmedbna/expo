@@ -37,7 +37,6 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  Vibration,
   View,
   ViewStyle,
 } from 'react-native';
@@ -254,9 +253,9 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
       try {
         setIsCapturing(true);
 
-        if (soundEnabled) {
-          Vibration.vibrate(50);
-        }
+        // if (soundEnabled) {
+        //   Vibration.vibrate(50);
+        // }
 
         const picture = await cameraRef.current.takePictureAsync({
           quality: 1,
@@ -286,9 +285,9 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
         setIsRecording(true);
         setRecordingTime(0);
 
-        if (soundEnabled) {
-          Vibration.vibrate([0, 100, 50, 100]);
-        }
+        // if (soundEnabled) {
+        //   Vibration.vibrate([0, 100, 50, 100]);
+        // }
 
         recordingInterval.current = setInterval(() => {
           setRecordingTime((prev) => {
@@ -343,9 +342,9 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
           recordingInterval.current = null;
         }
 
-        if (soundEnabled) {
-          Vibration.vibrate(100);
-        }
+        // if (soundEnabled) {
+        //   Vibration.vibrate(100);
+        // }
       } catch (error) {
         console.error('Error stopping recording:', error);
       } finally {

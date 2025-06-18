@@ -47,7 +47,6 @@ export function Spinner({
   showLabel = false,
   style,
   color,
-  thickness = 2,
   type = 'activity',
 }: LoadingSpinnerProps) {
   const rotateAnim = useRef(new Animated.Value(0)).current;
@@ -61,7 +60,6 @@ export function Spinner({
   const primaryColor = useThemeColor({}, 'primary');
   const secondaryColor = useThemeColor({}, 'secondary');
   const mutedColor = useThemeColor({}, 'textMuted');
-  const textColor = useThemeColor({}, 'text');
 
   const config = sizeConfig[size];
 
