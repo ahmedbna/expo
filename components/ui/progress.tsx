@@ -17,6 +17,8 @@ interface ProgressProps {
   style?: ViewStyle;
   height?: number;
   onValueChange?: (value: number) => void;
+  onSeekStart?: () => void;
+  onSeekEnd?: () => void;
   interactive?: boolean;
 }
 
@@ -25,6 +27,8 @@ export function Progress({
   style,
   height = HEIGHT,
   onValueChange,
+  onSeekStart,
+  onSeekEnd,
   interactive = false,
 }: ProgressProps) {
   const primaryColor = useThemeColor({}, 'primary');
@@ -33,10 +37,13 @@ export function Progress({
   const clampedValue = Math.max(0, Math.min(100, value));
   const progressWidth = useSharedValue(clampedValue);
   const containerWidth = useSharedValue(200); // Default width, will be updated
+  const isDragging = useSharedValue(false);
 
-  // Update animation when value prop changes
+  // Update animation when value prop changes (only if not dragging)
   useEffect(() => {
-    progressWidth.value = withTiming(clampedValue, { duration: 300 });
+    if (!isDragging.value) {
+      progressWidth.value = withTiming(clampedValue, { duration: 300 });
+    }
   }, [clampedValue]);
 
   const updateValue = (newValue: number) => {
@@ -44,10 +51,21 @@ export function Progress({
     onValueChange?.(clamped);
   };
 
+  const handleSeekStart = () => {
+    isDragging.value = true;
+    onSeekStart?.();
+  };
+
+  const handleSeekEnd = () => {
+    isDragging.value = false;
+    onSeekEnd?.();
+  };
+
   // Create pan gesture using the new Gesture API
   const panGesture = Gesture.Pan()
     .onStart(() => {
-      // Optional: Add haptic feedback or visual indication
+      if (!interactive) return;
+      runOnJS(handleSeekStart)();
     })
     .onUpdate((event) => {
       if (!interactive) return;
@@ -60,8 +78,30 @@ export function Progress({
       runOnJS(updateValue)(clampedProgress);
     })
     .onEnd(() => {
-      // Optional: Add snap-to behavior or validation here
+      if (!interactive) return;
+      runOnJS(handleSeekEnd)();
     });
+
+  // Create tap gesture for direct seeking
+  const tapGesture = Gesture.Tap().onStart((event) => {
+    if (!interactive) return;
+
+    runOnJS(handleSeekStart)();
+
+    // Calculate progress based on tap position
+    const newProgress = (event.x / containerWidth.value) * 100;
+    const clampedProgress = Math.max(0, Math.min(100, newProgress));
+
+    progressWidth.value = withTiming(clampedProgress, { duration: 200 });
+    runOnJS(updateValue)(clampedProgress);
+
+    setTimeout(() => {
+      runOnJS(handleSeekEnd)();
+    }, 200);
+  });
+
+  // Combine gestures
+  const combinedGesture = Gesture.Race(panGesture, tapGesture);
 
   const animatedProgressStyle = useAnimatedStyle(() => {
     return {
@@ -86,7 +126,7 @@ export function Progress({
 
   if (interactive) {
     return (
-      <GestureDetector gesture={panGesture}>
+      <GestureDetector gesture={combinedGesture}>
         <Animated.View style={containerStyle} onLayout={onLayout}>
           <Animated.View
             style={[

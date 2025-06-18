@@ -3,8 +3,8 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import React, { useEffect, useRef } from 'react';
 import {
   Animated,
+  PanResponder,
   StyleSheet,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from 'react-native';
@@ -14,6 +14,8 @@ export interface AudioWaveformProps {
   isPlaying?: boolean;
   progress?: number; // 0-100
   onSeek?: (position: number) => void;
+  onSeekStart?: () => void;
+  onSeekEnd?: () => void;
   style?: ViewStyle;
   height?: number;
   barCount?: number;
@@ -22,7 +24,8 @@ export interface AudioWaveformProps {
   activeColor?: string;
   inactiveColor?: string;
   animated?: boolean;
-  showProgress?: boolean; // New prop to enable progress visualization
+  showProgress?: boolean;
+  interactive?: boolean; // New prop to enable seeking
 }
 
 export function AudioWaveform({
@@ -30,6 +33,8 @@ export function AudioWaveform({
   isPlaying = false,
   progress = 0,
   onSeek,
+  onSeekStart,
+  onSeekEnd,
   style,
   height = 60,
   barCount = 50,
@@ -39,6 +44,7 @@ export function AudioWaveform({
   inactiveColor,
   animated = true,
   showProgress = false,
+  interactive = false,
 }: AudioWaveformProps) {
   // Theme colors
   const primaryColor = useThemeColor({}, 'destructive');
@@ -59,6 +65,10 @@ export function AudioWaveform({
 
   // Generate sample data if none provided
   const waveformData = data || generateSampleWaveform(barCount);
+
+  // Container ref for measuring dimensions
+  const containerRef = useRef<View>(null);
+  const containerWidth = useRef(0);
 
   // Update animated values when data changes (for real-time updates)
   useEffect(() => {
@@ -108,17 +118,61 @@ export function AudioWaveform({
     }
   }, [isPlaying, animated, showProgress, waveformData]);
 
+  // Pan responder for seeking
+  const panResponder = useRef(
+    PanResponder.create({
+      onMoveShouldSetPanResponder: () => interactive,
+      onMoveShouldSetPanResponderCapture: () => interactive,
+      onPanResponderGrant: (evt) => {
+        if (!interactive) return;
+        onSeekStart?.();
+        handleSeek(evt.nativeEvent.locationX);
+      },
+      onPanResponderMove: (evt) => {
+        if (!interactive) return;
+        handleSeek(evt.nativeEvent.locationX);
+      },
+      onPanResponderRelease: () => {
+        if (!interactive) return;
+        onSeekEnd?.();
+      },
+      onPanResponderTerminate: () => {
+        if (!interactive) return;
+        onSeekEnd?.();
+      },
+    })
+  ).current;
+
+  const handleSeek = (x: number) => {
+    if (!interactive || !onSeek || containerWidth.current === 0) return;
+
+    const clampedX = Math.max(0, Math.min(containerWidth.current, x));
+    const seekPercentage = (clampedX / containerWidth.current) * 100;
+    onSeek(seekPercentage);
+  };
+
   const handleBarPress = (index: number) => {
-    if (onSeek) {
-      const position = (index / barCount) * 100;
-      onSeek(position);
-    }
+    if (!interactive || !onSeek) return;
+
+    const position = (index / barCount) * 100;
+    onSeekStart?.();
+    onSeek(position);
+    onSeekEnd?.();
+  };
+
+  const onLayout = (event: any) => {
+    containerWidth.current = event.nativeEvent.layout.width;
   };
 
   const totalWidth = barCount * barWidth + (barCount - 1) * barGap;
 
   return (
-    <View style={[styles.container, { height }, style]}>
+    <View
+      style={[styles.container, { height }, style]}
+      {...(interactive ? panResponder.panHandlers : {})}
+      onLayout={onLayout}
+      ref={containerRef}
+    >
       <View style={[styles.waveform, { width: totalWidth }]}>
         {animatedBars.map((animatedValue, index) => {
           const progressRatio = progress / 100;
@@ -136,10 +190,8 @@ export function AudioWaveform({
           }
 
           return (
-            <TouchableOpacity
+            <View
               key={index}
-              onPress={() => handleBarPress(index)}
-              activeOpacity={0.7}
               style={[
                 styles.barContainer,
                 {
@@ -165,7 +217,7 @@ export function AudioWaveform({
                   },
                 ]}
               />
-            </TouchableOpacity>
+            </View>
           );
         })}
       </View>
@@ -179,6 +231,19 @@ export function AudioWaveform({
               left: (progress / 100) * totalWidth,
               height: height * 0.9,
               backgroundColor: finalActiveColor,
+            },
+          ]}
+        />
+      )}
+
+      {/* Invisible overlay for better touch handling */}
+      {interactive && (
+        <View
+          style={[
+            styles.touchOverlay,
+            {
+              width: totalWidth,
+              height: height,
             },
           ]}
         />
@@ -233,5 +298,9 @@ const styles = StyleSheet.create({
     borderRadius: 1,
     opacity: 0.8,
     top: '10%',
+  },
+  touchOverlay: {
+    position: 'absolute',
+    backgroundColor: 'transparent',
   },
 });

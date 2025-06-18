@@ -1,6 +1,7 @@
 // components/ui/audio-player.tsx
 import { AudioWaveform } from '@/components/ui/audio-waveform';
 import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
@@ -15,6 +16,7 @@ export interface AudioPlayerProps {
   showControls?: boolean;
   showWaveform?: boolean;
   showTimer?: boolean;
+  showProgressBar?: boolean;
   autoPlay?: boolean;
   onPlaybackStatusUpdate?: (status: any) => void;
 }
@@ -25,12 +27,14 @@ export function AudioPlayer({
   showControls = true,
   showWaveform = true,
   showTimer = true,
+  showProgressBar = true,
   autoPlay = false,
   onPlaybackStatusUpdate,
 }: AudioPlayerProps) {
   const player = useAudioPlayer(source);
   const [duration, setDuration] = useState(0);
   const [position, setPosition] = useState(0);
+  const [isSeeking, setIsSeeking] = useState(false);
 
   // Enhanced waveform data - more bars for smoother visualization
   const [waveformData] = useState<number[]>(
@@ -45,12 +49,10 @@ export function AudioPlayer({
   );
 
   // Theme colors
-  const primaryColor = useThemeColor({}, 'primary');
   const redColor = useThemeColor({}, 'destructive');
   const secondaryColor = useThemeColor({}, 'secondary');
   const textColor = useThemeColor({}, 'text');
   const mutedColor = useThemeColor({}, 'textMuted');
-  const borderColor = useThemeColor({}, 'border');
 
   useEffect(() => {
     if (autoPlay && player.isLoaded && !player.playing) {
@@ -60,23 +62,32 @@ export function AudioPlayer({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (player.isLoaded) {
-        setDuration(player.duration || 0);
-        setPosition(player.currentTime || 0);
+      if (player.isLoaded && !isSeeking) {
+        const currentTime = player.currentTime || 0;
+        const totalDuration = player.duration || 0;
+
+        setDuration(totalDuration);
+        setPosition(currentTime);
+
+        // Check if the audio finished
+        if (currentTime >= totalDuration && totalDuration > 0) {
+          player.seekTo(0);
+          player.pause(); // Ensure it's paused
+        }
 
         if (onPlaybackStatusUpdate) {
           onPlaybackStatusUpdate({
             isLoaded: player.isLoaded,
             playing: player.playing,
-            duration: player.duration,
-            position: player.currentTime,
+            duration: totalDuration,
+            position: currentTime,
           });
         }
       }
-    }, 100); // Balanced update frequency - smooth but not excessive
+    }, 100);
 
     return () => clearInterval(interval);
-  }, [player, onPlaybackStatusUpdate]);
+  }, [player, onPlaybackStatusUpdate, isSeeking]);
 
   const handlePlayPause = () => {
     if (player.playing) {
@@ -88,22 +99,55 @@ export function AudioPlayer({
 
   const handleBackFiveSeconds = () => {
     const newPosition = Math.max(0, position - 5);
-    player.seekTo(newPosition);
+    seekToPosition(newPosition);
   };
 
   const handleRestart = () => {
-    player.seekTo(0);
+    seekToPosition(0);
   };
 
-  const handleWaveformSeek = useCallback(
-    (seekPosition: number) => {
-      if (duration > 0) {
-        const newPosition = (seekPosition / 100) * duration;
-        player.seekTo(newPosition);
+  // Unified seeking function
+  const seekToPosition = useCallback(
+    (newPosition: number) => {
+      if (player.isLoaded && duration > 0) {
+        const clampedPosition = Math.max(0, Math.min(duration, newPosition));
+        player.seekTo(clampedPosition);
+        setPosition(clampedPosition);
       }
     },
-    [duration, player]
+    [player, duration]
   );
+
+  // Handle waveform seeking
+  const handleWaveformSeek = useCallback(
+    (seekPercentage: number) => {
+      if (duration > 0) {
+        const newPosition = (seekPercentage / 100) * duration;
+        seekToPosition(newPosition);
+      }
+    },
+    [duration, seekToPosition]
+  );
+
+  // Handle progress bar seeking
+  const handleProgressSeek = useCallback(
+    (progressValue: number) => {
+      if (duration > 0) {
+        const newPosition = (progressValue / 100) * duration;
+        seekToPosition(newPosition);
+      }
+    },
+    [duration, seekToPosition]
+  );
+
+  // Handle seeking start/end for smooth updates
+  const handleSeekStart = useCallback(() => {
+    setIsSeeking(true);
+  }, []);
+
+  const handleSeekEnd = useCallback(() => {
+    setIsSeeking(false);
+  }, []);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -117,7 +161,7 @@ export function AudioPlayer({
     <View
       style={[styles.container, { backgroundColor: secondaryColor }, style]}
     >
-      {/* Waveform Visualization with live progress */}
+      {/* Waveform Visualization with seeking capability */}
       {showWaveform && (
         <View style={styles.waveformContainer}>
           <AudioWaveform
@@ -125,6 +169,8 @@ export function AudioPlayer({
             isPlaying={player.playing}
             progress={progressPercentage}
             onSeek={handleWaveformSeek}
+            onSeekStart={handleSeekStart}
+            onSeekEnd={handleSeekEnd}
             height={80}
             barCount={60}
             barWidth={2.5}
@@ -132,25 +178,26 @@ export function AudioPlayer({
             activeColor={redColor}
             inactiveColor={mutedColor}
             animated={true}
-            showProgress={true} // Enable progress visualization
+            showProgress={true}
+            interactive={true} // Enable seeking
           />
         </View>
       )}
 
-      {/* Progress Bar */}
-      <View
-        style={[styles.progressContainer, { backgroundColor: borderColor }]}
-      >
-        <View
-          style={[
-            styles.progressBar,
-            {
-              width: `${progressPercentage}%`,
-              backgroundColor: primaryColor,
-            },
-          ]}
-        />
-      </View>
+      {/* Interactive Progress Bar */}
+      {showProgressBar && (
+        <View style={styles.progressContainer}>
+          <Progress
+            value={progressPercentage}
+            onValueChange={handleProgressSeek}
+            onSeekStart={handleSeekStart}
+            onSeekEnd={handleSeekEnd}
+            interactive={true}
+            height={6}
+            style={styles.progressBar}
+          />
+        </View>
+      )}
 
       {/* Controls */}
       {showControls && (
@@ -223,14 +270,11 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   progressContainer: {
-    height: 4,
-    borderRadius: 2,
     marginBottom: 12,
-    overflow: 'hidden',
+    paddingHorizontal: 4,
   },
   progressBar: {
-    height: '100%',
-    borderRadius: 2,
+    // Additional styling if needed
   },
   controlsContainer: {
     flexDirection: 'row',
