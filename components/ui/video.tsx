@@ -140,6 +140,7 @@ export const Video = forwardRef<VideoRef, VideoProps>(
       player.muted = muted;
       player.playbackRate = playbackRate;
       player.volume = volume;
+      player.timeUpdateEventInterval = 1; //< — — critical for event
 
       if (startTime > 0) {
         player.currentTime = startTime;
