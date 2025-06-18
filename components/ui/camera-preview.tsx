@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Camera, CaptureSuccess } from '@/components/ui/camera';
 import { Image } from '@/components/ui/image';
 import { Text } from '@/components/ui/text';
+import { Video } from '@/components/ui/video';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { useEvent } from 'expo';
@@ -192,12 +193,11 @@ export function CameraPreview() {
           {capturedMedia.type === 'picture' ? (
             <Image source={{ uri: capturedMedia.uri }} />
           ) : (
-            <VideoView
-              player={player}
-              style={[styles.previewMedia]}
+            <Video
+              source={{ uri: capturedMedia.uri }}
+              nativeControls
               allowsFullscreen
               allowsPictureInPicture
-              nativeControls
             />
           )}
 
