@@ -1,16 +1,11 @@
 // components/ui/avatar.tsx
+import { Image } from '@/components/ui/image';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { FONT_SIZE } from '@/theme/globals';
-import React from 'react';
-import {
-  Image,
-  ImageSourcePropType,
-  ImageStyle,
-  TextStyle,
-  ViewStyle,
-} from 'react-native';
+import { ImageProps, ImageSource } from 'expo-image';
+import { TextStyle, ViewStyle } from 'react-native';
 
 interface AvatarProps {
   children: React.ReactNode;
@@ -38,24 +33,12 @@ export function Avatar({ children, size = 40, style }: AvatarProps) {
 }
 
 interface AvatarImageProps {
-  source: ImageSourcePropType;
-  style?: ImageStyle;
+  source: ImageSource;
+  style?: ImageProps['style'];
 }
 
 export function AvatarImage({ source, style }: AvatarImageProps) {
-  return (
-    <Image
-      source={source}
-      style={[
-        {
-          width: '100%',
-          height: '100%',
-        },
-        style,
-      ]}
-      resizeMode='cover'
-    />
-  );
+  return <Image full source={source} style={[style]} />;
 }
 
 interface AvatarFallbackProps {
