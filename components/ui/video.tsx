@@ -95,14 +95,14 @@ export const Video = forwardRef<VideoRef, VideoProps>(
       nativeControls = false,
       allowsFullscreen = true,
       allowsPictureInPicture = true,
-      resizeMode = 'contain',
+      resizeMode = 'cover', // Changed default to 'cover' for better container filling
       aspectRatio,
       poster,
       onLoad,
       onError,
       onPlaybackStatusUpdate,
       onFullscreenUpdate,
-      contentFit = 'contain',
+      contentFit = 'cover', // Changed default to 'cover' for better container filling
       startTime = 0,
       endTime,
       playbackRate = 1.0,
@@ -233,7 +233,7 @@ export const Video = forwardRef<VideoRef, VideoProps>(
       }
     }, [player.status, onBuffer]);
 
-    // Handle completion - Fixed to properly stop audio looping
+    // Handle completion - FIXED: Properly stop both video and audio when finished
     useEffect(() => {
       if (currentTime > 0 && duration > 0) {
         const isNearEnd = Math.abs(currentTime - duration) < 0.5; // Within 0.5 seconds of end
@@ -241,37 +241,41 @@ export const Video = forwardRef<VideoRef, VideoProps>(
         if (isNearEnd && !hasFinished) {
           setHasFinished(true);
 
-          // If not looping, pause the player to stop audio
+          // If not looping, completely stop the player
           if (!loop) {
             player.pause();
-            // Ensure audio is also stopped
-            player.muted = true;
+            // Reset to beginning to ensure audio stops
+            player.currentTime = 0;
+            // Force stop any remaining audio
+            const originalVolume = player.volume;
+            player.volume = 0;
             setTimeout(() => {
-              if (!loop) {
-                player.muted = isMuted; // Restore original mute state
-              }
+              player.volume = originalVolume;
             }, 100);
           }
 
           onComplete?.();
-        } else if (currentTime < duration - 1) {
-          // Reset hasFinished if we're not near the end (e.g., user seeked)
+        } else if (!isNearEnd && hasFinished) {
+          // Reset hasFinished if we're not near the end (e.g., user seeked or replayed)
           setHasFinished(false);
         }
       }
-    }, [currentTime, duration, hasFinished, loop, onComplete, player, isMuted]);
+    }, [currentTime, duration, hasFinished, loop, onComplete, player]);
 
     // Handle end time
     useEffect(() => {
       if (endTime && currentTime >= endTime) {
         player.pause();
-        // Stop audio as well
-        player.muted = true;
+        // Reset to beginning to stop audio completely
+        player.currentTime = 0;
+        // Force stop any remaining audio
+        const originalVolume = player.volume;
+        player.volume = 0;
         setTimeout(() => {
-          player.muted = isMuted;
+          player.volume = originalVolume;
         }, 100);
       }
-    }, [currentTime, endTime, player, isMuted]);
+    }, [currentTime, endTime, player]);
 
     // Auto-hide controls
     useEffect(() => {
@@ -353,14 +357,13 @@ export const Video = forwardRef<VideoRef, VideoProps>(
       }
     };
 
-    // Calculate container style - Fixed to fill container properly
+    // FIXED: Calculate container style to fill parent completely
     const containerStyle = [
       styles.container,
       {
         backgroundColor: cardColor,
       },
-      // Apply user's style, but ensure it fills the container
-      style,
+      style, // User's style takes precedence
     ];
 
     if (error) {
@@ -549,7 +552,8 @@ Video.displayName = 'Video';
 
 const styles = StyleSheet.create({
   container: {
-    // Removed flex: 1 and fixed dimensions - let parent control size
+    // FIXED: Ensure the container fills its parent completely
+    flex: 1,
     width: '100%',
     height: '100%',
     borderRadius: BORDER_RADIUS,
@@ -557,13 +561,22 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   videoContainer: {
-    flex: 1,
-    position: 'relative',
+    // FIXED: Ensure video container fills the entire space
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     width: '100%',
     height: '100%',
   },
   video: {
-    flex: 1,
+    // FIXED: Video should fill the entire container
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     width: '100%',
     height: '100%',
   },
