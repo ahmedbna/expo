@@ -1,6 +1,6 @@
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
+import { CORNERS, FONT_SIZE } from '@/theme/globals';
 import React, {
   forwardRef,
   useCallback,
@@ -175,9 +175,9 @@ export const InputOTP = forwardRef<InputOTPRef, InputOTPProps>(
             disabled={disabled}
             style={[
               {
-                width: 56,
-                height: 56,
-                borderRadius: BORDER_RADIUS,
+                width: 58,
+                height: 58,
+                borderRadius: CORNERS,
                 borderWidth: 1,
                 borderColor: error
                   ? danger
