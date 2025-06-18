@@ -173,7 +173,7 @@ export function AudioPlayer({
             onSeekEnd={handleSeekEnd}
             height={80}
             barCount={60}
-            barWidth={2.5}
+            barWidth={4}
             barGap={1.5}
             activeColor={redColor}
             inactiveColor={mutedColor}

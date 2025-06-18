@@ -20,6 +20,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
+import { AudioPlayer } from './audio-player';
 
 export interface AudioRecorderProps {
   style?: ViewStyle;
@@ -302,85 +303,18 @@ export function AudioRecorder({
     <View
       style={[styles.container, { backgroundColor: secondaryColor }, style]}
     >
-      {/* Recording Status */}
-      {isRecording ? (
-        <View style={styles.recordingStatus}>
-          <View style={styles.recordingIndicator}>
-            <Circle size={8} color={redColor} fill={redColor} />
-            <Text variant='caption' style={{ color: redColor, marginLeft: 8 }}>
-              Recording
-            </Text>
-          </View>
-        </View>
-      ) : (
-        <View style={{ height: 36 }} />
-      )}
-
-      {/* Waveform Visualization */}
-      {showWaveform && (
-        <View style={styles.waveformContainer}>
-          <AudioWaveform
-            data={waveformData}
-            isPlaying={false} // Disable built-in animation
-            progress={0}
-            height={60}
-            barCount={30}
-            barWidth={4}
-            barGap={2}
-            activeColor={isRecording ? redColor : primaryColor}
-            inactiveColor={mutedColor}
-            animated={false} // Disable built-in animation to use real-time data
-          />
-        </View>
-      )}
-
-      {/* Timer */}
-      {showTimer && (
-        <View style={styles.timerContainer}>
-          <Text
-            variant='title'
-            style={{
-              color: isRecording ? redColor : textColor,
-              fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+      {recordingUri && !isRecording ? (
+        <View style={{ alignItems: 'center' }}>
+          <AudioPlayer
+            source={{ uri: recordingUri }}
+            showControls={true}
+            showWaveform={true}
+            showTimer={true}
+            autoPlay={false}
+            onPlaybackStatusUpdate={(status) => {
+              console.log('Playback status:', status);
             }}
-          >
-            {formatTime(duration)}
-          </Text>
-          {maxDuration && (
-            <Text variant='caption' style={{ color: mutedColor }}>
-              Max: {formatTime(maxDuration)}
-            </Text>
-          )}
-        </View>
-      )}
-
-      {/* Controls */}
-      <View style={styles.controlsContainer}>
-        {!isRecording && !recordingUri && (
-          <Animated.View style={{ transform: [{ scale: recordingPulse }] }}>
-            <Button
-              variant='default'
-              size='lg'
-              onPress={handleStartRecording}
-              style={[styles.recordButton, { backgroundColor: redColor }]}
-            >
-              <Mic size={24} color='white' />
-            </Button>
-          </Animated.View>
-        )}
-
-        {isRecording && (
-          <Button
-            variant='default'
-            size='lg'
-            onPress={handleStopRecording}
-            style={[styles.stopButton, { backgroundColor: redColor }]}
-          >
-            <Square size={24} fill='white' color='white' />
-          </Button>
-        )}
-
-        {recordingUri && !isRecording && (
+          />
           <View style={styles.playbackControls}>
             <Button
               variant='outline'
@@ -400,8 +334,90 @@ export function AudioRecorder({
               <Text style={{ color: 'white', marginLeft: 8 }}>Save</Text>
             </Button>
           </View>
-        )}
-      </View>
+        </View>
+      ) : (
+        <View>
+          {/* Recording Status */}
+          {isRecording ? (
+            <View style={styles.recordingStatus}>
+              <View style={styles.recordingIndicator}>
+                <Circle size={8} color={redColor} fill={redColor} />
+                <Text
+                  variant='caption'
+                  style={{ color: redColor, marginLeft: 8 }}
+                >
+                  Recording
+                </Text>
+              </View>
+            </View>
+          ) : (
+            <View style={{ height: 36 }} />
+          )}
+          {/* Waveform Visualization */}
+          {showWaveform && (
+            <View style={styles.waveformContainer}>
+              <AudioWaveform
+                data={waveformData}
+                isPlaying={false} // Disable built-in animation
+                progress={0}
+                height={60}
+                barCount={30}
+                barWidth={4}
+                barGap={2}
+                activeColor={isRecording ? redColor : primaryColor}
+                inactiveColor={mutedColor}
+                animated={false} // Disable built-in animation to use real-time data
+              />
+            </View>
+          )}
+          {/* Timer */}
+          {showTimer && (
+            <View style={styles.timerContainer}>
+              <Text
+                variant='title'
+                style={{
+                  color: isRecording ? redColor : textColor,
+                  fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+                }}
+              >
+                {formatTime(duration)}
+              </Text>
+              {maxDuration && (
+                <Text variant='caption' style={{ color: mutedColor }}>
+                  Max: {formatTime(maxDuration)}
+                </Text>
+              )}
+            </View>
+          )}
+
+          {/* Controls */}
+          <View style={styles.controlsContainer}>
+            {!isRecording && !recordingUri && (
+              <Animated.View style={{ transform: [{ scale: recordingPulse }] }}>
+                <Button
+                  variant='default'
+                  size='lg'
+                  onPress={handleStartRecording}
+                  style={[styles.recordButton, { backgroundColor: redColor }]}
+                >
+                  <Mic size={24} color='white' />
+                </Button>
+              </Animated.View>
+            )}
+
+            {isRecording && (
+              <Button
+                variant='default'
+                size='lg'
+                onPress={handleStopRecording}
+                style={[styles.stopButton, { backgroundColor: redColor }]}
+              >
+                <Square size={24} fill='white' color='white' />
+              </Button>
+            )}
+          </View>
+        </View>
+      )}
     </View>
   );
 }
