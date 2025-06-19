@@ -2,7 +2,7 @@
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BORDER_RADIUS } from '@/theme/globals';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -38,6 +38,19 @@ export interface LineChartDataPoint {
   label?: string;
 }
 
+export interface BubbleChartDataPoint {
+  x: number;
+  y: number;
+  size: number;
+  label?: string;
+  color?: string;
+}
+
+export interface RadarChartDataPoint {
+  label: string;
+  value: number;
+}
+
 export interface ChartConfig {
   width?: number;
   height?: number;
@@ -48,6 +61,8 @@ export interface ChartConfig {
   duration?: number;
   gradient?: boolean;
   interactive?: boolean;
+  innerRadius?: number; // For doughnut charts
+  maxValue?: number; // For radar charts
 }
 
 // Utility functions
@@ -89,6 +104,43 @@ const createAreaPath = (
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
+
+// Chart Container Component with automatic width
+export const ChartContainer: React.FC<{
+  title?: string;
+  description?: string;
+  children: React.ReactNode;
+  style?: ViewStyle;
+}> = ({ title, description, children, style }) => {
+  const cardColor = useThemeColor({}, 'card');
+
+  return (
+    <View
+      style={[
+        {
+          backgroundColor: cardColor,
+          borderRadius: BORDER_RADIUS,
+          padding: 16,
+          margin: 8,
+          width: '100%', // Full container width
+        },
+        style,
+      ]}
+    >
+      {title && (
+        <Text variant='subtitle' style={{ marginBottom: 4 }}>
+          {title}
+        </Text>
+      )}
+      {description && (
+        <Text variant='caption' style={{ marginBottom: 16 }}>
+          {description}
+        </Text>
+      )}
+      {children}
+    </View>
+  );
+};
 
 // Line Chart Component
 export const LineChart: React.FC<{
@@ -563,39 +615,888 @@ export const AreaChart: React.FC<{
   );
 };
 
-// Chart Container Component with automatic width
-export const ChartContainer: React.FC<{
-  title?: string;
-  description?: string;
-  children: React.ReactNode;
+// Column Chart Component (Horizontal)
+export const ColumnChart: React.FC<{
+  data: ChartDataPoint[];
+  config?: ChartConfig;
   style?: ViewStyle;
-}> = ({ title, description, children, style }) => {
-  const cardColor = useThemeColor({}, 'card');
+}> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  const {
+    height = 200,
+    padding = 20,
+    showLabels = true,
+    animated = true,
+    duration = 800,
+  } = config;
+
+  const chartWidth = containerWidth || config.width || 300;
+
+  const primaryColor = useThemeColor({}, 'primary');
+  const mutedColor = useThemeColor({}, 'mutedForeground');
+
+  const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (animated) {
+      animationProgress.value = withTiming(1, { duration });
+    } else {
+      animationProgress.value = 1;
+    }
+  }, [data, animated, duration]);
+
+  if (!data.length) return null;
+
+  const maxValue = Math.max(...data.map((d) => d.value));
+  const innerChartWidth = chartWidth - padding * 2;
+  const chartHeight = height - padding * 2;
+  const barHeight = (chartHeight / data.length) * 0.8;
+  const barSpacing = (chartHeight / data.length) * 0.2;
 
   return (
-    <View
-      style={[
-        {
-          backgroundColor: cardColor,
-          borderRadius: BORDER_RADIUS,
-          padding: 16,
-          margin: 8,
-          width: '100%', // Full container width
-        },
-        style,
-      ]}
-    >
-      {title && (
-        <Text variant='subtitle' style={{ marginBottom: 4 }}>
-          {title}
-        </Text>
-      )}
-      {description && (
-        <Text variant='caption' style={{ marginBottom: 16 }}>
-          {description}
-        </Text>
-      )}
-      {children}
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
+        {data.map((item, index) => {
+          const barWidth = (item.value / maxValue) * innerChartWidth;
+          const x = padding;
+          const y = padding + index * (barHeight + barSpacing) + barSpacing / 2;
+
+          const barAnimatedProps = useAnimatedProps(() => ({
+            width: animationProgress.value * barWidth,
+          }));
+
+          return (
+            <G key={`bar-${index}`}>
+              <AnimatedRect
+                x={x}
+                y={y}
+                height={barHeight}
+                fill={item.color || primaryColor}
+                rx={4}
+                animatedProps={barAnimatedProps}
+              />
+
+              {showLabels && (
+                <>
+                  <SvgText
+                    x={padding - 10}
+                    y={y + barHeight / 2}
+                    textAnchor='end'
+                    fontSize={12}
+                    fill={mutedColor}
+                    alignmentBaseline='middle'
+                  >
+                    {item.label}
+                  </SvgText>
+                  <SvgText
+                    x={x + barWidth + 10}
+                    y={y + barHeight / 2}
+                    textAnchor='start'
+                    fontSize={11}
+                    fill={mutedColor}
+                    fontWeight='600'
+                    alignmentBaseline='middle'
+                  >
+                    {item.value}
+                  </SvgText>
+                </>
+              )}
+            </G>
+          );
+        })}
+      </Svg>
+    </View>
+  );
+};
+
+// Doughnut Chart Component
+export const DoughnutChart: React.FC<{
+  data: ChartDataPoint[];
+  config?: ChartConfig;
+  style?: ViewStyle;
+}> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  const {
+    height = 200,
+    showLabels = true,
+    animated = true,
+    duration = 1000,
+    innerRadius = 0.5, // Default inner radius as ratio of outer radius
+  } = config;
+
+  const chartWidth = containerWidth || config.width || 300;
+
+  const primaryColor = useThemeColor({}, 'primary');
+
+  const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (animated) {
+      animationProgress.value = withTiming(1, { duration });
+    } else {
+      animationProgress.value = 1;
+    }
+  }, [data, animated, duration]);
+
+  if (!data.length) return null;
+
+  const total = data.reduce((sum, item) => sum + item.value, 0);
+  const outerRadius = Math.min(chartWidth, height) / 2 - 20;
+  const innerRadiusValue = outerRadius * innerRadius;
+  const centerX = chartWidth / 2;
+  const centerY = height / 2;
+
+  let currentAngle = -Math.PI / 2;
+
+  const colors = [
+    primaryColor,
+    useThemeColor({}, 'blue'),
+    useThemeColor({}, 'green'),
+    useThemeColor({}, 'orange'),
+    useThemeColor({}, 'purple'),
+    useThemeColor({}, 'pink'),
+  ];
+
+  return (
+    <View style={[{ width: '100%' }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
+        {data.map((item, index) => {
+          const sliceAngle = (item.value / total) * 2 * Math.PI;
+          const startAngle = currentAngle;
+          const endAngle = currentAngle + sliceAngle;
+
+          const largeArcFlag = sliceAngle > Math.PI ? 1 : 0;
+
+          // Outer arc points
+          const x1 = centerX + outerRadius * Math.cos(startAngle);
+          const y1 = centerY + outerRadius * Math.sin(startAngle);
+          const x2 = centerX + outerRadius * Math.cos(endAngle);
+          const y2 = centerY + outerRadius * Math.sin(endAngle);
+
+          // Inner arc points
+          const x3 = centerX + innerRadiusValue * Math.cos(endAngle);
+          const y3 = centerY + innerRadiusValue * Math.sin(endAngle);
+          const x4 = centerX + innerRadiusValue * Math.cos(startAngle);
+          const y4 = centerY + innerRadiusValue * Math.sin(startAngle);
+
+          const pathData = [
+            `M ${x1} ${y1}`,
+            `A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2}`,
+            `L ${x3} ${y3}`,
+            `A ${innerRadiusValue} ${innerRadiusValue} 0 ${largeArcFlag} 0 ${x4} ${y4}`,
+            'Z',
+          ].join(' ');
+
+          // Label position
+          const labelAngle = startAngle + sliceAngle / 2;
+          const labelRadius = (outerRadius + innerRadiusValue) / 2;
+          const labelX = centerX + labelRadius * Math.cos(labelAngle);
+          const labelY = centerY + labelRadius * Math.sin(labelAngle);
+
+          currentAngle = endAngle;
+
+          const sliceAnimatedProps = useAnimatedProps(() => ({
+            opacity: animationProgress.value,
+          }));
+
+          return (
+            <G key={`slice-${index}`}>
+              <AnimatedPath
+                d={pathData}
+                fill={item.color || colors[index % colors.length]}
+                animatedProps={sliceAnimatedProps}
+              />
+
+              {showLabels && (
+                <SvgText
+                  x={labelX}
+                  y={labelY}
+                  textAnchor='middle'
+                  fontSize={12}
+                  fill='#FFFFFF'
+                  fontWeight='600'
+                >
+                  {Math.round((item.value / total) * 100)}%
+                </SvgText>
+              )}
+            </G>
+          );
+        })}
+      </Svg>
+
+      {/* Legend */}
+      <View style={{ marginTop: 10 }}>
+        {data.map((item, index) => (
+          <View
+            key={`legend-${index}`}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: 6,
+                backgroundColor: item.color || colors[index % colors.length],
+                marginRight: 8,
+              }}
+            />
+            <Text variant='caption'>
+              {item.label}: {item.value}
+            </Text>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+};
+
+// Scatter Plot Component
+export const ScatterPlot: React.FC<{
+  data: LineChartDataPoint[];
+  config?: ChartConfig;
+  style?: ViewStyle;
+}> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  const {
+    height = 200,
+    padding = 20,
+    showGrid = true,
+    showLabels = true,
+    animated = true,
+    duration = 800,
+  } = config;
+
+  const chartWidth = containerWidth || config.width || 300;
+
+  const primaryColor = useThemeColor({}, 'primary');
+  const mutedColor = useThemeColor({}, 'mutedForeground');
+
+  const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (animated) {
+      animationProgress.value = withTiming(1, { duration });
+    } else {
+      animationProgress.value = 1;
+    }
+  }, [data, animated, duration]);
+
+  if (!data.length) return null;
+
+  const maxX = Math.max(...data.map((d) => d.x));
+  const minX = Math.min(...data.map((d) => d.x));
+  const maxY = Math.max(...data.map((d) => d.y));
+  const minY = Math.min(...data.map((d) => d.y));
+
+  const xRange = maxX - minX || 1;
+  const yRange = maxY - minY || 1;
+
+  const innerChartWidth = chartWidth - padding * 2;
+  const chartHeight = height - padding * 2;
+
+  // Convert data to screen coordinates
+  const points = data.map((point) => ({
+    x: padding + ((point.x - minX) / xRange) * innerChartWidth,
+    y: padding + ((maxY - point.y) / yRange) * chartHeight,
+  }));
+
+  return (
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
+        {/* Grid lines */}
+        {showGrid && (
+          <G>
+            {[0, 0.25, 0.5, 0.75, 1].map((ratio, index) => (
+              <G key={`grid-${index}`}>
+                <Line
+                  x1={padding}
+                  y1={padding + ratio * chartHeight}
+                  x2={chartWidth - padding}
+                  y2={padding + ratio * chartHeight}
+                  stroke={mutedColor}
+                  strokeWidth={0.5}
+                  opacity={0.3}
+                />
+                <Line
+                  x1={padding + ratio * innerChartWidth}
+                  y1={padding}
+                  x2={padding + ratio * innerChartWidth}
+                  y2={height - padding}
+                  stroke={mutedColor}
+                  strokeWidth={0.5}
+                  opacity={0.3}
+                />
+              </G>
+            ))}
+          </G>
+        )}
+
+        {/* Scatter points */}
+        {points.map((point, index) => {
+          const pointAnimatedProps = useAnimatedProps(() => ({
+            opacity: animationProgress.value,
+            r: withDelay(index * 50, withSpring(animationProgress.value * 5)),
+          }));
+
+          return (
+            <AnimatedCircle
+              key={`point-${index}`}
+              cx={point.x}
+              cy={point.y}
+              fill={primaryColor}
+              animatedProps={pointAnimatedProps}
+            />
+          );
+        })}
+
+        {/* Axis labels */}
+        {showLabels && (
+          <G>
+            {/* X-axis labels */}
+            {[minX, (minX + maxX) / 2, maxX].map((value, index) => (
+              <SvgText
+                key={`x-label-${index}`}
+                x={padding + (index * innerChartWidth) / 2}
+                y={height - 5}
+                textAnchor='middle'
+                fontSize={12}
+                fill={mutedColor}
+              >
+                {Math.round(value)}
+              </SvgText>
+            ))}
+            {/* Y-axis labels */}
+            {[maxY, (minY + maxY) / 2, minY].map((value, index) => (
+              <SvgText
+                key={`y-label-${index}`}
+                x={15}
+                y={padding + (index * chartHeight) / 2}
+                textAnchor='middle'
+                fontSize={12}
+                fill={mutedColor}
+                alignmentBaseline='middle'
+              >
+                {Math.round(value)}
+              </SvgText>
+            ))}
+          </G>
+        )}
+      </Svg>
+    </View>
+  );
+};
+
+// Bubble Chart Component
+export const BubbleChart: React.FC<{
+  data: BubbleChartDataPoint[];
+  config?: ChartConfig;
+  style?: ViewStyle;
+}> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  const {
+    height = 200,
+    padding = 20,
+    showGrid = true,
+    showLabels = true,
+    animated = true,
+    duration = 800,
+  } = config;
+
+  const chartWidth = containerWidth || config.width || 300;
+
+  const primaryColor = useThemeColor({}, 'primary');
+  const mutedColor = useThemeColor({}, 'mutedForeground');
+
+  const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (animated) {
+      animationProgress.value = withTiming(1, { duration });
+    } else {
+      animationProgress.value = 1;
+    }
+  }, [data, animated, duration]);
+
+  if (!data.length) return null;
+
+  const maxX = Math.max(...data.map((d) => d.x));
+  const minX = Math.min(...data.map((d) => d.x));
+  const maxY = Math.max(...data.map((d) => d.y));
+  const minY = Math.min(...data.map((d) => d.y));
+  const maxSize = Math.max(...data.map((d) => d.size));
+
+  const xRange = maxX - minX || 1;
+  const yRange = maxY - minY || 1;
+
+  const innerChartWidth = chartWidth - padding * 2;
+  const chartHeight = height - padding * 2;
+
+  const colors = [
+    primaryColor,
+    useThemeColor({}, 'blue'),
+    useThemeColor({}, 'green'),
+    useThemeColor({}, 'orange'),
+    useThemeColor({}, 'purple'),
+    useThemeColor({}, 'pink'),
+  ];
+
+  // Convert data to screen coordinates
+  const bubbles = data.map((point, index) => ({
+    x: padding + ((point.x - minX) / xRange) * innerChartWidth,
+    y: padding + ((maxY - point.y) / yRange) * chartHeight,
+    radius: (point.size / maxSize) * 20 + 5, // Scale bubble size
+    color: point.color || colors[index % colors.length],
+    label: point.label,
+  }));
+
+  return (
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
+        {/* Grid lines */}
+        {showGrid && (
+          <G>
+            {[0, 0.25, 0.5, 0.75, 1].map((ratio, index) => (
+              <G key={`grid-${index}`}>
+                <Line
+                  x1={padding}
+                  y1={padding + ratio * chartHeight}
+                  x2={chartWidth - padding}
+                  y2={padding + ratio * chartHeight}
+                  stroke={mutedColor}
+                  strokeWidth={0.5}
+                  opacity={0.3}
+                />
+                <Line
+                  x1={padding + ratio * innerChartWidth}
+                  y1={padding}
+                  x2={padding + ratio * innerChartWidth}
+                  y2={height - padding}
+                  stroke={mutedColor}
+                  strokeWidth={0.5}
+                  opacity={0.3}
+                />
+              </G>
+            ))}
+          </G>
+        )}
+
+        {/* Bubbles */}
+        {bubbles.map((bubble, index) => {
+          const bubbleAnimatedProps = useAnimatedProps(() => ({
+            opacity: animationProgress.value * 0.7,
+            r: withDelay(
+              index * 100,
+              withSpring(animationProgress.value * bubble.radius)
+            ),
+          }));
+
+          return (
+            <G key={`bubble-${index}`}>
+              <AnimatedCircle
+                cx={bubble.x}
+                cy={bubble.y}
+                fill={bubble.color}
+                animatedProps={bubbleAnimatedProps}
+              />
+              {showLabels && bubble.label && (
+                <SvgText
+                  x={bubble.x}
+                  y={bubble.y}
+                  textAnchor='middle'
+                  fontSize={10}
+                  fill='#FFFFFF'
+                  fontWeight='600'
+                  alignmentBaseline='middle'
+                >
+                  {bubble.label}
+                </SvgText>
+              )}
+            </G>
+          );
+        })}
+
+        {/* Axis labels */}
+        <G>
+          {/* X-axis labels */}
+          {[minX, (minX + maxX) / 2, maxX].map((value, index) => (
+            <SvgText
+              key={`x-label-${index}`}
+              x={padding + (index * innerChartWidth) / 2}
+              y={height - 5}
+              textAnchor='middle'
+              fontSize={12}
+              fill={mutedColor}
+            >
+              {Math.round(value)}
+            </SvgText>
+          ))}
+          {/* Y-axis labels */}
+          {[maxY, (minY + maxY) / 2, minY].map((value, index) => (
+            <SvgText
+              key={`y-label-${index}`}
+              x={15}
+              y={padding + (index * chartHeight) / 2}
+              textAnchor='middle'
+              fontSize={12}
+              fill={mutedColor}
+              alignmentBaseline='middle'
+            >
+              {Math.round(value)}
+            </SvgText>
+          ))}
+        </G>
+      </Svg>
+    </View>
+  );
+};
+
+// Radar Chart Component
+export const RadarChart: React.FC<{
+  data: RadarChartDataPoint[];
+  config?: ChartConfig;
+  style?: ViewStyle;
+}> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  const {
+    height = 200,
+    showLabels = true,
+    animated = true,
+    duration = 1000,
+    maxValue,
+  } = config;
+
+  const chartWidth = containerWidth || config.width || 300;
+
+  const primaryColor = useThemeColor({}, 'primary');
+  const mutedColor = useThemeColor({}, 'mutedForeground');
+
+  const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (animated) {
+      animationProgress.value = withTiming(1, { duration });
+    } else {
+      animationProgress.value = 1;
+    }
+  }, [data, animated, duration]);
+
+  if (!data.length) return null;
+
+  const centerX = chartWidth / 2;
+  const centerY = height / 2;
+  const radius = Math.min(chartWidth, height) / 2 - 40;
+  const maxVal = maxValue || Math.max(...data.map((d) => d.value));
+
+  // Calculate points for each data point
+  const angleStep = (2 * Math.PI) / data.length;
+  const points = data.map((item, index) => {
+    const angle = index * angleStep - Math.PI / 2; // Start from top
+    const distance = (item.value / maxVal) * radius;
+    return {
+      x: centerX + distance * Math.cos(angle),
+      y: centerY + distance * Math.sin(angle),
+      labelX: centerX + (radius + 20) * Math.cos(angle),
+      labelY: centerY + (radius + 20) * Math.sin(angle),
+      label: item.label,
+    };
+  });
+
+  // Create path for the radar area
+  const radarPath =
+    points.length > 0
+      ? `M${points[0].x},${points[0].y} ` +
+        points
+          .slice(1)
+          .map((p) => `L${p.x},${p.y}`)
+          .join(' ') +
+        ' Z'
+      : '';
+
+  const radarAnimatedProps = useAnimatedProps(() => ({
+    opacity: animationProgress.value * 0.3,
+  }));
+
+  return (
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
+        {/* Grid circles */}
+        {[0.2, 0.4, 0.6, 0.8, 1].map((ratio, index) => (
+          <Circle
+            key={`grid-circle-${index}`}
+            cx={centerX}
+            cy={centerY}
+            r={radius * ratio}
+            stroke={mutedColor}
+            strokeWidth={0.5}
+            fill='none'
+            opacity={0.3}
+          />
+        ))}
+
+        {/* Grid lines */}
+        {data.map((_, index) => {
+          const angle = index * angleStep - Math.PI / 2;
+          const endX = centerX + radius * Math.cos(angle);
+          const endY = centerY + radius * Math.sin(angle);
+
+          return (
+            <Line
+              key={`grid-line-${index}`}
+              x1={centerX}
+              y1={centerY}
+              x2={endX}
+              y2={endY}
+              stroke={mutedColor}
+              strokeWidth={0.5}
+              opacity={0.3}
+            />
+          );
+        })}
+
+        {/* Radar area */}
+        <AnimatedPath
+          d={radarPath}
+          fill={primaryColor}
+          stroke={primaryColor}
+          strokeWidth={2}
+          animatedProps={radarAnimatedProps}
+        />
+
+        {/* Data points */}
+        {points.map((point, index) => {
+          const pointAnimatedProps = useAnimatedProps(() => ({
+            opacity: animationProgress.value,
+            r: withDelay(index * 100, withSpring(animationProgress.value * 4)),
+          }));
+
+          return (
+            <AnimatedCircle
+              key={`point-${index}`}
+              cx={point.x}
+              cy={point.y}
+              fill={primaryColor}
+              animatedProps={pointAnimatedProps}
+            />
+          );
+        })}
+
+        {/* Labels */}
+        {showLabels &&
+          points.map((point, index) => (
+            <SvgText
+              key={`label-${index}`}
+              x={point.labelX}
+              y={point.labelY}
+              textAnchor='middle'
+              fontSize={12}
+              fill={mutedColor}
+              alignmentBaseline='middle'
+            >
+              {point.label}
+            </SvgText>
+          ))}
+      </Svg>
+    </View>
+  );
+};
+
+// Polar Area Chart Component
+export const PolarAreaChart: React.FC<{
+  data: ChartDataPoint[];
+  config?: ChartConfig;
+  style?: ViewStyle;
+}> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
+  const {
+    height = 200,
+    showLabels = true,
+    animated = true,
+    duration = 1000,
+  } = config;
+
+  const chartWidth = containerWidth || config.width || 300;
+
+  const primaryColor = useThemeColor({}, 'primary');
+  const mutedColor = useThemeColor({}, 'mutedForeground');
+
+  const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
+
+  useEffect(() => {
+    if (animated) {
+      animationProgress.value = withTiming(1, { duration });
+    } else {
+      animationProgress.value = 1;
+    }
+  }, [data, animated, duration]);
+
+  if (!data.length) return null;
+
+  const centerX = chartWidth / 2;
+  const centerY = height / 2;
+  const maxRadius = Math.min(chartWidth, height) / 2 - 20;
+  const maxValue = Math.max(...data.map((d) => d.value));
+
+  const angleStep = (2 * Math.PI) / data.length;
+
+  const colors = [
+    primaryColor,
+    useThemeColor({}, 'blue'),
+    useThemeColor({}, 'green'),
+    useThemeColor({}, 'orange'),
+    useThemeColor({}, 'purple'),
+    useThemeColor({}, 'pink'),
+  ];
+
+  return (
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
+        {data.map((item, index) => {
+          const angle = index * angleStep - Math.PI / 2;
+          const nextAngle = (index + 1) * angleStep - Math.PI / 2;
+          const radius = (item.value / maxValue) * maxRadius;
+
+          const x1 = centerX + radius * Math.cos(angle);
+          const y1 = centerY + radius * Math.sin(angle);
+          const x2 = centerX + radius * Math.cos(nextAngle);
+          const y2 = centerY + radius * Math.sin(nextAngle);
+
+          const pathData = [
+            `M ${centerX} ${centerY}`,
+            `L ${x1} ${y1}`,
+            `A ${radius} ${radius} 0 0 1 ${x2} ${y2}`,
+            'Z',
+          ].join(' ');
+
+          // Label position
+          const labelAngle = angle + angleStep / 2;
+          const labelRadius = radius * 0.7;
+          const labelX = centerX + labelRadius * Math.cos(labelAngle);
+          const labelY = centerY + labelRadius * Math.sin(labelAngle);
+
+          const sliceAnimatedProps = useAnimatedProps(() => ({
+            opacity: animationProgress.value * 0.8,
+          }));
+
+          return (
+            <G key={`slice-${index}`}>
+              <AnimatedPath
+                d={pathData}
+                fill={item.color || colors[index % colors.length]}
+                stroke='white'
+                strokeWidth={1}
+                animatedProps={sliceAnimatedProps}
+              />
+
+              {showLabels && (
+                <SvgText
+                  x={labelX}
+                  y={labelY}
+                  textAnchor='middle'
+                  fontSize={10}
+                  fill='#FFFFFF'
+                  fontWeight='600'
+                  alignmentBaseline='middle'
+                >
+                  {item.value}
+                </SvgText>
+              )}
+            </G>
+          );
+        })}
+
+        {/* Grid circles for reference */}
+        {[0.25, 0.5, 0.75, 1].map((ratio, index) => (
+          <Circle
+            key={`grid-${index}`}
+            cx={centerX}
+            cy={centerY}
+            r={maxRadius * ratio}
+            stroke={mutedColor}
+            strokeWidth={0.5}
+            fill='none'
+            opacity={0.2}
+          />
+        ))}
+      </Svg>
+
+      {/* Legend */}
+      <View style={{ marginTop: 10 }}>
+        {data.map((item, index) => (
+          <View
+            key={`legend-${index}`}
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              marginBottom: 5,
+            }}
+          >
+            <View
+              style={{
+                width: 12,
+                height: 12,
+                borderRadius: 6,
+                backgroundColor: item.color || colors[index % colors.length],
+                marginRight: 8,
+              }}
+            />
+            <Text variant='caption'>
+              {item.label}: {item.value}
+            </Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
 };
