@@ -1,5 +1,5 @@
 import { Test } from '@/components/test';
 
-export default function TestScreen() {
+export default function DemoScreen() {
   return <Test />;
 }

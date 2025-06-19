@@ -7,7 +7,11 @@ import { HapticTab } from '@/components/ui/haptic-tab';
 import { Icon } from '@/components/ui/icon';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/theme/colors';
-import { Earth, Home, TestTube2 } from 'lucide-react-native';
+import {
+  ChartCandlestick,
+  Home,
+  LucideSquareDashedMousePointer,
+} from 'lucide-react-native';
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
@@ -37,21 +41,26 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
-        name='explore'
+        name='demo'
         options={{
-          title: 'Explore',
+          title: 'Demo',
           tabBarIcon: ({ color }) => (
-            <Icon IconComponent={Earth} size={24} color={color} />
+            <Icon
+              IconComponent={LucideSquareDashedMousePointer}
+              size={24}
+              color={color}
+            />
           ),
         }}
       />
       <Tabs.Screen
-        name='test'
+        name='charts'
         options={{
-          title: 'Test',
+          title: 'Charts',
           tabBarIcon: ({ color }) => (
-            <Icon IconComponent={TestTube2} size={24} color={color} />
+            <Icon IconComponent={ChartCandlestick} size={24} color={color} />
           ),
         }}
       />

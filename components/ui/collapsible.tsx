@@ -28,8 +28,9 @@ export function Collapsible({
           style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
         />
 
-        <Text variant='title'>{title}</Text>
+        <Text variant='subtitle'>{title}</Text>
       </TouchableOpacity>
+
       {isOpen && (
         <View
           style={{

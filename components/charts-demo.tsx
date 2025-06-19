@@ -1,21 +1,22 @@
 // components/charts-demo.tsx
+
+import { AreaChart } from '@/components/ui/charts/area-chart';
+import { BarChart } from '@/components/ui/charts/bar-chart';
+import { BubbleChart } from '@/components/ui/charts/bubble-chart';
+import { ChartContainer } from '@/components/ui/charts/chart-container';
+import { ColumnChart } from '@/components/ui/charts/column-chart';
+import { DoughnutChart } from '@/components/ui/charts/doughnut-chart';
+import { LineChart } from '@/components/ui/charts/line-chart';
+import { PieChart } from '@/components/ui/charts/pie-chart';
+import { PolarAreaChart } from '@/components/ui/charts/polar-area-chart';
+import { RadarChart } from '@/components/ui/charts/radar-chart';
+import { ScatterPlot } from '@/components/ui/charts/scatter-chart';
 import {
-  AreaChart,
-  BarChart,
-  BubbleChart,
   BubbleChartDataPoint,
-  ChartContainer,
   ChartDataPoint,
-  ColumnChart,
-  DoughnutChart,
-  LineChart,
   LineChartDataPoint,
-  PieChart,
-  PolarAreaChart,
-  RadarChart,
   RadarChartDataPoint,
-  ScatterPlot,
-} from '@/components/ui/charts';
+} from '@/components/ui/charts/types';
 import { Text } from '@/components/ui/text';
 import React from 'react';
 import { View } from 'react-native';

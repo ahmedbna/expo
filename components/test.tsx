@@ -45,7 +45,6 @@ import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
 import { AudioExample } from './audio-example';
 import { CarouselTestComponent } from './carousel-examples';
-import { ChartsDemo } from './charts-demo';
 import { ComboboxExamples } from './combobox-example';
 import { InputOTPExamples } from './otp-examples';
 import { PickerExamples } from './picker-examples';
@@ -145,8 +144,6 @@ export const Test = () => {
             placeholder='Search products...'
             onSearch={(query) => console.log('Searching:', query)}
           />
-
-          <ChartsDemo />
 
           <AudioExample />
 
