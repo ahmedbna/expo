@@ -2,8 +2,8 @@
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { BORDER_RADIUS } from '@/theme/globals';
-import React, { useEffect } from 'react';
-import { View, ViewStyle } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { LayoutChangeEvent, View, ViewStyle } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedProps,
@@ -96,8 +96,10 @@ export const LineChart: React.FC<{
   config?: ChartConfig;
   style?: ViewStyle;
 }> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
   const {
-    width = 300, // Default container width instead of screen width
+    width, // This will be ignored in favor of measured width
     height = 200,
     padding = 20,
     showGrid = true,
@@ -108,6 +110,9 @@ export const LineChart: React.FC<{
     interactive = false,
   } = config;
 
+  // Use measured width or fallback to config width or default
+  const chartWidth = containerWidth || config.width || 300;
+
   const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'mutedForeground');
   const backgroundColor = useThemeColor({}, 'background');
@@ -115,6 +120,13 @@ export const LineChart: React.FC<{
   const animationProgress = useSharedValue(0);
   const touchX = useSharedValue(0);
   const showTooltip = useSharedValue(false);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
 
   useEffect(() => {
     if (animated) {
@@ -130,12 +142,12 @@ export const LineChart: React.FC<{
   const minValue = Math.min(...data.map((d) => d.y));
   const valueRange = maxValue - minValue || 1;
 
-  const chartWidth = width - padding * 2;
+  const innerChartWidth = chartWidth - padding * 2;
   const chartHeight = height - padding * 2;
 
   // Convert data to screen coordinates
   const points = data.map((point, index) => ({
-    x: padding + (index / (data.length - 1)) * chartWidth,
+    x: padding + (index / (data.length - 1)) * innerChartWidth,
     y: padding + ((maxValue - point.y) / valueRange) * chartHeight,
   }));
 
@@ -175,10 +187,10 @@ export const LineChart: React.FC<{
     });
 
   return (
-    <View style={[{ width, height }, style]}>
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
       <GestureDetector gesture={panGesture}>
         <Animated.View>
-          <Svg width={width} height={height}>
+          <Svg width={chartWidth} height={height}>
             <Defs>
               {gradient && (
                 <LinearGradient id='gradient' x1='0%' y1='0%' x2='0%' y2='100%'>
@@ -204,7 +216,7 @@ export const LineChart: React.FC<{
                     key={`grid-${index}`}
                     x1={padding}
                     y1={padding + ratio * chartHeight}
-                    x2={width - padding}
+                    x2={chartWidth - padding}
                     y2={padding + ratio * chartHeight}
                     stroke={mutedColor}
                     strokeWidth={0.5}
@@ -293,8 +305,10 @@ export const BarChart: React.FC<{
   config?: ChartConfig;
   style?: ViewStyle;
 }> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
   const {
-    width = 300, // Default container width instead of screen width
+    width, // This will be ignored in favor of measured width
     height = 200,
     padding = 20,
     showLabels = true,
@@ -302,10 +316,20 @@ export const BarChart: React.FC<{
     duration = 800,
   } = config;
 
+  // Use measured width or fallback to config width or default
+  const chartWidth = containerWidth || config.width || 300;
+
   const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'mutedForeground');
 
   const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
 
   useEffect(() => {
     if (animated) {
@@ -318,30 +342,30 @@ export const BarChart: React.FC<{
   if (!data.length) return null;
 
   const maxValue = Math.max(...data.map((d) => d.value));
-  const chartWidth = width - padding * 2;
+  const innerChartWidth = chartWidth - padding * 2;
   const chartHeight = height - padding * 2;
-  const barWidth = (chartWidth / data.length) * 0.8;
-  const barSpacing = (chartWidth / data.length) * 0.2;
+  const barWidth = (innerChartWidth / data.length) * 0.8;
+  const barSpacing = (innerChartWidth / data.length) * 0.2;
 
   return (
-    <View style={[{ width, height }, style]}>
-      <Svg width={width} height={height}>
+    <View style={[{ width: '100%', height }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
         {data.map((item, index) => {
           const barHeight = (item.value / maxValue) * chartHeight;
           const x = padding + index * (barWidth + barSpacing) + barSpacing / 2;
           const y = height - padding - barHeight;
 
+          // Fix: Use useAnimatedProps correctly for SVG rect height animation
           const barAnimatedProps = useAnimatedProps(() => ({
-            transform: `scale(1, ${animationProgress.value})`,
+            height: animationProgress.value * barHeight,
+            y: height - padding - animationProgress.value * barHeight,
           }));
 
           return (
             <G key={`bar-${index}`}>
               <AnimatedRect
                 x={x}
-                y={y}
                 width={barWidth}
-                height={barHeight}
                 fill={item.color || primaryColor}
                 rx={4}
                 animatedProps={barAnimatedProps}
@@ -384,18 +408,30 @@ export const PieChart: React.FC<{
   config?: ChartConfig;
   style?: ViewStyle;
 }> = ({ data, config = {}, style }) => {
+  const [containerWidth, setContainerWidth] = useState(300);
+
   const {
-    width = 300, // Default container width instead of screen width
+    width, // This will be ignored in favor of measured width
     height = 200,
     showLabels = true,
     animated = true,
     duration = 1000,
   } = config;
 
+  // Use measured width or fallback to config width or default
+  const chartWidth = containerWidth || config.width || 300;
+
   const primaryColor = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'mutedForeground');
 
   const animationProgress = useSharedValue(0);
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const { width: measuredWidth } = event.nativeEvent.layout;
+    if (measuredWidth > 0) {
+      setContainerWidth(measuredWidth);
+    }
+  };
 
   useEffect(() => {
     if (animated) {
@@ -408,8 +444,8 @@ export const PieChart: React.FC<{
   if (!data.length) return null;
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
-  const radius = Math.min(width, height) / 2 - 20;
-  const centerX = width / 2;
+  const radius = Math.min(chartWidth, height) / 2 - 20;
+  const centerX = chartWidth / 2;
   const centerY = height / 2;
 
   let currentAngle = -Math.PI / 2; // Start from top
@@ -424,8 +460,8 @@ export const PieChart: React.FC<{
   ];
 
   return (
-    <View style={[{ width, height }, style]}>
-      <Svg width={width} height={height}>
+    <View style={[{ width: '100%' }, style]} onLayout={handleLayout}>
+      <Svg width={chartWidth} height={height}>
         {data.map((item, index) => {
           const sliceAngle = (item.value / total) * 2 * Math.PI;
           const startAngle = currentAngle;
