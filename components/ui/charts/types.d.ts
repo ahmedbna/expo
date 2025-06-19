@@ -1,4 +1,4 @@
-// components/ui/charts/types.d.tsx
+// components/ui/charts/types.d.ts
 
 export interface ChartDataPoint {
   label: string;
@@ -25,6 +25,13 @@ export interface RadarChartDataPoint {
   value: number;
 }
 
+export interface HeatmapDataPoint {
+  row: string | number;
+  col: string | number;
+  value: number;
+  label?: string;
+}
+
 export interface ChartConfig {
   width?: number;
   height?: number;
@@ -37,4 +44,5 @@ export interface ChartConfig {
   interactive?: boolean;
   innerRadius?: number; // For doughnut charts
   maxValue?: number; // For radar charts
+  colorScale?: string[]; // For heatmap charts - array of hex colors for gradient
 }
