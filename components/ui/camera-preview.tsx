@@ -6,11 +6,9 @@ import { Text } from '@/components/ui/text';
 import { Video } from '@/components/ui/video';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { useEvent } from 'expo';
 import * as MediaLibrary from 'expo-media-library';
-import { useVideoPlayer, VideoView } from 'expo-video';
 import { Download, Upload, X } from 'lucide-react-native';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Alert, Dimensions, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -30,35 +28,6 @@ export function CameraPreview() {
   const backgroundColor = useThemeColor({}, 'background');
   const cardColor = useThemeColor({}, 'card');
   const textColor = useThemeColor({}, 'text');
-  const primaryColor = useThemeColor({}, 'primary');
-
-  // Create video player only when we have a video to play
-  const player = useVideoPlayer(
-    capturedMedia?.type === 'video' ? capturedMedia.uri : null,
-    (player) => {
-      if (capturedMedia?.type === 'video') {
-        player.play();
-        player.loop = true;
-        player.muted = false;
-      }
-    }
-  );
-
-  const { isPlaying } = useEvent(player, 'playingChange', {
-    isPlaying: player.playing,
-  });
-
-  // Effect to handle player source changes
-  useEffect(() => {
-    const replaceUri = async () => {
-      if (capturedMedia?.type === 'video' && capturedMedia.uri) {
-        // Replace the player source when we have a new video
-        await player.replaceAsync(capturedMedia.uri);
-      }
-    };
-
-    replaceUri();
-  }, [capturedMedia?.uri, capturedMedia?.type, player]);
 
   const handleCapture = (results: CaptureSuccess) => {
     setCameraHeight(results.cameraHeight);
@@ -85,10 +54,6 @@ export function CameraPreview() {
   };
 
   const handleRetakeMedia = () => {
-    // Stop video if playing
-    if (capturedMedia?.type === 'video' && isPlaying) {
-      player.pause();
-    }
     setCapturedMedia(null);
     setShowPreview(false);
     setShowCamera(true);
@@ -122,10 +87,6 @@ export function CameraPreview() {
           {
             text: 'OK',
             onPress: () => {
-              // Stop video if playing
-              if (capturedMedia?.type === 'video' && isPlaying) {
-                player.pause();
-              }
               setCapturedMedia(null);
               setShowPreview(false);
             },
@@ -173,10 +134,6 @@ export function CameraPreview() {
         {
           text: 'Done',
           onPress: () => {
-            // Stop video if playing
-            if (capturedMedia?.type === 'video' && isPlaying) {
-              player.pause();
-            }
             // setCapturedMedia(null);
             // setShowPreview(false);
           },
@@ -190,12 +147,12 @@ export function CameraPreview() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor }]}>
         <View style={[styles.previewContainer, { height: cameraHeight }]}>
-          {capturedMedia.type === 'picture' ? (
+          {capturedMedia.type === 'picture' && capturedMedia.uri ? (
             <Image source={{ uri: capturedMedia.uri }} />
           ) : (
             <Video
               source={{ uri: capturedMedia.uri }}
-              nativeControls
+              // nativeControls
               allowsFullscreen
               allowsPictureInPicture
             />
@@ -288,46 +245,6 @@ export function CameraPreview() {
           After capturing, you can preview, save, or process your media.
         </Text>
 
-        {capturedMedia && (
-          <View
-            style={[
-              styles.lastCaptureContainer,
-              { backgroundColor: cardColor },
-            ]}
-          >
-            <Text variant='subtitle' style={styles.lastCaptureTitle}>
-              Last Capture:
-            </Text>
-            {capturedMedia.type === 'picture' ? (
-              <Image
-                source={{ uri: capturedMedia.uri }}
-                style={styles.thumbnailImage}
-              />
-            ) : (
-              <View style={styles.videoThumbnailContainer}>
-                <VideoView
-                  player={player}
-                  style={styles.thumbnailImage}
-                  allowsFullscreen={false}
-                  allowsPictureInPicture={false}
-                  nativeControls={false}
-                />
-                <View style={styles.playIconOverlay}>
-                  <Text style={styles.playIcon}>▶️</Text>
-                </View>
-              </View>
-            )}
-            <TouchableOpacity
-              style={[styles.viewButton, { backgroundColor: primaryColor }]}
-              onPress={() => setShowPreview(true)}
-            >
-              <Text style={styles.viewButtonText}>
-                View {capturedMedia.type}
-              </Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
         <View style={styles.buttonContainer}>
           <Button
             variant='default'
@@ -337,23 +254,6 @@ export function CameraPreview() {
           >
             Open Camera
           </Button>
-
-          {capturedMedia && (
-            <Button
-              variant='outline'
-              size='lg'
-              onPress={() => {
-                // Stop video if playing
-                if (capturedMedia?.type === 'video' && isPlaying) {
-                  player.pause();
-                }
-                setCapturedMedia(null);
-              }}
-              style={styles.button}
-            >
-              Clear Media
-            </Button>
-          )}
         </View>
       </View>
     </SafeAreaView>
