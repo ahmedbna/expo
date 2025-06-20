@@ -45,7 +45,10 @@ import ActionSheetExample from './action-sheet-examples';
 import { AlertExamples } from './alert-example';
 import { AudioExample } from './audio-example';
 import { CarouselTestComponent } from './carousel-examples';
+import { ColorPickerDemo } from './color-picker-demo';
 import { ComboboxExamples } from './combobox-example';
+import { FilePickerDemo } from './file-picker-demo';
+import { FilePickerHook } from './file-picker-hook-demo';
 import { InputOTPExamples } from './otp-examples';
 import { PickerExamples } from './picker-examples';
 import { PopoverExamples } from './popover-example';
@@ -138,6 +141,14 @@ export const Test = () => {
               { label: 'Option 3', value: 'option3' },
             ]}
           />
+
+          <ColorPickerDemo />
+
+          <FilePickerHook />
+
+          <FilePickerDemo />
+
+          {/* <MediaPickerDemo /> */}
 
           {/* // Basic usage */}
           <SearchBar

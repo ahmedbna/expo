@@ -5,9 +5,7 @@ Expo React Native CLI UI Library
 ## TODO
 
 - Image, Video Picker
-- Expo DocumentPicker
 - Form with zod
-- Color Picker
 - Mansory Grid
 - Onboarding
 - Spotlight
@@ -20,7 +18,6 @@ Expo React Native CLI UI Library
 
 - Toast swipe crash
 - Sortable
-- Video
 
 ## Get started
 
