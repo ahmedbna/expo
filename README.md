@@ -7,7 +7,6 @@ Expo React Native CLI UI Library
 - Image, Video Picker
 - Expo DocumentPicker
 - Form with zod
-- Charts
 - Color Picker
 - Mansory Grid
 - Onboarding
