@@ -9,6 +9,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { Colors } from '@/theme/colors';
 import {
   ChartCandlestick,
+  HeartHandshakeIcon,
   Home,
   LucideSquareDashedMousePointer,
 } from 'lucide-react-native';
@@ -43,6 +44,16 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
+        name='welcome'
+        options={{
+          title: 'Welcome',
+          tabBarIcon: ({ color }) => (
+            <Icon IconComponent={HeartHandshakeIcon} size={24} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
         name='demo'
         options={{
           title: 'Demo',
@@ -55,6 +66,7 @@ export default function TabLayout() {
           ),
         }}
       />
+
       <Tabs.Screen
         name='charts'
         options={{

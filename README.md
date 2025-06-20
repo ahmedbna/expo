@@ -7,7 +7,6 @@ Expo React Native CLI UI Library
 - Image, Video Picker
 - Form with zod
 - Mansory Grid
-- Onboarding
 - Spotlight
 - Chat
 - AWS
