@@ -5,13 +5,10 @@ Expo React Native CLI UI Library
 ## TODO
 
 - Image, Video Picker
-- Form with zod
-- Mansory Grid
-- Spotlight
 - Chat
 - AWS
-- Gallary
 - Maps
+- Form with zod
 
 ## Bugs
 

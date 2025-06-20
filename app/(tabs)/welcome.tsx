@@ -1,5 +1,6 @@
-import { OnboardingDemo } from '@/components/onboarding-demo';
+import { GalleryDemo } from '@/components/gallery-demo';
 
 export default function WelcomeScreen() {
-  return <OnboardingDemo />;
+  return <GalleryDemo />;
+  // return <OnboardingDemo />;
 }
