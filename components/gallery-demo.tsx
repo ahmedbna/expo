@@ -116,23 +116,7 @@ export function GalleryDemo() {
           Basic Gallery (2 columns)
         </Text>
 
-        <Gallery items={sampleImages} columns={3} spacing={1} />
-      </View>
-
-      {/* Gallery with titles and descriptions */}
-      <View style={styles.section}>
-        <Text variant='title' style={styles.sectionTitle}>
-          With Titles & Descriptions
-        </Text>
-
-        <Gallery
-          items={sampleImages.slice(0, 3)}
-          columns={2}
-          aspectRatio={1.5}
-          showTitles
-          showDescriptions
-          spacing={16}
-        />
+        <Gallery items={sampleImages} columns={3} spacing={2} />
       </View>
 
       {/* Gallery with custom functionality */}
@@ -149,6 +133,22 @@ export function GalleryDemo() {
           enableShare
           onDownload={handleDownload}
           onShare={handleShare}
+          spacing={0}
+        />
+      </View>
+
+      {/* Gallery with titles and descriptions */}
+      <View style={styles.section}>
+        <Text variant='title' style={styles.sectionTitle}>
+          With Titles & Descriptions
+        </Text>
+
+        <Gallery
+          items={sampleImages}
+          columns={2}
+          aspectRatio={1.5}
+          showTitles
+          showDescriptions
           spacing={16}
         />
       </View>
@@ -160,7 +160,7 @@ export function GalleryDemo() {
         </Text>
 
         <Gallery
-          items={sampleImages.slice(0, 4)}
+          items={sampleImages}
           columns={2}
           aspectRatio={1}
           renderCustomOverlay={(item) => (
@@ -181,7 +181,7 @@ export function GalleryDemo() {
 
         <Gallery
           items={sampleImages}
-          columns={4}
+          columns={6}
           aspectRatio={1}
           spacing={4}
           enableZoom={false}
@@ -195,79 +195,12 @@ export function GalleryDemo() {
         </Text>
 
         <Gallery
-          items={sampleImages.slice(0, 4)}
-          columns={2}
-          spacing={8}
+          items={sampleImages}
+          columns={3}
+          spacing={6}
           aspectRatio={1}
           enableFullscreen={false}
         />
-      </View>
-
-      {/* Photo Grid */}
-      <View style={styles.section}>
-        <Text variant='title' style={styles.sectionTitle}>
-          Photo Grid
-        </Text>
-
-        <Gallery
-          items={sampleImages.slice(0, 6)}
-          columns={3}
-          spacing={2}
-          aspectRatio={1}
-          enableZoom
-          enableShare
-          onShare={async (item) => {
-            await Share.share({
-              message: `Check out this photo!`,
-              url: item.uri,
-            });
-          }}
-        />
-      </View>
-
-      {/* Portfolio Gallery */}
-      <View style={styles.section}>
-        <Text variant='title' style={styles.sectionTitle}>
-          Portfolio Gallery
-        </Text>
-
-        <Gallery
-          items={sampleImages.slice(0, 3)}
-          columns={1}
-          spacing={16}
-          aspectRatio={1.33}
-          showTitles
-          showDescriptions
-          enableFullscreen
-          enableZoom
-          enableShare
-          onShare={async (item) => {
-            await Share.share({
-              message: `${item.title}: ${item.description}`,
-              url: item.uri,
-            });
-          }}
-        />
-      </View>
-
-      {/* Masonry-style Gallery */}
-      <View style={styles.section}>
-        <Text variant='title' style={styles.sectionTitle}>
-          Masonry-style Layout
-        </Text>
-
-        {sampleImages.slice(0, 4).map((item, index) => (
-          <View key={item.id} style={styles.masonryItem}>
-            <Gallery
-              items={[item]}
-              columns={1}
-              spacing={0}
-              aspectRatio={aspectRatios[index % aspectRatios.length]}
-              showTitles
-              enableFullscreen
-            />
-          </View>
-        ))}
       </View>
 
       {/* Empty state demo */}

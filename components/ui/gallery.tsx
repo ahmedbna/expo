@@ -5,7 +5,7 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { BORDER_RADIUS } from '@/theme/globals';
 import { Image } from 'expo-image';
 import { Download, Share, X } from 'lucide-react-native';
-import { useCallback, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Dimensions,
   FlatList,
@@ -21,6 +21,7 @@ import {
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
 import Animated, {
+  runOnJS,
   useAnimatedStyle,
   useSharedValue,
   withSpring,
@@ -58,6 +59,267 @@ interface GalleryProps {
 
 const AnimatedImage = Animated.createAnimatedComponent(Image);
 
+// Improved zoom hook with better gesture handling
+interface UseImageZoomProps {
+  enableZoom: boolean;
+  onSetCanSwipe: (canSwipe: boolean) => void;
+  shouldReset?: boolean;
+}
+
+export const useImageZoom = ({
+  enableZoom,
+  onSetCanSwipe,
+  shouldReset = false,
+}: UseImageZoomProps) => {
+  const scale = useSharedValue(1);
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0);
+  const savedScale = useSharedValue(1);
+  const savedTranslateX = useSharedValue(0);
+  const savedTranslateY = useSharedValue(0);
+
+  const minScale = 0.8;
+  const maxScale = 4;
+
+  const resetZoom = useCallback(() => {
+    'worklet';
+    scale.value = withSpring(1, { damping: 20, stiffness: 300 });
+    translateX.value = withSpring(0, { damping: 20, stiffness: 300 });
+    translateY.value = withSpring(0, { damping: 20, stiffness: 300 });
+    savedScale.value = 1;
+    savedTranslateX.value = 0;
+    savedTranslateY.value = 0;
+    runOnJS(onSetCanSwipe)(true);
+  }, [
+    scale,
+    translateX,
+    translateY,
+    savedScale,
+    savedTranslateX,
+    savedTranslateY,
+    onSetCanSwipe,
+  ]);
+
+  // Reset zoom when shouldReset changes
+  useEffect(() => {
+    if (shouldReset) {
+      resetZoom();
+    }
+  }, [shouldReset, resetZoom]);
+
+  const constrainTranslation = useCallback(
+    (newScale: number, newTranslateX: number, newTranslateY: number) => {
+      'worklet';
+      const maxTranslateX = Math.max(
+        0,
+        (screenWidth * newScale - screenWidth) / 2
+      );
+      const maxTranslateY = Math.max(
+        0,
+        (screenHeight * newScale - screenHeight) / 2
+      );
+
+      const constrainedX = Math.max(
+        -maxTranslateX,
+        Math.min(maxTranslateX, newTranslateX)
+      );
+      const constrainedY = Math.max(
+        -maxTranslateY,
+        Math.min(maxTranslateY, newTranslateY)
+      );
+
+      return { x: constrainedX, y: constrainedY };
+    },
+    []
+  );
+
+  const doubleTapGesture = Gesture.Tap()
+    .numberOfTaps(2)
+    .onEnd((event) => {
+      if (!enableZoom) return;
+      ('worklet');
+
+      if (scale.value > 1.1) {
+        resetZoom();
+      } else {
+        const targetScale = 2.5;
+        const tapX = event.x - screenWidth / 2;
+        const tapY = event.y - screenHeight / 2;
+
+        const newTranslateX = (-tapX * (targetScale - 1)) / targetScale;
+        const newTranslateY = (-tapY * (targetScale - 1)) / targetScale;
+
+        const constrained = constrainTranslation(
+          targetScale,
+          newTranslateX,
+          newTranslateY
+        );
+
+        scale.value = withSpring(targetScale, { damping: 20, stiffness: 300 });
+        translateX.value = withSpring(constrained.x, {
+          damping: 20,
+          stiffness: 300,
+        });
+        translateY.value = withSpring(constrained.y, {
+          damping: 20,
+          stiffness: 300,
+        });
+
+        savedScale.value = targetScale;
+        savedTranslateX.value = constrained.x;
+        savedTranslateY.value = constrained.y;
+
+        runOnJS(onSetCanSwipe)(false);
+      }
+    });
+
+  const pinchGesture = Gesture.Pinch()
+    .onStart(() => {
+      if (!enableZoom) return;
+      ('worklet');
+      savedScale.value = scale.value;
+      savedTranslateX.value = translateX.value;
+      savedTranslateY.value = translateY.value;
+    })
+    .onUpdate((event) => {
+      if (!enableZoom) return;
+      ('worklet');
+
+      const newScale = Math.max(
+        minScale,
+        Math.min(maxScale, savedScale.value * event.scale)
+      );
+
+      // Calculate focal point relative to the image center
+      const focalX = event.focalX - screenWidth / 2;
+      const focalY = event.focalY - screenHeight / 2;
+
+      // Calculate new translation to keep focal point in place
+      const scaleDiff = newScale / savedScale.value;
+      const newTranslateX = savedTranslateX.value + focalX * (1 - scaleDiff);
+      const newTranslateY = savedTranslateY.value + focalY * (1 - scaleDiff);
+
+      const constrained = constrainTranslation(
+        newScale,
+        newTranslateX,
+        newTranslateY
+      );
+
+      scale.value = newScale;
+      translateX.value = constrained.x;
+      translateY.value = constrained.y;
+    })
+    .onEnd(() => {
+      if (!enableZoom) return;
+      ('worklet');
+
+      if (scale.value < 1) {
+        resetZoom();
+      } else {
+        savedScale.value = scale.value;
+        savedTranslateX.value = translateX.value;
+        savedTranslateY.value = translateY.value;
+        runOnJS(onSetCanSwipe)(scale.value <= 1.1);
+      }
+    });
+
+  const panGesture = Gesture.Pan()
+    .minPointers(1)
+    .maxPointers(1)
+    .onStart(() => {
+      'worklet';
+      savedTranslateX.value = translateX.value;
+      savedTranslateY.value = translateY.value;
+    })
+    .onUpdate((event) => {
+      if (!enableZoom || scale.value <= 1.1) return;
+      ('worklet');
+
+      const newTranslateX = savedTranslateX.value + event.translationX;
+      const newTranslateY = savedTranslateY.value + event.translationY;
+
+      const constrained = constrainTranslation(
+        scale.value,
+        newTranslateX,
+        newTranslateY
+      );
+
+      translateX.value = constrained.x;
+      translateY.value = constrained.y;
+    })
+    .onEnd(() => {
+      'worklet';
+      if (scale.value > 1.1) {
+        savedTranslateX.value = translateX.value;
+        savedTranslateY.value = translateY.value;
+      }
+    });
+
+  const composedGesture = Gesture.Race(
+    doubleTapGesture,
+    Gesture.Simultaneous(pinchGesture, panGesture)
+  );
+
+  const animatedImageStyle = useAnimatedStyle(() => {
+    return {
+      transform: [
+        { scale: scale.value },
+        { translateX: translateX.value },
+        { translateY: translateY.value },
+      ],
+    };
+  });
+
+  return {
+    animatedImageStyle,
+    composedGesture,
+    resetZoom,
+    currentScale: scale,
+  };
+};
+
+// Fixed fullscreen image component
+interface FullscreenImageProps {
+  item: GalleryItem;
+  index: number;
+  selectedIndex: number;
+  enableZoom: boolean;
+  onSetCanSwipe: (canSwipe: boolean) => void;
+}
+
+const FullscreenImage = memo(
+  ({
+    item,
+    index,
+    selectedIndex,
+    enableZoom,
+    onSetCanSwipe,
+  }: FullscreenImageProps) => {
+    // Only reset zoom when this image becomes the selected one
+    const shouldReset = index === selectedIndex;
+
+    const { animatedImageStyle, composedGesture } = useImageZoom({
+      enableZoom,
+      onSetCanSwipe,
+      shouldReset,
+    });
+
+    return (
+      <View style={styles.fullscreenSlide}>
+        <GestureDetector gesture={composedGesture}>
+          <Animated.View style={styles.imageContainer}>
+            <AnimatedImage
+              source={{ uri: item.uri }}
+              style={[styles.fullscreenImage, animatedImageStyle]}
+              contentFit='contain'
+            />
+          </Animated.View>
+        </GestureDetector>
+      </View>
+    );
+  }
+);
+
 export function Gallery({
   items,
   columns = 4,
@@ -79,49 +341,29 @@ export function Gallery({
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [containerWidth, setContainerWidth] = useState(screenWidth);
+  const [flatListScrollEnabled, setFlatListScrollEnabled] = useState(true);
 
   const fullscreenFlatListRef = useRef<FlatList>(null);
   const thumbnailFlatListRef = useRef<FlatList>(null);
 
+  // Theme colors
   const textColor = useThemeColor({}, 'text');
   const primary = useThemeColor({}, 'primary');
   const mutedColor = useThemeColor({}, 'textMuted');
   const backgroundColor = useThemeColor({}, 'background');
   const secondary = useThemeColor({}, 'secondary');
 
-  const scale = useSharedValue(1);
-  const translateX = useSharedValue(0);
-  const translateY = useSharedValue(0);
-  const savedScale = useSharedValue(1);
-  const savedTranslateX = useSharedValue(0);
-  const savedTranslateY = useSharedValue(0);
-
   // Calculate item width based on container width
   const itemWidth = (containerWidth - spacing * (columns - 1)) / columns;
-
-  const resetZoom = useCallback(() => {
-    scale.value = 1;
-    translateX.value = 0;
-    translateY.value = 0;
-    savedScale.value = 1;
-    savedTranslateX.value = 0;
-    savedTranslateY.value = 0;
-  }, [
-    scale,
-    translateX,
-    translateY,
-    savedScale,
-    savedTranslateX,
-    savedTranslateY,
-  ]);
 
   const openFullscreen = useCallback(
     (index: number) => {
       if (!enableFullscreen) return;
       setSelectedIndex(index);
       setIsModalVisible(true);
-      resetZoom();
-      // Scroll to selected item after modal opens
+      setFlatListScrollEnabled(true);
+
+      // Use setTimeout to ensure the modal is rendered and the FlatList is ready
       setTimeout(() => {
         fullscreenFlatListRef.current?.scrollToIndex({
           index,
@@ -129,17 +371,18 @@ export function Gallery({
         });
         thumbnailFlatListRef.current?.scrollToIndex({
           index,
-          animated: true,
+          animated: false,
           viewPosition: 0.5,
         });
       }, 100);
     },
-    [enableFullscreen, resetZoom]
+    [enableFullscreen]
   );
 
   const closeFullscreen = useCallback(() => {
     setIsModalVisible(false);
     setSelectedIndex(-1);
+    setFlatListScrollEnabled(true);
   }, []);
 
   const handleItemPress = useCallback(
@@ -153,49 +396,49 @@ export function Gallery({
     [onItemPress, enableFullscreen, openFullscreen]
   );
 
-  const handleThumbnailPress = useCallback(
-    (index: number) => {
-      setSelectedIndex(index);
-      fullscreenFlatListRef.current?.scrollToIndex({
-        index,
-        animated: true,
-      });
-      resetZoom();
-    },
-    [resetZoom]
-  );
+  const handleThumbnailPress = useCallback((index: number) => {
+    setSelectedIndex(index);
+    setFlatListScrollEnabled(true);
+    fullscreenFlatListRef.current?.scrollToIndex({
+      index,
+      animated: true,
+    });
+  }, []);
 
   const onViewableItemsChanged = useCallback(
     ({ viewableItems }: any) => {
       if (viewableItems.length > 0) {
         const newIndex = viewableItems[0].index;
-        if (newIndex !== selectedIndex) {
+        if (
+          newIndex !== selectedIndex &&
+          newIndex !== null &&
+          newIndex !== undefined
+        ) {
           setSelectedIndex(newIndex);
-          // Auto-scroll thumbnail to center
-          thumbnailFlatListRef.current?.scrollToIndex({
-            index: newIndex,
-            animated: true,
-            viewPosition: 0.5,
-          });
-          resetZoom();
+          // Sync thumbnail scroll
+          setTimeout(() => {
+            thumbnailFlatListRef.current?.scrollToIndex({
+              index: newIndex,
+              animated: true,
+              viewPosition: 0.5,
+            });
+          }, 100);
         }
       }
     },
-    [resetZoom, selectedIndex]
+    [selectedIndex]
   );
 
   const viewabilityConfig = {
     itemVisiblePercentThreshold: 50,
   };
 
-  // Get current item being viewed
   const getCurrentItem = useCallback(() => {
     return selectedIndex >= 0 && selectedIndex < items.length
       ? items[selectedIndex]
       : null;
   }, [selectedIndex, items]);
 
-  // Handle download for current item
   const handleDownload = useCallback(() => {
     const currentItem = getCurrentItem();
     if (currentItem && onDownload) {
@@ -203,7 +446,6 @@ export function Gallery({
     }
   }, [getCurrentItem, onDownload]);
 
-  // Handle share for current item
   const handleShare = useCallback(() => {
     const currentItem = getCurrentItem();
     if (currentItem && onShare) {
@@ -211,145 +453,84 @@ export function Gallery({
     }
   }, [getCurrentItem, onShare]);
 
-  // Pinch gesture for zooming
-  const pinchGesture = Gesture.Pinch()
-    .onStart(() => {
-      savedScale.value = scale.value;
-    })
-    .onUpdate((event) => {
-      if (!enableZoom) return;
-      scale.value = Math.max(0.5, Math.min(savedScale.value * event.scale, 4));
-    })
-    .onEnd(() => {
-      if (scale.value < 1) {
-        scale.value = withSpring(1);
-        translateX.value = withSpring(0);
-        translateY.value = withSpring(0);
-        savedTranslateX.value = 0;
-        savedTranslateY.value = 0;
-      }
-      savedScale.value = scale.value;
-    });
+  const renderGalleryItem = useCallback(
+    ({ item, index }: { item: GalleryItem; index: number }) => (
+      <Pressable
+        key={item.id}
+        style={[
+          {
+            width: itemWidth,
+            height: itemWidth * aspectRatio,
+            borderRadius,
+          },
+        ]}
+        onPress={() => handleItemPress(item, index)}
+      >
+        <Image
+          source={{ uri: item.thumbnail || item.uri }}
+          style={[styles.gridImage, { borderRadius }]}
+          contentFit='cover'
+          transition={200}
+        />
 
-  // Pan gesture for moving when zoomed
-  const panGesture = Gesture.Pan()
-    .onStart(() => {
-      savedTranslateX.value = translateX.value;
-      savedTranslateY.value = translateY.value;
-    })
-    .onUpdate((event) => {
-      if (scale.value > 1) {
-        const maxTranslateX = (scale.value - 1) * (screenWidth / 2);
-        const maxTranslateY = (scale.value - 1) * (screenHeight / 2);
+        {renderCustomOverlay && renderCustomOverlay(item, index)}
 
-        translateX.value = Math.max(
-          -maxTranslateX,
-          Math.min(maxTranslateX, savedTranslateX.value + event.translationX)
-        );
-        translateY.value = Math.max(
-          -maxTranslateY,
-          Math.min(maxTranslateY, savedTranslateY.value + event.translationY)
-        );
-      }
-    })
-    .onEnd(() => {
-      savedTranslateX.value = translateX.value;
-      savedTranslateY.value = translateY.value;
-    })
-    // Only allow pan when zoomed in to prevent interference with horizontal swipe
-    .enabled(scale.value > 1);
-
-  // Combine gestures - prioritize pinch over pan
-  const composedGesture = Gesture.Race(pinchGesture, panGesture);
-
-  const animatedImageStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        { scale: scale.value },
-        { translateX: translateX.value },
-        { translateY: translateY.value },
-      ],
-    };
-  });
-
-  const renderGalleryItem = ({
-    item,
-    index,
-  }: {
-    item: GalleryItem;
-    index: number;
-  }) => (
-    <Pressable
-      key={item.id}
-      style={[
-        {
-          width: itemWidth,
-          height: itemWidth * aspectRatio,
-          borderRadius,
-        },
-      ]}
-      onPress={() => handleItemPress(item, index)}
-    >
-      <Image
-        source={{ uri: item.thumbnail || item.uri }}
-        style={[styles.gridImage, { borderRadius }]}
-        contentFit='cover'
-        transition={200}
-      />
-
-      {renderCustomOverlay && renderCustomOverlay(item, index)}
-
-      {(showTitles || showDescriptions) && (
-        <View style={[styles.itemInfo]}>
-          {showTitles && item.title && (
-            <Text
-              variant='subtitle'
-              numberOfLines={1}
-              style={{ color: textColor }}
-            >
-              {item.title}
-            </Text>
-          )}
-          {showDescriptions && item.description && (
-            <Text
-              variant='caption'
-              numberOfLines={2}
-              style={{ color: mutedColor }}
-            >
-              {item.description}
-            </Text>
-          )}
-        </View>
-      )}
-    </Pressable>
+        {(showTitles || showDescriptions) && (
+          <View style={[styles.itemInfo]}>
+            {showTitles && item.title && (
+              <Text
+                variant='subtitle'
+                numberOfLines={1}
+                style={{ color: textColor }}
+              >
+                {item.title}
+              </Text>
+            )}
+            {showDescriptions && item.description && (
+              <Text
+                variant='caption'
+                numberOfLines={2}
+                style={{ color: mutedColor }}
+              >
+                {item.description}
+              </Text>
+            )}
+          </View>
+        )}
+      </Pressable>
+    ),
+    [
+      itemWidth,
+      aspectRatio,
+      borderRadius,
+      handleItemPress,
+      renderCustomOverlay,
+      showTitles,
+      showDescriptions,
+      textColor,
+      mutedColor,
+    ]
   );
 
-  const renderFullscreenItem = ({
-    item,
-    index,
-  }: {
-    item: GalleryItem;
-    index: number;
-  }) => (
-    <View style={styles.fullscreenSlide}>
-      <GestureDetector gesture={composedGesture}>
-        <Animated.View style={styles.imageContainer}>
-          <AnimatedImage
-            source={{ uri: item.uri }}
-            style={[styles.fullscreenImage, animatedImageStyle]}
-            contentFit='contain'
-          />
-        </Animated.View>
-      </GestureDetector>
-    </View>
+  const renderFullscreenItem = useCallback(
+    ({ item, index }: { item: GalleryItem; index: number }) => (
+      <FullscreenImage
+        key={`fullscreen-${item.id}`}
+        item={item}
+        index={index}
+        selectedIndex={selectedIndex}
+        enableZoom={enableZoom}
+        onSetCanSwipe={setFlatListScrollEnabled}
+      />
+    ),
+    [enableZoom, selectedIndex]
   );
 
   const renderFullscreenControls = () => {
     const currentItem = getCurrentItem();
 
     return (
-      <View style={styles.fullscreenControls}>
-        {/* Top controls */}
+      <View style={styles.fullscreenControls} pointerEvents='box-none'>
         <View style={[styles.topControls, { backgroundColor }]}>
           <View style={styles.topRightControls}>
             {enableDownload && onDownload && (
@@ -369,10 +550,7 @@ export function Gallery({
           </Button>
         </View>
 
-        {/* Bottom thumbnail slider */}
         <View style={[styles.bottomControls, { backgroundColor }]}>
-          {/* Counter */}
-
           {showPages && (
             <Text
               variant='caption'
@@ -437,8 +615,8 @@ export function Gallery({
             contentContainerStyle={styles.thumbnailContainer}
             ItemSeparatorComponent={() => <View style={{ width: 8 }} />}
             getItemLayout={(data, index) => ({
-              length: 48, // thumbnail width + separator
-              offset: 56 * index, // thumbnail width + separator
+              length: 48,
+              offset: 56 * index,
               index,
             })}
           />
@@ -471,14 +649,13 @@ export function Gallery({
         {items.map((item, index) => renderGalleryItem({ item, index }))}
       </ScrollView>
 
-      {/* Fullscreen Modal */}
       <Modal
         visible={isModalVisible}
         transparent
         animationType='fade'
         onRequestClose={closeFullscreen}
       >
-        <View style={{ flex: 1, backgroundColor }}>
+        <View style={{ flex: 1, backgroundColor: 'black' }}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <FlatList
               ref={fullscreenFlatListRef}
@@ -495,14 +672,13 @@ export function Gallery({
                 offset: screenWidth * index,
                 index,
               })}
-              // Ensure smooth scrolling
-              decelerationRate='fast'
-              snapToInterval={screenWidth}
-              snapToAlignment='start'
-              disableIntervalMomentum={true}
+              scrollEnabled={flatListScrollEnabled}
+              removeClippedSubviews={false}
+              initialNumToRender={3}
+              maxToRenderPerBatch={3}
+              windowSize={21}
             />
           </GestureHandlerRootView>
-
           {renderFullscreenControls()}
         </View>
       </Modal>
@@ -537,6 +713,7 @@ const styles = StyleSheet.create({
     height: screenHeight,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'black',
   },
   imageContainer: {
     flex: 1,
