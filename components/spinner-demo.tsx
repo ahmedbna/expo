@@ -42,7 +42,7 @@ export function SpinnerDemo() {
             Done
           </Button>
 
-          <Button icon={Home} variant='confirm'>
+          <Button icon={Home} variant='confirm' animation={false}>
             Done
           </Button>
 

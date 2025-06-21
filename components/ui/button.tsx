@@ -1,5 +1,3 @@
-// components/ui/button.tsx
-
 import { Icon } from '@/components/ui/icon';
 import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
@@ -8,12 +6,18 @@ import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
 import {
+  Pressable,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
   View,
   ViewStyle,
 } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withSpring,
+} from 'react-native-reanimated';
 
 export type ButtonVariant =
   | 'default'
@@ -27,6 +31,7 @@ export type ButtonVariant =
 export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   label?: string;
   children: React.ReactNode;
+  animation?: boolean;
   icon?: React.ComponentType<LucideProps>;
   onPress?: () => void;
   variant?: ButtonVariant;
@@ -48,6 +53,7 @@ export const Button = forwardRef<View, ButtonProps>(
       size = 'default',
       disabled = false,
       loading = false,
+      animation = true,
       loadingVariant = 'default',
       style,
       textStyle,
@@ -66,6 +72,10 @@ export const Button = forwardRef<View, ButtonProps>(
     );
     const greenColor = useThemeColor({}, 'green');
     const borderColor = useThemeColor({}, 'border');
+
+    // Animation values for liquid glass effect
+    const scale = useSharedValue(1);
+    const brightness = useSharedValue(1);
 
     const getButtonStyle = (): ViewStyle => {
       const baseStyle: ViewStyle = {
@@ -184,12 +194,95 @@ export const Button = forwardRef<View, ButtonProps>(
       }
     };
 
+    // Improved animation handlers for liquid glass effect
+    const handlePressIn = () => {
+      'worklet';
+      // Scale up with bouncy spring animation
+      scale.value = withSpring(1.04, {
+        damping: 15,
+        stiffness: 400,
+        mass: 0.5,
+      });
+
+      // Slight brightness increase for glass effect
+      brightness.value = withSpring(1.1, {
+        damping: 20,
+        stiffness: 300,
+      });
+    };
+
+    const handlePressOut = () => {
+      'worklet';
+      // Return to original size with smooth spring
+      scale.value = withSpring(1, {
+        damping: 20,
+        stiffness: 400,
+        mass: 0.8,
+        overshootClamping: false,
+      });
+
+      // Return brightness to normal
+      brightness.value = withSpring(1, {
+        damping: 20,
+        stiffness: 300,
+      });
+    };
+
+    // Handle actual press action
+    const handlePress = () => {
+      if (onPress && !disabled && !loading) {
+        onPress();
+      }
+    };
+
+    // Animated styles using useAnimatedStyle
+    const animatedStyle = useAnimatedStyle(() => {
+      return {
+        transform: [{ scale: scale.value }],
+        opacity: brightness.value * (disabled ? 0.5 : 1),
+      };
+    });
+
     const buttonStyle = getButtonStyle();
     const finalTextStyle = getButtonTextStyle();
     const contentColor = getColor();
     const iconSize = getIconSize();
 
-    return (
+    return animation ? (
+      <Pressable
+        ref={ref}
+        onPress={handlePress}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        disabled={disabled || loading}
+        {...props}
+      >
+        <Animated.View style={[buttonStyle, animatedStyle, style]}>
+          {loading ? (
+            <ButtonSpinner
+              size={size}
+              variant={loadingVariant}
+              color={contentColor}
+            />
+          ) : typeof children === 'string' ? (
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}
+            >
+              {icon && (
+                <Icon
+                  IconComponent={icon}
+                  color={contentColor}
+                  size={iconSize}
+                />
+              )}
+              <Text style={[finalTextStyle, textStyle]}>{children}</Text>
+            </View>
+          ) : (
+            children
+          )}
+        </Animated.View>
+      </Pressable>
+    ) : (
       <TouchableOpacity
         ref={ref}
         style={[buttonStyle, disabled && { opacity: 0.5 }, style]}
