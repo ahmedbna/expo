@@ -6,6 +6,8 @@ import { ParallaxScrollView } from '@/components/ui/parallax-scrollview';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 
+import { MediaPickerDemo } from '@/components/media-picker-demo';
+import { SpinnerDemo } from '@/components/spinner-demo';
 import { Collapsible } from '@/components/ui/collapsible';
 import { Link } from '@/components/ui/link';
 
@@ -24,6 +26,11 @@ export default function HomeScreen() {
         <Text>Welcome!</Text>
         <HelloWave />
       </View>
+
+      <SpinnerDemo />
+
+      <MediaPickerDemo />
+
       <View style={styles.stepContainer}>
         <Text>Step 1: Try it</Text>
         <Text>

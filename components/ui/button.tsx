@@ -1,10 +1,13 @@
 // components/ui/button.tsx
+
+import { Icon } from '@/components/ui/icon';
+import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
 import {
-  ActivityIndicator,
   TextStyle,
   TouchableOpacity,
   TouchableOpacityProps,
@@ -21,16 +24,16 @@ export type ButtonVariant =
   | 'ghost'
   | 'link';
 
-type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
-
 export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   label?: string;
   children: React.ReactNode;
+  icon?: React.ComponentType<LucideProps>;
   onPress?: () => void;
   variant?: ButtonVariant;
-  size?: ButtonSize;
+  size?: 'default' | 'sm' | 'lg' | 'icon';
   disabled?: boolean;
   loading?: boolean;
+  loadingVariant?: SpinnerVariant;
   style?: ViewStyle | ViewStyle[];
   textStyle?: TextStyle;
 }
@@ -39,11 +42,13 @@ export const Button = forwardRef<View, ButtonProps>(
   (
     {
       children,
+      icon,
       onPress,
       variant = 'default',
       size = 'default',
       disabled = false,
       loading = false,
+      loadingVariant = 'default',
       style,
       textStyle,
       ...props
@@ -146,8 +151,43 @@ export const Button = forwardRef<View, ButtonProps>(
       }
     };
 
+    const getColor = (): string => {
+      switch (variant) {
+        case 'destructive':
+          return destructiveForegroundColor;
+        case 'confirm':
+          return destructiveForegroundColor;
+        case 'outline':
+          return primaryColor;
+        case 'secondary':
+          return secondaryForegroundColor;
+        case 'ghost':
+          return primaryColor;
+        case 'link':
+          return primaryColor;
+        default:
+          return primaryForegroundColor;
+      }
+    };
+
+    // Helper function to get icon size based on button size
+    const getIconSize = (): number => {
+      switch (size) {
+        case 'sm':
+          return 16;
+        case 'lg':
+          return 24;
+        case 'icon':
+          return 20;
+        default:
+          return 18;
+      }
+    };
+
     const buttonStyle = getButtonStyle();
     const finalTextStyle = getButtonTextStyle();
+    const contentColor = getColor();
+    const iconSize = getIconSize();
 
     return (
       <TouchableOpacity
@@ -158,19 +198,19 @@ export const Button = forwardRef<View, ButtonProps>(
         activeOpacity={0.8}
         {...props}
       >
-        {loading && (
-          <ActivityIndicator
-            size='small'
-            color={
-              variant === 'outline' || variant === 'ghost'
-                ? primaryColor
-                : primaryForegroundColor
-            }
-            style={{ marginRight: 8 }}
+        {loading ? (
+          <ButtonSpinner
+            size={size}
+            variant={loadingVariant}
+            color={contentColor}
           />
-        )}
-        {typeof children === 'string' ? (
-          <Text style={[finalTextStyle, textStyle]}>{children}</Text>
+        ) : typeof children === 'string' ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
+            {icon && (
+              <Icon IconComponent={icon} color={contentColor} size={iconSize} />
+            )}
+            <Text style={[finalTextStyle, textStyle]}>{children}</Text>
+          </View>
         ) : (
           children
         )}
