@@ -11,45 +11,51 @@ import { Alert, ScrollView, Share, StyleSheet, View } from 'react-native';
 const sampleImages: GalleryItem[] = [
   {
     id: '1',
-    uri: 'https://picsum.photos/800/600?random=1',
-    title: 'Beautiful Landscape',
-    description: 'A stunning view of mountains and valleys',
-    thumbnail: 'https://picsum.photos/400/300?random=1',
+    uri: 'https://images.unsplash.com/photo-1637858868799-7f26a0640eb6?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'City Skyline',
+    description: 'Modern architecture at sunset',
+    thumbnail:
+      'https://images.unsplash.com/photo-1637858868799-7f26a0640eb6?q=80&w=2960&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     id: '2',
-    uri: 'https://picsum.photos/800/600?random=2',
-    title: 'City Skyline',
-    description: 'Modern architecture at sunset',
-    thumbnail: 'https://picsum.photos/400/300?random=2',
+    uri: 'https://images.unsplash.com/photo-1644190022446-04b99df7259a?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'Winter Wonderland',
+    description: 'Snow-covered peaks and pristine wilderness',
+    thumbnail:
+      'https://images.unsplash.com/photo-1644190022446-04b99df7259a?q=80&w=2012&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     id: '3',
-    uri: 'https://picsum.photos/800/600?random=3',
+    uri: 'https://images.unsplash.com/photo-1717732596477-04f8c5d53387?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     title: 'Ocean Waves',
     description: 'Peaceful ocean scene with rolling waves',
-    thumbnail: 'https://picsum.photos/400/300?random=3',
+    thumbnail:
+      'https://images.unsplash.com/photo-1717732596477-04f8c5d53387?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     id: '4',
-    uri: 'https://picsum.photos/800/600?random=4',
+    uri: 'https://images.unsplash.com/photo-1575737698350-52e966f924d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     title: 'Forest Path',
     description: 'A winding path through ancient trees',
-    thumbnail: 'https://picsum.photos/400/300?random=4',
+    thumbnail:
+      'https://images.unsplash.com/photo-1575737698350-52e966f924d4?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     id: '5',
-    uri: 'https://picsum.photos/800/600?random=5',
+    uri: 'https://images.unsplash.com/photo-1667830867718-da7f5a45d20d?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     title: 'Desert Dunes',
     description: 'Golden sand dunes stretching to the horizon',
-    thumbnail: 'https://picsum.photos/400/300?random=5',
+    thumbnail:
+      'https://images.unsplash.com/photo-1667830867718-da7f5a45d20d?q=80&w=1064&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
   {
     id: '6',
-    uri: 'https://picsum.photos/800/600?random=6',
-    title: 'Winter Wonderland',
-    description: 'Snow-covered peaks and pristine wilderness',
-    thumbnail: 'https://picsum.photos/400/300?random=6',
+    uri: 'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?q=80&w=2334&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+    title: 'Beautiful Landscape',
+    description: 'A stunning view of mountains and valleys',
+    thumbnail:
+      'https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?q=80&w=2334&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
   },
 ];
 
@@ -109,14 +115,8 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Basic Gallery (2 columns)
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 4)}
-            columns={2}
-            spacing={12}
-            aspectRatio={0.75}
-          />
-        </View>
+
+        <Gallery items={sampleImages} columns={3} spacing={1} />
       </View>
 
       {/* Gallery with titles and descriptions */}
@@ -124,16 +124,15 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           With Titles & Descriptions
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 3)}
-            columns={1}
-            aspectRatio={1.5}
-            showTitles
-            showDescriptions
-            spacing={16}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages.slice(0, 3)}
+          columns={2}
+          aspectRatio={1.5}
+          showTitles
+          showDescriptions
+          spacing={16}
+        />
       </View>
 
       {/* Gallery with custom functionality */}
@@ -141,19 +140,17 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           With Download & Share
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 6)}
-            columns={3}
-            aspectRatio={1}
-            enableDownload
-            enableShare
-            onDownload={handleDownload}
-            onShare={handleShare}
-            onItemPress={handleItemPress}
-            spacing={8}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages.slice(0, 6)}
+          columns={3}
+          aspectRatio={1}
+          enableDownload
+          enableShare
+          onDownload={handleDownload}
+          onShare={handleShare}
+          spacing={16}
+        />
       </View>
 
       {/* Gallery with custom overlay */}
@@ -161,20 +158,19 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           With Custom Overlay
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 4)}
-            columns={2}
-            aspectRatio={1}
-            renderCustomOverlay={(item, index) => (
-              <View style={styles.customOverlay}>
-                <Text variant='caption' style={styles.overlayText}>
-                  #{index + 1}
-                </Text>
-              </View>
-            )}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages.slice(0, 4)}
+          columns={2}
+          aspectRatio={1}
+          renderCustomOverlay={(item) => (
+            <View style={styles.customOverlay}>
+              <Text variant='caption' style={styles.overlayText}>
+                {item.title}
+              </Text>
+            </View>
+          )}
+        />
       </View>
 
       {/* Compact Gallery */}
@@ -182,15 +178,14 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Compact Grid (4 columns)
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages}
-            columns={4}
-            aspectRatio={1}
-            spacing={4}
-            enableZoom={false}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages}
+          columns={4}
+          aspectRatio={1}
+          spacing={4}
+          enableZoom={false}
+        />
       </View>
 
       {/* Minimal Gallery */}
@@ -198,15 +193,14 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Minimal Gallery (No Fullscreen)
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 4)}
-            columns={2}
-            spacing={8}
-            aspectRatio={1}
-            enableFullscreen={false}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages.slice(0, 4)}
+          columns={2}
+          spacing={8}
+          aspectRatio={1}
+          enableFullscreen={false}
+        />
       </View>
 
       {/* Photo Grid */}
@@ -214,22 +208,21 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Photo Grid
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 6)}
-            columns={3}
-            spacing={2}
-            aspectRatio={1}
-            enableZoom
-            enableShare
-            onShare={async (item) => {
-              await Share.share({
-                message: `Check out this photo!`,
-                url: item.uri,
-              });
-            }}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages.slice(0, 6)}
+          columns={3}
+          spacing={2}
+          aspectRatio={1}
+          enableZoom
+          enableShare
+          onShare={async (item) => {
+            await Share.share({
+              message: `Check out this photo!`,
+              url: item.uri,
+            });
+          }}
+        />
       </View>
 
       {/* Portfolio Gallery */}
@@ -237,25 +230,24 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Portfolio Gallery
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery
-            items={sampleImages.slice(0, 3)}
-            columns={1}
-            spacing={16}
-            aspectRatio={1.33}
-            showTitles
-            showDescriptions
-            enableFullscreen
-            enableZoom
-            enableShare
-            onShare={async (item) => {
-              await Share.share({
-                message: `${item.title}: ${item.description}`,
-                url: item.uri,
-              });
-            }}
-          />
-        </View>
+
+        <Gallery
+          items={sampleImages.slice(0, 3)}
+          columns={1}
+          spacing={16}
+          aspectRatio={1.33}
+          showTitles
+          showDescriptions
+          enableFullscreen
+          enableZoom
+          enableShare
+          onShare={async (item) => {
+            await Share.share({
+              message: `${item.title}: ${item.description}`,
+              url: item.uri,
+            });
+          }}
+        />
       </View>
 
       {/* Masonry-style Gallery */}
@@ -263,20 +255,19 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Masonry-style Layout
         </Text>
-        <View style={styles.masonryContainer}>
-          {sampleImages.slice(0, 4).map((item, index) => (
-            <View key={item.id} style={styles.masonryItem}>
-              <Gallery
-                items={[item]}
-                columns={1}
-                spacing={0}
-                aspectRatio={aspectRatios[index % aspectRatios.length]}
-                showTitles
-                enableFullscreen
-              />
-            </View>
-          ))}
-        </View>
+
+        {sampleImages.slice(0, 4).map((item, index) => (
+          <View key={item.id} style={styles.masonryItem}>
+            <Gallery
+              items={[item]}
+              columns={1}
+              spacing={0}
+              aspectRatio={aspectRatios[index % aspectRatios.length]}
+              showTitles
+              enableFullscreen
+            />
+          </View>
+        ))}
       </View>
 
       {/* Empty state demo */}
@@ -284,9 +275,8 @@ export function GalleryDemo() {
         <Text variant='title' style={styles.sectionTitle}>
           Empty Gallery
         </Text>
-        <View style={styles.galleryContainer}>
-          <Gallery items={[]} columns={2} spacing={8} aspectRatio={1} />
-        </View>
+
+        <Gallery items={[]} columns={2} spacing={8} aspectRatio={1} />
       </View>
 
       {/* Bottom spacing */}
@@ -301,6 +291,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 16,
+    paddingTop: 100,
     paddingBottom: 32,
   },
   title: {
@@ -314,32 +305,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingHorizontal: 4,
   },
-  galleryContainer: {
-    borderRadius: 12,
-    padding: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    // Fixed height to prevent layout issues
-    minHeight: 200,
-  },
-  masonryContainer: {
-    borderRadius: 12,
-    padding: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
+
   masonryItem: {
     marginBottom: 8,
   },
