@@ -346,7 +346,7 @@ const FullscreenImage = memo(
   }: FullscreenImageProps) => {
     // Determine if this image is the currently selected one to trigger zoom reset
     const shouldReset = index === selectedIndex;
-
+    const backgroundColor = useThemeColor({}, 'background');
     const { animatedImageStyle, composedGesture } = useImageZoom({
       enableZoom,
       onSetCanSwipe, // Pass the callback to the hook
@@ -354,7 +354,15 @@ const FullscreenImage = memo(
     });
 
     return (
-      <View style={styles.fullscreenSlide}>
+      <View
+        style={{
+          width: screenWidth,
+          height: screenHeight,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor,
+        }}
+      >
         {/* GestureDetector always present if zoom is enabled */}
         {enableZoom ? (
           <GestureDetector gesture={composedGesture}>
@@ -745,7 +753,7 @@ export function Gallery({
         animationType='fade'
         onRequestClose={closeFullscreen}
       >
-        <View style={{ flex: 1, backgroundColor: 'black' }}>
+        <View style={{ flex: 1, backgroundColor }}>
           {/* GestureHandlerRootView for gestures within the modal */}
           <GestureHandlerRootView style={{ flex: 1 }}>
             {/* FlatList for horizontal swiping of fullscreen images */}
@@ -801,13 +809,6 @@ const styles = StyleSheet.create({
     padding: 32,
     borderRadius: BORDER_RADIUS,
     margin: 16,
-  },
-  fullscreenSlide: {
-    width: screenWidth,
-    height: screenHeight,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
   },
   imageContainer: {
     flex: 1,
