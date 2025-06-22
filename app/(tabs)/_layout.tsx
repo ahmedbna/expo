@@ -12,6 +12,7 @@ import {
   HeartHandshakeIcon,
   Home,
   LucideSquareDashedMousePointer,
+  MapPlus,
 } from 'lucide-react-native';
 
 export default function TabLayout() {
@@ -39,6 +40,16 @@ export default function TabLayout() {
           title: 'Home',
           tabBarIcon: ({ color }) => (
             <Icon IconComponent={Home} size={24} color={color} />
+          ),
+        }}
+      />
+
+      <Tabs.Screen
+        name='maps'
+        options={{
+          title: 'Maps',
+          tabBarIcon: ({ color }) => (
+            <Icon IconComponent={MapPlus} size={24} color={color} />
           ),
         }}
       />

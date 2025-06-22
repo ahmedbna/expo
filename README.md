@@ -4,7 +4,6 @@ Expo React Native CLI UI Library
 
 ## TODO
 
-- Image, Video Picker
 - Chat
 - AWS
 - Maps
