@@ -28,6 +28,8 @@ export type ButtonVariant =
   | 'ghost'
   | 'link';
 
+export type ButtonSize = 'default' | 'sm' | 'lg' | 'icon';
+
 export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   label?: string;
   children: React.ReactNode;
@@ -35,7 +37,7 @@ export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   icon?: React.ComponentType<LucideProps>;
   onPress?: () => void;
   variant?: ButtonVariant;
-  size?: 'default' | 'sm' | 'lg' | 'icon';
+  size?: ButtonSize;
   disabled?: boolean;
   loading?: boolean;
   loadingVariant?: SpinnerVariant;
