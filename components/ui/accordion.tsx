@@ -1,4 +1,5 @@
 // components/ui/accordion.tsx
+
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
@@ -132,13 +133,12 @@ export function AccordionTrigger({ children }: AccordionTriggerProps) {
       onPress={context.toggle}
       activeOpacity={0.8}
     >
-      <Text variant='title'>{children}</Text>
+      <Text variant='subtitle'>{children}</Text>
       <Icon
         IconComponent={ChevronRight}
         size={18}
         style={{
           transform: [{ rotate: context.isOpen ? '90deg' : '0deg' }],
-          opacity: 0.7,
         }}
       />
     </TouchableOpacity>

@@ -56,8 +56,8 @@ export const Text = forwardRef<RNText, TextProps>(
         case 'subtitle':
           return {
             ...baseStyle,
-            fontSize: FONT_SIZE,
-            fontWeight: '500',
+            fontSize: 19,
+            fontWeight: '600',
           };
         case 'caption':
           return {
