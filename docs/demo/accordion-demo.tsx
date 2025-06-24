@@ -1,12 +1,12 @@
 // registry/examples/accordion-demo.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { AccordionControlled } from '@/examples/accordion/accordion-controlled';
-import { AccordionDemo } from '@/examples/accordion/accordion-demo';
-import { AccordionFAQ } from '@/examples/accordion/accordion-faq';
-import { AccordionMultiple } from '@/examples/accordion/accordion-multiple';
-import { AccordionNonCollapsible } from '@/examples/accordion/accordion-non-collapsible';
-import { AccordionStyled } from '@/examples/accordion/accordion-styled';
+import { AccordionControlled } from '@/docs/examples/accordion/accordion-controlled';
+import { AccordionDemo } from '@/docs/examples/accordion/accordion-demo';
+import { AccordionFAQ } from '@/docs/examples/accordion/accordion-faq';
+import { AccordionMultiple } from '@/docs/examples/accordion/accordion-multiple';
+import { AccordionNonCollapsible } from '@/docs/examples/accordion/accordion-non-collapsible';
+import { AccordionStyled } from '@/docs/examples/accordion/accordion-styled';
 import React from 'react';
 import { ScrollView } from 'react-native';
 
