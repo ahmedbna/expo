@@ -51,6 +51,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => (
             <Icon IconComponent={MapPlus} size={24} color={color} />
           ),
+          tabBarStyle: { display: 'none' }, // This line hides the tab bar for the 'maps' screen
         }}
       />
 

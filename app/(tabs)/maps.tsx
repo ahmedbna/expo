@@ -1,8 +1,10 @@
-import ActionSheetDemoScreen from '@/docs/demo/action-sheet-demo';
+import { View } from '@/components/ui/view';
+import { ActionSheetExammple } from '@/docs/demo/action-sheet-example';
 
 export default function MapsScreen() {
-  return <ActionSheetDemoScreen />;
-  // return <AccordionDemoScreen />;
-  // return <UberMap />;
-  // return <MapsDemo />;
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <ActionSheetExammple />
+    </View>
+  );
 }

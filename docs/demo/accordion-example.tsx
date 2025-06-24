@@ -11,7 +11,7 @@ import React from 'react';
 import { ScrollView } from 'react-native';
 
 // Main demo screen combining all examples
-export function AccordionDemoScreen() {
+export function AccordionExample() {
   return (
     <ScrollView
       style={{

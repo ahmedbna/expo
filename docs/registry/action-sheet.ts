@@ -1,16 +1,17 @@
-// Registry configuration for accordion component and examples
+// docs/registry/action-sheet.ts
+// Registry configuration for action sheet component and examples
 
-export const accordionRegistry = {
-  // Main accordion component
-  accordion: {
-    name: 'accordion',
+export const actionSheetRegistry = {
+  // Main action sheet component
+  'action-sheet': {
+    name: 'action-sheet',
     description:
-      'A vertically stacked set of interactive headings that each reveal a section of content.',
+      'A native-feeling action sheet component that provides a menu of options triggered from the bottom of the screen.',
     type: 'registry:ui',
-    registryDependencies: ['text', 'view', 'icon'],
+    registryDependencies: ['text', 'view'],
     files: [
       {
-        path: 'registry/components/ui/accordion.tsx',
+        path: 'registry/components/ui/action-sheet.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -23,14 +24,14 @@ export const accordionRegistry = {
   },
 
   // Default demo
-  'accordion-demo': {
-    name: 'accordion-demo',
-    description: 'A basic accordion with collapsible sections',
+  'action-sheet-demo': {
+    name: 'action-sheet-demo',
+    description: 'A basic action sheet with multiple options',
     type: 'registry:example',
-    registryDependencies: ['accordion'],
+    registryDependencies: ['action-sheet', 'button'],
     files: [
       {
-        path: 'registry/examples/accordion/accordion-demo.tsx',
+        path: 'registry/examples/action-sheet/action-sheet-demo.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -42,15 +43,15 @@ export const accordionRegistry = {
     },
   },
 
-  // Single selection example
-  'accordion-single': {
-    name: 'accordion-single',
-    description: 'An accordion that allows only one item to be open at a time',
+  // Icons example
+  'action-sheet-icons': {
+    name: 'action-sheet-icons',
+    description: 'An action sheet with icons next to each option',
     type: 'registry:example',
-    registryDependencies: ['accordion'],
+    registryDependencies: ['action-sheet', 'button', 'icon'],
     files: [
       {
-        path: 'registry/examples/accordion/accordion-single.tsx',
+        path: 'registry/examples/action-sheet/action-sheet-icons.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -62,16 +63,16 @@ export const accordionRegistry = {
     },
   },
 
-  // Multiple selection example
-  'accordion-multiple': {
-    name: 'accordion-multiple',
+  // Destructive example
+  'action-sheet-destructive': {
+    name: 'action-sheet-destructive',
     description:
-      'An accordion that allows multiple items to be open simultaneously',
+      'An action sheet featuring destructive actions with appropriate styling',
     type: 'registry:example',
-    registryDependencies: ['accordion'],
+    registryDependencies: ['action-sheet', 'button', 'icon'],
     files: [
       {
-        path: 'registry/examples/accordion/accordion-multiple.tsx',
+        path: 'registry/examples/action-sheet/action-sheet-destructive.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -83,56 +84,15 @@ export const accordionRegistry = {
     },
   },
 
-  // Controlled example
-  'accordion-controlled': {
-    name: 'accordion-controlled',
-    description: 'An accordion with controlled state management',
+  // Disabled example
+  'action-sheet-disabled': {
+    name: 'action-sheet-disabled',
+    description: 'An action sheet with some disabled options',
     type: 'registry:example',
-    registryDependencies: ['accordion'],
+    registryDependencies: ['action-sheet', 'button', 'icon'],
     files: [
       {
-        path: 'registry/examples/accordion/accordion-controlled.tsx',
-        type: 'registry:example',
-        target: '',
-      },
-    ],
-    preview: {
-      light:
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    },
-  },
-
-  // FAQ style example
-  'accordion-faq': {
-    name: 'accordion-faq',
-    description:
-      'An accordion formatted as a frequently asked questions section',
-    type: 'registry:example',
-    registryDependencies: ['accordion'],
-    files: [
-      {
-        path: 'registry/examples/accordion/accordion-faq.tsx',
-        type: 'registry:example',
-        target: '',
-      },
-    ],
-    preview: {
-      light:
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-      dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
-    },
-  },
-
-  // Non-collapsible example
-  'accordion-non-collapsible': {
-    name: 'accordion-non-collapsible',
-    description: 'An accordion where at least one item must always remain open',
-    type: 'registry:example',
-    registryDependencies: ['accordion'],
-    files: [
-      {
-        path: 'registry/examples/accordion/accordion-non-collapsible.tsx',
+        path: 'registry/examples/action-sheet/action-sheet-disabled.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -145,14 +105,54 @@ export const accordionRegistry = {
   },
 
   // Custom styled example
-  'accordion-styled': {
-    name: 'accordion-styled',
-    description: 'An accordion with custom styling and icons',
+  'action-sheet-styled': {
+    name: 'action-sheet-styled',
+    description: 'An action sheet with custom styling and branding',
     type: 'registry:example',
-    registryDependencies: ['accordion'],
+    registryDependencies: ['action-sheet', 'button', 'icon'],
     files: [
       {
-        path: 'registry/examples/accordion/accordion-styled.tsx',
+        path: 'registry/examples/action-sheet/action-sheet-styled.tsx',
+        type: 'registry:example',
+        target: '',
+      },
+    ],
+    preview: {
+      light:
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    },
+  },
+
+  // Long list example
+  'action-sheet-long': {
+    name: 'action-sheet-long',
+    description: 'An action sheet with many options that scrolls',
+    type: 'registry:example',
+    registryDependencies: ['action-sheet', 'button', 'icon'],
+    files: [
+      {
+        path: 'registry/examples/action-sheet/action-sheet-long.tsx',
+        type: 'registry:example',
+        target: '',
+      },
+    ],
+    preview: {
+      light:
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    },
+  },
+
+  // Hook usage example
+  'action-sheet-hook': {
+    name: 'action-sheet-hook',
+    description: 'Using the useActionSheet hook for easier management',
+    type: 'registry:example',
+    registryDependencies: ['action-sheet', 'button', 'view', 'icon'],
+    files: [
+      {
+        path: 'registry/examples/action-sheet/action-sheet-hook.tsx',
         type: 'registry:example',
         target: '',
       },
