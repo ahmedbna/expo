@@ -13,7 +13,7 @@ import { ActionSheetDestructive } from '@/docs/demo/action-sheet/action-sheet-de
 // Main demo screen combining all examples
 export function ActionSheetExammple() {
   return (
-    <View style={{ gap: 24 }}>
+    <View style={{ width: '100%', gap: 24 }}>
       {/* <View>
         <Text variant="title">Default</Text>
         <Text variant="caption" style={{ marginBottom: 16 }}>
