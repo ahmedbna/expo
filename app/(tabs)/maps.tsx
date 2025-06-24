@@ -1,5 +1,5 @@
 import { View } from '@/components/ui/view';
-import { ActionSheetExammple } from '@/docs/demo/action-sheet-example';
+import { ActionSheetExammple } from '@/docs/examples/action-sheet-example';
 
 export default function MapsScreen() {
   return (

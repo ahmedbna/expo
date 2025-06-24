@@ -3,7 +3,7 @@ import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 
 // import { ActionSheetDemo } from '@/docs/examples/action-sheet/action-sheet-demo';
-import { ActionSheetDestructive } from '@/docs/examples/action-sheet/action-sheet-destructive';
+import { ActionSheetDestructive } from '@/docs/demo/action-sheet/action-sheet-destructive';
 // import { ActionSheetDisabled } from '@/docs/examples/action-sheet/action-sheet-disabled';
 // import { ActionSheetHook } from '@/docs/examples/action-sheet/action-sheet-hook';
 // import { ActionSheetIcons } from '@/docs/examples/action-sheet/action-sheet-icons';
@@ -32,8 +32,8 @@ export function AlertExammple() {
       </View> */}
 
       <View>
-        <Text variant="title">Destructive Actions</Text>
-        <Text variant="caption" style={{ marginBottom: 16 }}>
+        <Text variant='title'>Destructive Actions</Text>
+        <Text variant='caption' style={{ marginBottom: 16 }}>
           Highlighting destructive actions with red styling
         </Text>
         <ActionSheetDestructive />
