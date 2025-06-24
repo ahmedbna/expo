@@ -1,6 +1,7 @@
-import { UberMap } from '@/components/uber-map';
+import { AccordionDemoScreen } from '@/components/ui/demo/accordion-demo';
 
 export default function MapsScreen() {
-  return <UberMap />;
+  return <AccordionDemoScreen />;
+  // return <UberMap />;
   // return <MapsDemo />;
 }
