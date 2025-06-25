@@ -53,6 +53,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  useCarousel,
 } from '@/components/ui/carousel';
 ```
 
@@ -189,6 +190,10 @@ const { currentIndex, goToSlide, goToNext, goToPrevious } =
   useCarousel(totalSlides);
 ```
 
+| Parameter     | Type     | Description             |
+| ------------- | -------- | ----------------------- |
+| `totalSlides` | `number` | Total number of slides. |
+
 | Return Value   | Type                      | Description                     |
 | -------------- | ------------------------- | ------------------------------- |
 | `currentIndex` | `number`                  | Current active slide index.     |
@@ -196,24 +201,85 @@ const { currentIndex, goToSlide, goToNext, goToPrevious } =
 | `goToNext`     | `() => void`              | Navigate to the next slide.     |
 | `goToPrevious` | `() => void`              | Navigate to the previous slide. |
 
+## Advanced Usage
+
+### External Control with useCarousel
+
+```tsx
+import { useCarousel } from '@/components/ui/carousel';
+
+function MyComponent() {
+  const { currentIndex, goToSlide, goToNext, goToPrevious } = useCarousel(5);
+
+  return (
+    <View>
+      <Button onPress={goToPrevious}>Previous</Button>
+      <Button onPress={goToNext}>Next</Button>
+      <Button onPress={() => goToSlide(2)}>Go to slide 3</Button>
+
+      <Carousel onIndexChange={goToSlide}>{/* Your carousel items */}</Carousel>
+    </View>
+  );
+}
+```
+
+### Custom Styling
+
+```tsx
+<Carousel
+  style={{
+    backgroundColor: '#f8f9fa',
+    borderRadius: 12,
+    overflow: 'hidden',
+  }}
+  showIndicators
+  showArrows
+>
+  <CarouselItem
+    style={{
+      backgroundColor: 'white',
+      margin: 8,
+      borderRadius: 8,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      elevation: 3,
+    }}
+  >
+    {/* Your content */}
+  </CarouselItem>
+</Carousel>
+```
+
 ## Features
 
 - **Auto-play**: Automatic slide progression with customizable intervals
-- **Touch Gestures**: Swipe to navigate between slides
-- **Indicators**: Dot indicators showing current position
-- **Navigation Arrows**: Optional left/right arrow controls
-- **Loop Mode**: Infinite scrolling capability
-- **Custom Layouts**: Support for custom item widths and spacing
+- **Touch Gestures**: Swipe to navigate between slides using react-native-gesture-handler
+- **Indicators**: Dot indicators showing current position with tap-to-navigate
+- **Navigation Arrows**: Optional left/right arrow controls with blur effects
+- **Loop Mode**: Infinite scrolling capability for seamless navigation
+- **Custom Layouts**: Support for custom item widths and spacing for multi-item views
 - **Responsive**: Adapts to container width automatically
-- **Smooth Animations**: Hardware-accelerated scrolling with momentum
-- **Accessibility**: Built-in accessibility support
+- **Smooth Animations**: Hardware-accelerated scrolling with momentum and spring physics
+- **External Control**: useCarousel hook for programmatic control
+- **Accessibility**: Built-in accessibility support with proper ARIA labels
 
 ## Accessibility
 
-The Carousel component includes several accessibility features:
+The Carousel component includes comprehensive accessibility features:
 
-- Screen reader support for navigation controls
-- Proper focus management for keyboard navigation
-- Semantic roles for carousel structure
-- Accessible indicators with proper labeling
-- Support for reduced motion preferences
+- **Screen Reader Support**: Proper announcements for navigation controls and slide changes
+- **Keyboard Navigation**: Full keyboard support for focus management and navigation
+- **Semantic Roles**: Appropriate ARIA roles for carousel structure and components
+- **Accessible Indicators**: Dot indicators with descriptive labels and touch targets
+- **Motion Preferences**: Respects user's reduced motion preferences
+- **Focus Management**: Logical focus order and visible focus indicators
+- **Alternative Text**: Support for image descriptions and content labels
+
+## Performance Tips
+
+- Use `itemWidth` prop for multi-item carousels to optimize rendering
+- Implement lazy loading for image carousels with many slides
+- Consider disabling auto-play for carousels with heavy content
+- Use `onIndexChange` callback to preload adjacent slides for smoother navigation
