@@ -13,7 +13,7 @@ export function AlertConfirmDemo() {
   };
 
   return (
-    <Button onPress={handleConfirmAlert} variant='confirm'>
+    <Button onPress={handleConfirmAlert} variant='success'>
       Show Confirm Alert
     </Button>
   );

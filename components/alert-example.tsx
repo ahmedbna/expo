@@ -131,7 +131,7 @@ export function AlertExamples() {
           Show Error Alert
         </Button>
 
-        <Button onPress={handleConfirmAlert} variant='confirm'>
+        <Button onPress={handleConfirmAlert} variant='success'>
           Show Confirm Alert
         </Button>
       </View>

@@ -38,11 +38,11 @@ export function SpinnerDemo() {
             Delete
           </Button>
 
-          <Button loading loadingVariant='cirlce' variant='confirm'>
+          <Button loading loadingVariant='cirlce' variant='success'>
             Done
           </Button>
 
-          <Button icon={Home} variant='confirm' animation={false}>
+          <Button icon={Home} variant='success' animation={false}>
             Done
           </Button>
 

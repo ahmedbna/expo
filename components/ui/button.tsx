@@ -22,7 +22,7 @@ import Animated, {
 export type ButtonVariant =
   | 'default'
   | 'destructive'
-  | 'confirm'
+  | 'success'
   | 'outline'
   | 'secondary'
   | 'ghost'
@@ -110,7 +110,7 @@ export const Button = forwardRef<View, ButtonProps>(
       switch (variant) {
         case 'destructive':
           return { ...baseStyle, backgroundColor: destructiveColor };
-        case 'confirm':
+        case 'success':
           return { ...baseStyle, backgroundColor: greenColor };
         case 'outline':
           return {
@@ -144,7 +144,7 @@ export const Button = forwardRef<View, ButtonProps>(
       switch (variant) {
         case 'destructive':
           return { ...baseTextStyle, color: destructiveForegroundColor };
-        case 'confirm':
+        case 'success':
           return { ...baseTextStyle, color: destructiveForegroundColor };
         case 'outline':
           return { ...baseTextStyle, color: primaryColor };
@@ -167,7 +167,7 @@ export const Button = forwardRef<View, ButtonProps>(
       switch (variant) {
         case 'destructive':
           return destructiveForegroundColor;
-        case 'confirm':
+        case 'success':
           return destructiveForegroundColor;
         case 'outline':
           return primaryColor;

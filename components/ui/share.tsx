@@ -168,7 +168,7 @@ export function ShareButton({
     switch (variant) {
       case 'destructive':
         return { ...baseTextStyle, color: destructiveForegroundColor };
-      case 'confirm':
+      case 'success':
         return { ...baseTextStyle, color: destructiveForegroundColor };
       case 'outline':
         return { ...baseTextStyle, color: primaryColor };

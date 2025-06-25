@@ -5,7 +5,12 @@ import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { TextStyle, ViewStyle } from 'react-native';
 
-type BadgeVariant = 'default' | 'secondary' | 'destructive' | 'outline';
+type BadgeVariant =
+  | 'default'
+  | 'secondary'
+  | 'destructive'
+  | 'outline'
+  | 'success';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -27,6 +32,7 @@ export function Badge({
   const destructiveColor = useThemeColor({}, 'destructive');
   const destructiveForegroundColor = useThemeColor({}, 'destructiveForeground');
   const borderColor = useThemeColor({}, 'border');
+  const successColor = useThemeColor({}, 'border');
 
   const getBadgeStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
@@ -40,6 +46,8 @@ export function Badge({
         return { ...baseStyle, backgroundColor: secondaryColor };
       case 'destructive':
         return { ...baseStyle, backgroundColor: destructiveColor };
+      case 'success':
+        return { ...baseStyle, backgroundColor: successColor };
       case 'outline':
         return {
           ...baseStyle,

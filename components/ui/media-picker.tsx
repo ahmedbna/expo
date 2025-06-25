@@ -413,7 +413,7 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
 
                   <Button
                     size='sm'
-                    variant='confirm'
+                    variant='success'
                     onPress={() => setIsGalleryVisible(false)}
                   >
                     Done
