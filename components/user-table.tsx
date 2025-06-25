@@ -1,6 +1,6 @@
-// Example usage and documentation for DataTable component
+// Example usage and documentation for Table component
 
-import { DataTable, DataTableColumn } from '@/components/ui/data-table';
+import { Table, TableColumn } from '@/components/ui/table';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import React from 'react';
@@ -83,7 +83,7 @@ const sampleProducts: Product[] = [
 
 // Example 1: Basic User Table
 export function BasicUserTable() {
-  const userColumns: DataTableColumn<User>[] = [
+  const userColumns: TableColumn<User>[] = [
     {
       id: 'name',
       header: 'Name',
@@ -180,7 +180,7 @@ export function BasicUserTable() {
   };
 
   return (
-    <DataTable
+    <Table
       data={sampleUsers}
       columns={userColumns}
       onRowPress={handleRowPress}
@@ -192,7 +192,7 @@ export function BasicUserTable() {
 
 // Example 2: Product Table with Custom Pagination
 export function ProductTable() {
-  const productColumns: DataTableColumn<Product>[] = [
+  const productColumns: TableColumn<Product>[] = [
     {
       id: 'id',
       header: 'ID',
@@ -271,7 +271,7 @@ export function ProductTable() {
   ];
 
   return (
-    <DataTable
+    <Table
       data={sampleProducts}
       columns={productColumns}
       pageSize={5}
@@ -283,7 +283,7 @@ export function ProductTable() {
 
 // Example 3: Minimal Table (No Search, No Pagination)
 export function MinimalTable() {
-  const columns: DataTableColumn[] = [
+  const columns: TableColumn[] = [
     {
       id: 'name',
       header: 'Name',
@@ -306,7 +306,7 @@ export function MinimalTable() {
   ];
 
   return (
-    <DataTable
+    <Table
       data={data}
       columns={columns}
       pagination={false}
@@ -318,17 +318,17 @@ export function MinimalTable() {
 
 // Example 4: Loading State
 export function LoadingTableExample() {
-  const columns: DataTableColumn[] = [
+  const columns: TableColumn[] = [
     { id: 'name', header: 'Name', accessorKey: 'name' },
     { id: 'email', header: 'Email', accessorKey: 'email' },
   ];
 
-  return <DataTable data={[]} columns={columns} loading={true} />;
+  return <Table data={[]} columns={columns} loading={true} />;
 }
 
 // Example 5: Custom Styled Table
 export function CustomStyledTable() {
-  const columns: DataTableColumn<User>[] = [
+  const columns: TableColumn<User>[] = [
     {
       id: 'name',
       header: 'Name',
@@ -344,7 +344,7 @@ export function CustomStyledTable() {
   ];
 
   return (
-    <DataTable
+    <Table
       data={sampleUsers}
       columns={columns}
       style={{
@@ -369,7 +369,7 @@ export function CustomStyledTable() {
 }
 
 // Complete demo component
-export function DataTableDemo() {
+export function TableDemo() {
   return (
     <View style={{ padding: 16, gap: 32 }}>
       <View>
@@ -414,9 +414,9 @@ DATA TABLE COMPONENT DOCUMENTATION
 
 ## Props
 
-### DataTableProps<T>
+### TableProps<T>
 - `data: T[]` - Array of data objects
-- `columns: DataTableColumn<T>[]` - Column definitions
+- `columns: TableColumn<T>[]` - Column definitions
 - `pagination?: boolean` - Enable pagination (default: true)
 - `pageSize?: number` - Items per page (default: 10)
 - `searchable?: boolean` - Enable search bar (default: true)
@@ -431,7 +431,7 @@ DATA TABLE COMPONENT DOCUMENTATION
 - `rowStyle?: ViewStyle` - Data row styles
 - `cellStyle?: ViewStyle` - Individual cell styles
 
-### DataTableColumn<T>
+### TableColumn<T>
 - `id: string` - Unique column identifier
 - `header: string` - Column header text
 - `accessorKey: string` - Property key in data object
@@ -452,7 +452,7 @@ const columns = [
   { id: 'email', header: 'Email', accessorKey: 'email', sortable: true },
 ];
 
-<DataTable data={users} columns={columns} />
+<Table data={users} columns={columns} />
 ```
 
 ### Custom Cell Rendering
@@ -473,7 +473,7 @@ const columns = [
 
 ### Disable Features
 ```tsx
-<DataTable
+<Table
   data={data}
   columns={columns}
   pagination={false}

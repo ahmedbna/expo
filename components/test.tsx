@@ -72,7 +72,7 @@ import { useSortableData } from './ui/sortable';
 import { Textarea } from './ui/textarea';
 import { useToast } from './ui/toast';
 import { Toggle } from './ui/toggle';
-import { DataTableDemo } from './user-table';
+import { TableDemo } from './user-table';
 
 // Simple options array
 const countryOptions: PickerOption[] = [
@@ -498,7 +498,7 @@ export const Test = () => {
 
           {/* <LoadingSpinnerExample /> */}
 
-          <DataTableDemo />
+          <TableDemo />
 
           <RadioGroup
             options={[

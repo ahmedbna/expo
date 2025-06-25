@@ -23,7 +23,7 @@ import {
 } from 'react-native';
 
 // Types
-export interface DataTableColumn<T = any> {
+export interface TableColumn<T = any> {
   id: string;
   header: string;
   accessorKey: string;
@@ -36,9 +36,9 @@ export interface DataTableColumn<T = any> {
   align?: 'left' | 'center' | 'right';
 }
 
-export interface DataTableProps<T = any> {
+export interface TableProps<T = any> {
   data: T[];
-  columns: DataTableColumn<T>[];
+  columns: TableColumn<T>[];
   pagination?: boolean;
   pageSize?: number;
   searchable?: boolean;
@@ -61,7 +61,7 @@ interface SortState {
   direction: SortDirection;
 }
 
-export function DataTable<T = any>({
+export function Table<T = any>({
   data,
   columns,
   pagination = true,
@@ -77,7 +77,7 @@ export function DataTable<T = any>({
   onRowPress,
   sortable = true,
   filterable = true,
-}: DataTableProps<T>) {
+}: TableProps<T>) {
   // Theme colors
   const borderColor = useThemeColor({}, 'border');
   const textColor = useThemeColor({}, 'text');
@@ -193,7 +193,7 @@ export function DataTable<T = any>({
     );
   };
 
-  const renderCell = (column: DataTableColumn<T>, row: T, rowIndex: number) => {
+  const renderCell = (column: TableColumn<T>, row: T, rowIndex: number) => {
     const value = (row as any)[column.accessorKey];
     const cellContent = column.cell
       ? column.cell(value, row)
