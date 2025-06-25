@@ -8,8 +8,8 @@ export const audioPlayerRegistry = {
     description:
       'A feature-rich audio player component with waveform visualization, playback controls, and seeking capabilities for music, podcasts, and voice recordings.',
     type: 'registry:ui',
-    registryDependencies: ['button', 'progress', 'text', 'audio-waveform'],
     dependencies: ['expo-audio', 'lucide-react-native'],
+    registryDependencies: ['button', 'progress', 'text', 'audio-waveform'],
     files: [
       {
         path: 'registry/components/ui/audio-player.tsx',

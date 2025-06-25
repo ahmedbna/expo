@@ -6,6 +6,7 @@ export const audioRecorderRegistry = {
     description:
       'A comprehensive audio recording component with real-time waveform visualization, quality settings, and built-in playback capabilities.',
     type: 'registry:ui',
+    dependencies: ['lucide-react-native'],
     registryDependencies: [
       'audio-player',
       'audio-waveform',

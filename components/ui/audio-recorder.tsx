@@ -1,4 +1,5 @@
 // components/ui/audio-recorder.tsx
+import { AudioPlayer } from '@/components/ui/audio-player';
 import { AudioWaveform } from '@/components/ui/audio-waveform';
 import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
@@ -20,7 +21,6 @@ import {
   View,
   ViewStyle,
 } from 'react-native';
-import { AudioPlayer } from './audio-player';
 
 export interface AudioRecorderProps {
   style?: ViewStyle;
