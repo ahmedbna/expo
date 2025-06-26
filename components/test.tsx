@@ -132,6 +132,8 @@ export const Test = () => {
             ]}
           />
 
+          <SheetExample />
+
           <Picker
             options={countryOptions}
             value={selectedCountry}
@@ -482,8 +484,6 @@ export const Test = () => {
           <Button variant='ghost'>Hello</Button>
           <Button variant='link'>Hello</Button>
           <Button variant='destructive'>Hello</Button>
-
-          <SheetExample />
 
           {/* <LoadingSpinnerExample /> */}
 

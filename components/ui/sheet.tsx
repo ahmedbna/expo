@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { FONT_SIZE } from '@/theme/globals';
+import { BORDER_RADIUS, FONT_SIZE } from '@/theme/globals';
 import { X } from 'lucide-react-native';
 import React, { useEffect, useRef } from 'react';
 import {
@@ -198,6 +198,7 @@ export function SheetContent({ children, style }: SheetContentProps) {
           style={[
             styles.sheet,
             {
+              borderRadius: BORDER_RADIUS,
               backgroundColor,
               borderColor,
               width: sheetWidth,
