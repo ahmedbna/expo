@@ -1,0 +1,173 @@
+---
+title: Icon
+description: A themed icon component wrapper for Lucide React Native icons with light/dark mode support.
+---
+
+<ComponentPreview
+  name='icon-demo'
+  description='Basic icon with theme support'
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx @bna/ui add icon
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install lucide-react-native
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name='icon' title='components/ui/icon.tsx' />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Icon } from '@/components/ui/icon';
+import { Heart, Star, User } from 'lucide-react-native';
+```
+
+```tsx
+<Icon IconComponent={Heart} />
+<Icon IconComponent={Star} size={32} />
+<Icon IconComponent={User} color="#ff0000" />
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview
+  name='icon-demo'
+  description='Basic icon with theme support'
+/>
+
+### Different Sizes
+
+<ComponentPreview name='icon-sizes' description='Icons in various sizes' />
+
+### Custom Colors
+
+<ComponentPreview name='icon-colors' description='Icons with custom colors' />
+
+### Theme Colors
+
+<ComponentPreview
+  name='icon-theme'
+  description='Icons with light and dark theme colors'
+/>
+
+### Stroke Variations
+
+<ComponentPreview
+  name='icon-strokes'
+  description='Icons with different stroke widths'
+/>
+
+### Icon Gallery
+
+<ComponentPreview
+  name='icon-gallery'
+  description='Showcase of popular Lucide icons'
+/>
+
+## API Reference
+
+### Icon
+
+A wrapper component for Lucide React Native icons with theme support.
+
+| Prop            | Type                               | Default   | Description                                   |
+| --------------- | ---------------------------------- | --------- | --------------------------------------------- |
+| `IconComponent` | `React.ComponentType<LucideProps>` | -         | The Lucide icon component to render.          |
+| `size`          | `number`                           | `24`      | The size of the icon in pixels.               |
+| `color`         | `string`                           | -         | Override color (takes precedence over theme). |
+| `lightColor`    | `string`                           | -         | Color to use in light mode.                   |
+| `darkColor`     | `string`                           | -         | Color to use in dark mode.                    |
+| `strokeWidth`   | `number`                           | `1.8`     | The thickness of the icon strokes.            |
+| `strokeLinecap` | `'round' \| 'butt' \| 'square'`    | `'round'` | The style of line endings.                    |
+
+### Additional Props
+
+The Icon component accepts all props from `LucideProps`, allowing full customization of Lucide icons.
+
+## Theme Integration
+
+The Icon component integrates with your app's theme system:
+
+- Automatically uses theme colors when no explicit color is provided
+- Supports separate colors for light and dark modes
+- Falls back to the 'icon' theme color by default
+- Color prop overrides theme colors when specified
+
+## Popular Icons
+
+Here are some commonly used Lucide icons:
+
+```tsx
+import {
+  Heart,
+  Star,
+  User,
+  Settings,
+  Home,
+  Search,
+  Bell,
+  Mail,
+  Calendar,
+  Camera,
+  Edit,
+  Trash,
+  Plus,
+  Minus,
+  Check,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Menu,
+  MoreHorizontal,
+} from 'lucide-react-native';
+```
+
+## Best Practices
+
+- Use consistent sizes throughout your app (16, 20, 24, 32px are common)
+- Maintain proper contrast ratios for accessibility
+- Use semantic icons that clearly represent their function
+- Consider stroke width based on your design system
+- Test icons in both light and dark themes
+
+## Accessibility
+
+The Icon component supports accessibility:
+
+- Icons inherit accessibility properties from Lucide components
+- Proper contrast is maintained with theme colors
+- Icons scale appropriately with system text size settings
+- Consider adding accessibility labels for interactive icons

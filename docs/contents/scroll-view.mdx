@@ -1,0 +1,227 @@
+---
+title: Scroll View
+description: A customized ScrollView component with transparent background and consistent styling.
+---
+
+<ComponentPreview
+  name='scroll-view-demo'
+  description='Basic scroll view with content'
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx @bna/ui add scroll-view
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>This component uses React Native's built-in ScrollView.</Step>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name='scroll-view' title='components/ui/scroll-view.tsx' />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { ScrollView } from '@/components/ui/scroll-view';
+```
+
+```tsx
+<ScrollView>
+  <Text>Content that scrolls</Text>
+  <View style={{ height: 1000 }}>
+    <Text>Long content...</Text>
+  </View>
+</ScrollView>
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview
+  name='scroll-view-demo'
+  description='Basic scroll view with content'
+/>
+
+### Horizontal Scrolling
+
+<ComponentPreview
+  name='scroll-view-horizontal'
+  description='Horizontal scroll view with items'
+/>
+
+### Nested Scrolling
+
+<ComponentPreview
+  name='scroll-view-nested'
+  description='Nested scroll views for complex layouts'
+/>
+
+### Pull to Refresh
+
+<ComponentPreview
+  name='scroll-view-refresh'
+  description='Scroll view with pull-to-refresh functionality'
+/>
+
+### With Fixed Header
+
+<ComponentPreview
+  name='scroll-view-header'
+  description='Scroll view with sticky header elements'
+/>
+
+## API Reference
+
+### ScrollView
+
+A wrapper around React Native's ScrollView with consistent styling defaults.
+
+| Prop                             | Type        | Default                              | Description                            |
+| -------------------------------- | ----------- | ------------------------------------ | -------------------------------------- |
+| `style`                          | `ViewStyle` | `{ backgroundColor: 'transparent' }` | Additional styles for the scroll view. |
+| `children`                       | `ReactNode` | -                                    | Content to be scrolled.                |
+| `horizontal`                     | `boolean`   | `false`                              | Enable horizontal scrolling.           |
+| `showsVerticalScrollIndicator`   | `boolean`   | `true`                               | Show vertical scroll indicator.        |
+| `showsHorizontalScrollIndicator` | `boolean`   | `true`                               | Show horizontal scroll indicator.      |
+
+### Additional Props
+
+The ScrollView component accepts all props from React Native's `ScrollView` component.
+
+## Common Patterns
+
+### Vertical Content List
+
+```tsx
+<ScrollView style={{ flex: 1 }}>
+  {items.map((item) => (
+    <View key={item.id} style={styles.item}>
+      <Text>{item.title}</Text>
+    </View>
+  ))}
+</ScrollView>
+```
+
+### Horizontal Carousel
+
+```tsx
+<ScrollView horizontal showsHorizontalScrollIndicator={false} pagingEnabled>
+  {images.map((image) => (
+    <Image key={image.id} source={image.uri} style={styles.carouselImage} />
+  ))}
+</ScrollView>
+```
+
+### Form Container
+
+```tsx
+<ScrollView
+  style={{ flex: 1 }}
+  contentContainerStyle={{ padding: 16, gap: 16 }}
+  keyboardShouldPersistTaps='handled'
+>
+  <TextInput placeholder='Name' />
+  <TextInput placeholder='Email' />
+  <Button title='Submit' />
+</ScrollView>
+```
+
+## Styling
+
+### Default Behavior
+
+- `backgroundColor: 'transparent'` allows theme backgrounds to show through
+- Preserves all default ScrollView styling and behavior
+- Maintains platform-specific scroll indicators
+
+### Custom Styling
+
+```tsx
+<ScrollView
+  style={{
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  }}
+  contentContainerStyle={{
+    padding: 16,
+    gap: 12,
+  }}
+>
+  {/* Content */}
+</ScrollView>
+```
+
+## Performance Tips
+
+### Large Lists
+
+For large lists, consider using `FlatList` or `VirtualizedList` instead:
+
+```tsx
+// For large datasets, use FlatList
+<FlatList
+  data={largeDataset}
+  renderItem={({ item }) => <ItemComponent item={item} />}
+  keyExtractor={(item) => item.id}
+/>
+```
+
+### Images and Heavy Content
+
+```tsx
+<ScrollView
+  removeClippedSubviews={true} // Improves performance
+  maxToRenderPerBatch={10}
+>
+  {/* Heavy content */}
+</ScrollView>
+```
+
+## Accessibility
+
+The ScrollView component maintains accessibility:
+
+- Inherits all ScrollView accessibility features
+- Supports scroll-to-element navigation
+- Works with screen readers for content navigation
+- Maintains proper focus management
+- Supports accessibility zoom and text scaling
+
+## Platform Differences
+
+- **iOS**: Natural momentum scrolling, rubber band effect
+- **Android**: Different scroll behavior and indicators
+- **Web**: Mouse wheel and touch scrolling support
+
+## Best Practices
+
+- Use `contentContainerStyle` for inner content styling
+- Set `keyboardShouldPersistTaps="handled"` for forms
+- Consider `removeClippedSubviews` for performance
+- Use `FlatList` for large, uniform lists
+- Test scroll behavior on all target platforms
+- Ensure sufficient scroll indicators for usability

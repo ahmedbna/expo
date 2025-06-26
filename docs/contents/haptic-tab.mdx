@@ -1,0 +1,109 @@
+---
+title: Haptic Tab
+description: A pressable tab component with haptic feedback for bottom navigation.
+---
+
+<ComponentPreview
+  name='haptic-tab-demo'
+  description='A basic haptic tab with feedback on press'
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx @bna/ui add haptic-tab
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @react-navigation/bottom-tabs @react-navigation/elements expo-haptics
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name='haptic-tab' title='components/ui/haptic-tab.tsx' />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { HapticTab } from '@/components/ui/haptic-tab';
+```
+
+```tsx
+<HapticTab
+  onPress={() => console.log('Tab pressed')}
+  accessibilityLabel='Home Tab'
+>
+  <Text>Home</Text>
+</HapticTab>
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview
+  name='haptic-tab-demo'
+  description='A basic haptic tab with feedback on press'
+/>
+
+## API Reference
+
+### HapticTab
+
+A pressable component that provides haptic feedback on iOS devices.
+
+| Prop                 | Type              | Default | Description                              |
+| -------------------- | ----------------- | ------- | ---------------------------------------- |
+| `onPress`            | `() => void`      | -       | Function called when the tab is pressed. |
+| `onPressIn`          | `(event) => void` | -       | Function called when press starts.       |
+| `children`           | `ReactNode`       | -       | The content to display inside the tab.   |
+| `style`              | `ViewStyle`       | -       | Additional styles to apply to the tab.   |
+| `disabled`           | `boolean`         | `false` | Whether the tab is disabled.             |
+| `testID`             | `string`          | -       | Test identifier for testing.             |
+| `accessibilityLabel` | `string`          | -       | Accessibility label for screen readers.  |
+
+## Platform Support
+
+- **iOS**: Full haptic feedback support with `Haptics.ImpactFeedbackStyle.Light`
+- **Android**: Component works normally without haptic feedback
+- **Web**: Component works as a regular pressable
+
+## Accessibility
+
+The HapticTab component is built with accessibility in mind:
+
+- Supports all standard pressable accessibility props
+- Works with screen readers and keyboard navigation
+- Maintains proper focus states
+- Respects system accessibility settings
+
+## Notes
+
+- Haptic feedback only triggers on iOS devices
+- The component uses `Haptics.ImpactFeedbackStyle.Light` for subtle feedback
+- Integrates seamlessly with React Navigation bottom tabs
+- Preserves all original `BottomTabBarButtonProps` functionality

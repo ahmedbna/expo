@@ -1,5 +1,5 @@
 // components/ui/mode-toggle.tsx
-import { Button } from '@/components/ui/button';
+import { Button, ButtonSize, ButtonVariant } from '@/components/ui/button';
 import { Icon } from '@/components/ui/icon';
 import { useModeToggle } from '@/hooks/useModeToggle';
 import { Moon, Sun } from 'lucide-react-native';
@@ -11,7 +11,12 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-export const ModeToggle = () => {
+type Props = {
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+};
+
+export const ModeToggle = ({ variant = 'outline', size = 'icon' }: Props) => {
   const { toggleMode, isDark } = useModeToggle();
   const rotation = useSharedValue(0);
   const scale = useSharedValue(1);
@@ -42,7 +47,7 @@ export const ModeToggle = () => {
   });
 
   return (
-    <Button variant='outline' size='icon' onPress={toggleMode}>
+    <Button variant={variant} size={size} onPress={toggleMode}>
       <Animated.View style={animatedStyle}>
         <Icon IconComponent={showIcon === 'moon' ? Moon : Sun} size={24} />
       </Animated.View>

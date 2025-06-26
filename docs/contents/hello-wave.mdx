@@ -1,0 +1,108 @@
+---
+title: Hello Wave
+description: An animated waving hand emoji component with smooth rotation animation.
+---
+
+<ComponentPreview
+  name='hello-wave-demo'
+  description='An animated waving hand emoji'
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx @bna/ui add hello-wave
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install react-native-reanimated
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name='hello-wave' title='components/ui/hello-wave.tsx' />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { HelloWave } from '@/components/ui/hello-wave';
+```
+
+```tsx
+<HelloWave />
+```
+
+## Examples
+
+### Default
+
+<ComponentPreview
+  name='hello-wave-demo'
+  description='An animated waving hand emoji'
+/>
+
+## API Reference
+
+### HelloWave
+
+An animated component that displays a waving hand emoji with rotation animation.
+
+| Prop    | Type        | Default | Description                                  |
+| ------- | ----------- | ------- | -------------------------------------------- |
+| `style` | `ViewStyle` | -       | Additional styles to apply to the container. |
+
+## Animation Details
+
+- **Duration**: 150ms for each rotation phase
+- **Rotation Range**: 0° to 25° and back to 0°
+- **Repetitions**: 4 complete wave cycles
+- **Timing**: Runs automatically on component mount
+- **Easing**: Uses default timing function for smooth animation
+
+## Customization
+
+While the component doesn't expose animation props directly, you can:
+
+- Wrap in a container with custom styling
+- Combine with other animated components
+- Modify the source code for different animation parameters
+
+## Technical Notes
+
+- Uses `react-native-reanimated` for smooth 60fps animations
+- Animation runs on the UI thread for better performance
+- Automatically starts animation when component mounts
+- Uses `useSharedValue` and `useAnimatedStyle` for optimal performance
+
+## Accessibility
+
+The HelloWave component:
+
+- Uses semantic emoji that screen readers can interpret
+- Maintains proper text sizing for accessibility
+- Works with system accessibility settings
+- Animation doesn't interfere with screen reader functionality
