@@ -42,7 +42,7 @@ export interface MediaPickerProps {
   icon?: React.ComponentType<LucideProps>;
   disabled?: boolean;
   mediaType?: MediaType;
-  mutliple?: boolean;
+  multiple?: boolean;
   maxSelection?: number;
   quality?: MediaQuality;
   buttonText?: string;
@@ -73,7 +73,7 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
     {
       children,
       mediaType = 'all',
-      mutliple = false,
+      multiple = false,
       gallery = false,
       maxSelection = 10,
       quality = 'high',
@@ -182,9 +182,9 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
               : mediaType === 'video'
               ? ImagePicker.MediaTypeOptions.Videos
               : ImagePicker.MediaTypeOptions.All,
-          allowsMultipleSelection: mutliple,
+          allowsMultipleSelection: multiple,
           quality: quality === 'high' ? 1 : quality === 'medium' ? 0.7 : 0.3,
-          selectionLimit: mutliple ? maxSelection : 1,
+          selectionLimit: multiple ? maxSelection : 1,
         });
 
         if (!result.canceled && result.assets) {
@@ -210,7 +210,7 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
     const handleAssetSelection = (newAssets: MediaAsset[]) => {
       let updatedAssets: MediaAsset[];
 
-      if (mutliple) {
+      if (multiple) {
         updatedAssets = [...assets, ...newAssets].slice(0, maxSelection);
       } else {
         updatedAssets = newAssets;
@@ -240,7 +240,7 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
           filename: galleryAsset.filename,
         };
 
-        if (mutliple) {
+        if (multiple) {
           const isAlreadySelected = assets.some(
             (asset) => asset.id === newAsset.id
           );
@@ -323,7 +323,7 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
               <Video size={20} color='white' />
             </View>
           )}
-          {mutliple && isSelected && (
+          {multiple && isSelected && (
             <View
               style={[
                 styles.selectedIndicator,
@@ -403,7 +403,7 @@ export const MediaPicker = forwardRef<RNView, MediaPickerProps>(
                     }`}
                 </Text>
                 <View style={styles.modalActions}>
-                  {mutliple && (
+                  {multiple && (
                     <Text
                       style={[styles.selectionCount, { color: mutedColor }]}
                     >
