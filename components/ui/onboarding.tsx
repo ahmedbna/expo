@@ -15,8 +15,9 @@ import Animated, {
   useSharedValue,
   withSpring,
 } from 'react-native-reanimated';
-import { Button } from './button';
-import { Text } from './text';
+import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/text';
+import { HEIGHT } from '@/theme/globals';
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -231,11 +232,7 @@ export function Onboarding({
       {/* Navigation Buttons */}
       <View style={styles.buttonContainer}>
         {!isFirstStep && (
-          <Button
-            variant='outline'
-            onPress={handleBack}
-            style={styles.backButton}
-          >
+          <Button variant='outline' onPress={handleBack} style={{ flex: 1 }}>
             {backButtonText}
           </Button>
         )}
@@ -243,10 +240,7 @@ export function Onboarding({
         <Button
           variant='default'
           onPress={handleNext}
-          style={[
-            styles.nextButton,
-            ...(isFirstStep ? [styles.fullWidthButton] : []),
-          ]}
+          style={[...(isFirstStep ? [styles.fullWidthButton] : [{ flex: 2 }])]}
         >
           {isLastStep ? primaryButtonText : nextButtonText}
         </Button>
@@ -314,20 +308,16 @@ const styles = StyleSheet.create({
   skipContainer: {
     position: 'absolute',
     top: 60,
-    right: 20,
+    right: 10,
     zIndex: 1,
   },
   buttonContainer: {
+    width: '100%',
+    height: 90,
     flexDirection: 'row',
     paddingHorizontal: 24,
     paddingBottom: 40,
     gap: 12,
-  },
-  backButton: {
-    flex: 1,
-  },
-  nextButton: {
-    flex: 2,
   },
   fullWidthButton: {
     flex: 1,
