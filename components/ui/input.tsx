@@ -24,6 +24,8 @@ export interface InputProps extends Omit<TextInputProps, 'style'> {
   errorStyle?: TextStyle;
   variant?: 'filled' | 'outline';
   disabled?: boolean;
+  type?: 'input' | 'textarea';
+  rows?: number; // Only used when type="textarea"
 }
 
 export const Input = forwardRef<TextInput, InputProps>(
@@ -39,8 +41,11 @@ export const Input = forwardRef<TextInput, InputProps>(
       errorStyle,
       variant = 'filled',
       disabled = false,
+      type = 'input',
+      rows = 4,
       onFocus,
       onBlur,
+      placeholder,
       ...props
     },
     ref
@@ -55,14 +60,25 @@ export const Input = forwardRef<TextInput, InputProps>(
     const primary = useThemeColor({}, 'primary');
     const danger = useThemeColor({}, 'red');
 
+    const isTextarea = type === 'textarea';
+
+    // Calculate height based on type
+    const getHeight = () => {
+      if (isTextarea) {
+        return rows * 20 + 32; // Approximate line height + padding
+      }
+      return HEIGHT;
+    };
+
     // Variant styles
     const getVariantStyle = (): ViewStyle => {
       const baseStyle: ViewStyle = {
         borderRadius: CORNERS,
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: HEIGHT,
+        flexDirection: isTextarea ? 'column' : 'row',
+        alignItems: isTextarea ? 'stretch' : 'center',
+        minHeight: getHeight(),
         paddingHorizontal: 16,
+        paddingVertical: isTextarea ? 12 : 0,
       };
 
       switch (variant) {
@@ -87,8 +103,10 @@ export const Input = forwardRef<TextInput, InputProps>(
     const getInputStyle = (): TextStyle => ({
       flex: 1,
       fontSize: FONT_SIZE,
+      lineHeight: isTextarea ? 20 : undefined,
       color: disabled ? muted : error ? danger : textColor,
       paddingVertical: 0, // Remove default padding
+      textAlignVertical: isTextarea ? 'top' : 'center',
     });
 
     const handleFocus = (e: any) => {
@@ -123,65 +141,136 @@ export const Input = forwardRef<TextInput, InputProps>(
           }}
           disabled={disabled}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-            }}
-          >
-            {/* Left section - Icon + Label (fixed width to simulate grid column) */}
-            <View
-              style={{
-                width: label ? 120 : 'auto',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 8,
-              }}
-              pointerEvents='none'
-            >
-              {icon && (
-                <Icon
-                  IconComponent={icon}
-                  size={16}
-                  color={error ? danger : muted}
-                />
-              )}
-              {label && (
-                <Text
-                  variant='caption'
-                  numberOfLines={1}
-                  ellipsizeMode='tail'
-                  style={[
-                    {
-                      color: error ? danger : muted,
-                    },
-                    labelStyle,
-                  ]}
-                  pointerEvents='none'
+          {isTextarea ? (
+            // Textarea Layout (Column)
+            <>
+              {/* Header section with icon, label, and right component */}
+              {(icon || label || rightComponent) && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: 8,
+                    gap: 8,
+                  }}
                 >
-                  {label}
-                </Text>
-              )}
-            </View>
+                  {/* Left section - Icon + Label */}
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 8,
+                    }}
+                    pointerEvents='none'
+                  >
+                    {icon && (
+                      <Icon
+                        IconComponent={icon}
+                        size={16}
+                        color={error ? danger : muted}
+                      />
+                    )}
+                    {label && (
+                      <Text
+                        variant='caption'
+                        numberOfLines={1}
+                        ellipsizeMode='tail'
+                        style={[
+                          {
+                            color: error ? danger : muted,
+                          },
+                          labelStyle,
+                        ]}
+                        pointerEvents='none'
+                      >
+                        {label}
+                      </Text>
+                    )}
+                  </View>
 
-            {/* TextInput section - takes remaining space */}
-            <View style={{ flex: 1 }}>
+                  {/* Right Component */}
+                  {renderRightComponent()}
+                </View>
+              )}
+
+              {/* TextInput section */}
               <TextInput
                 ref={ref}
+                multiline
+                numberOfLines={rows}
                 style={[getInputStyle(), inputStyle]}
-                placeholderTextColor={error ? danger + 99 : muted}
+                placeholderTextColor={error ? danger + '99' : muted}
+                placeholder={placeholder || 'Type your message...'}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 editable={!disabled}
                 selectionColor={primary}
                 {...props}
               />
-            </View>
+            </>
+          ) : (
+            // Input Layout (Row)
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              {/* Left section - Icon + Label (fixed width to simulate grid column) */}
+              <View
+                style={{
+                  width: label ? 120 : 'auto',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+                pointerEvents='none'
+              >
+                {icon && (
+                  <Icon
+                    IconComponent={icon}
+                    size={16}
+                    color={error ? danger : muted}
+                  />
+                )}
+                {label && (
+                  <Text
+                    variant='caption'
+                    numberOfLines={1}
+                    ellipsizeMode='tail'
+                    style={[
+                      {
+                        color: error ? danger : muted,
+                      },
+                      labelStyle,
+                    ]}
+                    pointerEvents='none'
+                  >
+                    {label}
+                  </Text>
+                )}
+              </View>
 
-            {/* Right Component */}
-            {renderRightComponent()}
-          </View>
+              {/* TextInput section - takes remaining space */}
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  ref={ref}
+                  style={[getInputStyle(), inputStyle]}
+                  placeholderTextColor={error ? danger + 99 : muted}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  editable={!disabled}
+                  selectionColor={primary}
+                  {...props}
+                />
+              </View>
+
+              {/* Right Component */}
+              {renderRightComponent()}
+            </View>
+          )}
         </Pressable>
 
         {/* Error Message */}
@@ -302,6 +391,8 @@ export interface GroupedInputItemProps extends Omit<TextInputProps, 'style'> {
   labelStyle?: TextStyle;
   errorStyle?: TextStyle;
   disabled?: boolean;
+  type?: 'input' | 'textarea';
+  rows?: number; // Only used when type="textarea"
 }
 
 export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
@@ -315,8 +406,11 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
       labelStyle,
       errorStyle,
       disabled,
+      type = 'input',
+      rows = 3,
       onFocus,
       onBlur,
+      placeholder,
       ...props
     },
     ref
@@ -327,6 +421,8 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
     const muted = useThemeColor({}, 'textMuted');
     const primary = useThemeColor({}, 'primary');
     const danger = useThemeColor({}, 'red');
+
+    const isTextarea = type === 'textarea';
 
     const handleFocus = (e: any) => {
       setIsFocused(true);
@@ -353,79 +449,160 @@ export const GroupedInputItem = forwardRef<TextInput, GroupedInputItemProps>(
       >
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
+            flexDirection: isTextarea ? 'column' : 'row',
+            alignItems: isTextarea ? 'stretch' : 'center',
             backgroundColor: 'transparent',
           }}
         >
-          <View
-            style={{
-              flex: 1,
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-            }}
-          >
-            {/* Icon & Label */}
-            <View
-              style={{
-                width: label ? 120 : 'auto',
-                flexDirection: 'row',
-                alignItems: 'center',
-                gap: 8,
-              }}
-              pointerEvents='none'
-            >
-              {icon && (
-                <Icon
-                  IconComponent={icon}
-                  size={16}
-                  color={error ? danger : muted}
-                />
-              )}
-              {label && (
-                <Text
-                  variant='caption'
-                  numberOfLines={1}
-                  ellipsizeMode='tail'
-                  style={[
-                    {
-                      color: error ? danger : muted,
-                    },
-                    labelStyle,
-                  ]}
-                  pointerEvents='none'
+          {isTextarea ? (
+            // Textarea Layout (Column)
+            <>
+              {/* Header section with icon, label, and right component */}
+              {(icon || label || rightComponent) && (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: 8,
+                    gap: 8,
+                  }}
                 >
-                  {label}
-                </Text>
-              )}
-            </View>
+                  {/* Icon & Label */}
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      gap: 8,
+                    }}
+                    pointerEvents='none'
+                  >
+                    {icon && (
+                      <Icon
+                        IconComponent={icon}
+                        size={16}
+                        color={error ? danger : muted}
+                      />
+                    )}
+                    {label && (
+                      <Text
+                        variant='caption'
+                        numberOfLines={1}
+                        ellipsizeMode='tail'
+                        style={[
+                          {
+                            color: error ? danger : muted,
+                          },
+                          labelStyle,
+                        ]}
+                        pointerEvents='none'
+                      >
+                        {label}
+                      </Text>
+                    )}
+                  </View>
 
-            {/* Input */}
-            <View style={{ flex: 1 }}>
+                  {/* Right Component */}
+                  {renderRightComponent()}
+                </View>
+              )}
+
+              {/* Textarea Input */}
               <TextInput
                 ref={ref}
+                multiline
+                numberOfLines={rows}
                 style={[
                   {
-                    flex: 1,
                     fontSize: FONT_SIZE,
+                    lineHeight: 20,
                     color: disabled ? muted : error ? danger : text,
+                    textAlignVertical: 'top',
                     paddingVertical: 0,
+                    minHeight: rows * 20,
                   },
                   inputStyle,
                 ]}
                 placeholderTextColor={error ? danger + '99' : muted}
+                placeholder={placeholder || 'Type your message...'}
                 editable={!disabled}
                 selectionColor={primary}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 {...props}
               />
-            </View>
+            </>
+          ) : (
+            // Input Layout (Row)
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                alignItems: 'center',
+                gap: 8,
+              }}
+            >
+              {/* Icon & Label */}
+              <View
+                style={{
+                  width: label ? 120 : 'auto',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                }}
+                pointerEvents='none'
+              >
+                {icon && (
+                  <Icon
+                    IconComponent={icon}
+                    size={16}
+                    color={error ? danger : muted}
+                  />
+                )}
+                {label && (
+                  <Text
+                    variant='caption'
+                    numberOfLines={1}
+                    ellipsizeMode='tail'
+                    style={[
+                      {
+                        color: error ? danger : muted,
+                      },
+                      labelStyle,
+                    ]}
+                    pointerEvents='none'
+                  >
+                    {label}
+                  </Text>
+                )}
+              </View>
 
-            {/* Right Component */}
-            {renderRightComponent()}
-          </View>
+              {/* Input */}
+              <View style={{ flex: 1 }}>
+                <TextInput
+                  ref={ref}
+                  style={[
+                    {
+                      flex: 1,
+                      fontSize: FONT_SIZE,
+                      color: disabled ? muted : error ? danger : text,
+                      paddingVertical: 0,
+                    },
+                    inputStyle,
+                  ]}
+                  placeholderTextColor={error ? danger + '99' : muted}
+                  editable={!disabled}
+                  selectionColor={primary}
+                  onFocus={handleFocus}
+                  onBlur={handleBlur}
+                  {...props}
+                />
+              </View>
+
+              {/* Right Component */}
+              {renderRightComponent()}
+            </View>
+          )}
         </View>
       </Pressable>
     );
