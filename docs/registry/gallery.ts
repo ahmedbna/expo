@@ -1,17 +1,17 @@
-// Registry configuration for file-picker component and examples
+// Registry configuration for gallery component and examples
 
-export const filePickerRegistry = {
-  // Main file-picker component
-  'file-picker': {
-    name: 'file-picker',
+export const galleryRegistry = {
+  // Main gallery component
+  gallery: {
+    name: 'gallery',
     description:
-      'A customizable file picker component with validation, preview, and multiple file support.',
+      'A responsive image gallery component with fullscreen viewing, zoom, and gesture support.',
     type: 'registry:ui',
     dependencies: ['lucide-react-native', 'expo-document-picker'],
     registryDependencies: ['button', 'text', 'view'],
     files: [
       {
-        path: 'registry/components/ui/file-picker.tsx',
+        path: 'registry/components/ui/gallery.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -24,14 +24,15 @@ export const filePickerRegistry = {
   },
 
   // Default demo
-  'file-picker-demo': {
-    name: 'file-picker-demo',
-    description: 'A basic file picker with validation and preview',
+  'gallery-demo': {
+    name: 'gallery-demo',
+    description:
+      'A basic image gallery with grid layout and fullscreen viewing',
     type: 'registry:example',
-    registryDependencies: ['file-picker'],
+    registryDependencies: ['gallery'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-demo.tsx',
+        path: 'registry/examples/gallery/gallery-demo.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -43,14 +44,14 @@ export const filePickerRegistry = {
     },
   },
 
-  'file-picker-images': {
-    name: 'file-picker-images',
-    description: 'File picker configured for images only',
+  'gallery-grid': {
+    name: 'gallery-grid',
+    description: 'Gallery with custom columns, spacing, and aspect ratio',
     type: 'registry:example',
-    registryDependencies: ['file-picker', 'view', 'text'],
+    registryDependencies: ['gallery', 'view', 'text'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-images.tsx',
+        path: 'registry/examples/gallery/gallery-grid.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -62,14 +63,14 @@ export const filePickerRegistry = {
     },
   },
 
-  'file-picker-single': {
-    name: 'file-picker-single',
-    description: 'File picker for selecting a single file',
+  'gallery-info': {
+    name: 'gallery-info',
+    description: 'Gallery displaying image titles and descriptions',
     type: 'registry:example',
-    registryDependencies: ['file-picker', 'view', 'text'],
+    registryDependencies: ['gallery'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-single.tsx',
+        path: 'registry/examples/gallery/gallery-info.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -81,14 +82,14 @@ export const filePickerRegistry = {
     },
   },
 
-  'file-picker-validation': {
-    name: 'file-picker-validation',
-    description: 'File picker with size limits and extension validation',
+  'gallery-layouts': {
+    name: 'gallery-layouts',
+    description: 'Various gallery layouts and configurations',
     type: 'registry:example',
-    registryDependencies: ['file-picker', 'view', 'text'],
+    registryDependencies: ['gallery', 'view', 'text'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-validation.tsx',
+        path: 'registry/examples/gallery/gallery-layouts.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -100,14 +101,14 @@ export const filePickerRegistry = {
     },
   },
 
-  'file-picker-styled': {
-    name: 'file-picker-styled',
-    description: 'File picker with custom styling and colors',
+  'gallery-controls': {
+    name: 'gallery-controls',
+    description: 'Gallery with download and share functionality',
     type: 'registry:example',
-    registryDependencies: ['file-picker', 'view', 'text'],
+    registryDependencies: ['gallery'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-styled.tsx',
+        path: 'registry/examples/gallery/gallery-controls.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -119,14 +120,15 @@ export const filePickerRegistry = {
     },
   },
 
-  'file-picker-controlled': {
-    name: 'file-picker-controlled',
-    description: 'Controlled file picker using the useFilePicker hook',
+  'gallery-overlay': {
+    name: 'gallery-controlled',
+    description: 'Gallery with custom overlay content on images',
     type: 'registry:example',
-    registryDependencies: ['file-picker', 'button', 'text', 'view'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['gallery', 'view', 'text'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-controlled.tsx',
+        path: 'registry/examples/gallery/gallery-controlled.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -138,14 +140,14 @@ export const filePickerRegistry = {
     },
   },
 
-  'file-picker-info': {
-    name: 'file-picker-info',
-    description: 'File picker displaying detailed file information',
+  'gallery-masonry': {
+    name: 'gallery-masonry',
+    description: 'Gallery with varied aspect ratios for masonry effect',
     type: 'registry:example',
-    registryDependencies: ['file-picker', 'text', 'view'],
+    registryDependencies: ['gallery', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/file-picker/file-picker-info.tsx',
+        path: 'registry/examples/gallery/gallery-masonry.tsx',
         type: 'registry:example',
         target: '',
       },
