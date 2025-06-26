@@ -13,7 +13,6 @@ import { Link } from '@/components/ui/link';
 export default function HomeScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
       headerImage={
         <Image
           source={require('@/assets/images/partial-react-logo.png')}
@@ -108,10 +107,9 @@ export default function HomeScreen() {
       </Collapsible>
       <Collapsible title='Light and dark mode components'>
         <Text>
-          This template has light and dark mode support. The{' '}
-          <Text>useColorScheme()</Text> hook lets you inspect what the
-          user&apos;s current color scheme is, and so you can adjust UI colors
-          accordingly.
+          This template has light and dark mode support. The hook lets you
+          inspect what the user&apos;s current color scheme is, and so you can
+          adjust UI colors accordingly.
         </Text>
         <Link href='https://docs.expo.dev/develop/user-interface/color-themes/'>
           <Text>Learn more</Text>

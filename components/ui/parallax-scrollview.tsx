@@ -1,6 +1,6 @@
 import { useBottomTabOverflow } from '@/components/ui/blur-background';
 import { View } from '@/components/ui/view';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import type { PropsWithChildren, ReactElement } from 'react';
 import Animated, {
   interpolate,
@@ -12,16 +12,14 @@ import Animated, {
 type Props = PropsWithChildren<{
   headerHeight?: number;
   headerImage: ReactElement;
-  headerBackgroundColor: { dark: string; light: string };
 }>;
 
 export function ParallaxScrollView({
   children,
   headerHeight = 250,
   headerImage,
-  headerBackgroundColor,
 }: Props) {
-  const colorScheme = useColorScheme() ?? 'light';
+  const backgroundColor = useThemeColor({}, 'background');
   const scrollRef = useAnimatedRef<Animated.ScrollView>();
   const scrollOffset = useScrollViewOffset(scrollRef);
   const bottom = useBottomTabOverflow();
@@ -61,10 +59,10 @@ export function ParallaxScrollView({
         <Animated.View
           style={[
             {
-              height: headerHeight,
+              backgroundColor,
               overflow: 'hidden',
+              height: headerHeight,
             },
-            { backgroundColor: headerBackgroundColor[colorScheme] },
             headerAnimatedStyle,
           ]}
         >
@@ -76,6 +74,7 @@ export function ParallaxScrollView({
             padding: 32,
             gap: 16,
             overflow: 'hidden',
+            backgroundColor,
           }}
         >
           {children}

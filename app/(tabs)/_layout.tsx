@@ -5,8 +5,7 @@ import { Platform } from 'react-native';
 import BlurBackground from '@/components/ui/blur-background';
 import { HapticTab } from '@/components/ui/haptic-tab';
 import { Icon } from '@/components/ui/icon';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { Colors } from '@/theme/colors';
+import { useThemeColor } from '@/hooks/useThemeColor';
 import {
   ChartCandlestick,
   HeartHandshakeIcon,
@@ -16,12 +15,12 @@ import {
 } from 'lucide-react-native';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const primary = useThemeColor({}, 'primary');
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].primary,
+        tabBarActiveTintColor: primary,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarBackground: BlurBackground,
