@@ -8,7 +8,7 @@ export const tabsRegistry = {
       'A foundational View component with transparent background and ref forwarding support.',
     type: 'registry:ui',
     dependencies: [],
-    registryDependencies: ['text'],
+    registryDependencies: ['text', 'view'],
     files: [
       {
         path: 'registry/components/ui/tabs.tsx',
@@ -28,7 +28,7 @@ export const tabsRegistry = {
     name: 'tabs-demo',
     description: 'Basic tabs container with content',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['tabs', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/tabs/tabs-demo.tsx',
@@ -47,7 +47,7 @@ export const tabsRegistry = {
     name: 'tabs-vertical',
     description: 'Tabs arranged in vertical orientation',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['tabs', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/tabs/tabs-vertical.tsx',
@@ -66,7 +66,7 @@ export const tabsRegistry = {
     name: 'tabs-disabled',
     description: 'Tabs with disabled states',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['tabs', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/tabs/tabs-disabled.tsx',
@@ -85,7 +85,7 @@ export const tabsRegistry = {
     name: 'tabs-styled',
     description: 'Tabs with custom colors and styling',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['tabs', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/tabs/tabs-styled.tsx',
@@ -104,7 +104,7 @@ export const tabsRegistry = {
     name: 'tabs-scrollable',
     description: 'Tabs that scroll horizontally when they overflow',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['tabs', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/tabs/tabs-scrollable.tsx',
