@@ -7,8 +7,8 @@ export const pickerRegistry = {
     description:
       'A customizable dropdown picker component with search, sections, and multiple selection support.',
     type: 'registry:ui',
-    dependencies: [],
-    registryDependencies: ['text', 'picker'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['icon', 'scroll-view', 'text', 'view'],
     files: [
       {
         path: 'registry/components/ui/picker.tsx',
@@ -104,7 +104,7 @@ export const pickerRegistry = {
     name: 'picker-variants',
     description: 'Different picker variants: outline, filled, and group',
     type: 'registry:example',
-    registryDependencies: ['picker'],
+    registryDependencies: ['picker', 'view', 'text'],
     files: [
       {
         path: 'registry/examples/picker/picker-variants.tsx',
@@ -123,6 +123,7 @@ export const pickerRegistry = {
     name: 'picker-styled',
     description: 'Picker with custom styling, icons, and labels',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['picker'],
     files: [
       {
@@ -142,7 +143,7 @@ export const pickerRegistry = {
     name: 'picker-form',
     description: 'Picker integrated with form validation and error handling',
     type: 'registry:example',
-    registryDependencies: ['picker'],
+    registryDependencies: ['picker', 'view', 'text', 'button'],
     files: [
       {
         path: 'registry/examples/picker/picker-form.tsx',
@@ -162,7 +163,7 @@ export const pickerRegistry = {
     description:
       'Picker with descriptions, disabled options, and custom modal title',
     type: 'registry:example',
-    registryDependencies: ['picker'],
+    registryDependencies: ['picker', 'view', 'text'],
     files: [
       {
         path: 'registry/examples/picker/picker-advanced.tsx',
