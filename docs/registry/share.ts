@@ -159,7 +159,7 @@ export const shareRegistry = {
     name: 'share-hook',
     description: 'Using the useShare hook for programmatic sharing',
     type: 'registry:example',
-    registryDependencies: ['share', 'text', 'view'],
+    registryDependencies: ['share', 'text', 'view', 'button'],
     files: [
       {
         path: 'registry/examples/share/share-hook.tsx',

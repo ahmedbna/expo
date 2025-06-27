@@ -26,7 +26,7 @@ export function MediaPickerDemo() {
         </Text>
         <MediaPicker
           mediaType='image'
-          mutliple
+          multiple
           maxSelection={5}
           selectedAssets={selectedImages}
           onSelectionChange={setSelectedImages}
@@ -45,7 +45,7 @@ export function MediaPickerDemo() {
         <MediaPicker
           gallery
           mediaType='image'
-          mutliple
+          multiple
           maxSelection={5}
           selectedAssets={selectedGallery}
           onSelectionChange={setSelectedGallery}
@@ -63,7 +63,7 @@ export function MediaPickerDemo() {
         </Text>
         <MediaPicker
           mediaType='video'
-          mutliple
+          multiple
           gallery
           maxSelection={10}
           selectedAssets={selectedVideos}

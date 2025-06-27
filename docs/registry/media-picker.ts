@@ -53,6 +53,7 @@ export const mediaPickerRegistry = {
     name: 'media-picker-images',
     description: 'Media picker configured for images only',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['media-picker'],
     files: [
       {
@@ -73,6 +74,7 @@ export const mediaPickerRegistry = {
     name: 'media-picker-videos',
     description: 'Media picker configured for videos only',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['media-picker'],
     files: [
       {
@@ -93,7 +95,8 @@ export const mediaPickerRegistry = {
     name: 'media-picker-multiple',
     description: 'Media picker with multiple selection enabled',
     type: 'registry:example',
-    registryDependencies: ['media-picker'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['media-picker', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/media-picker/media-picker-multiple.tsx',
@@ -113,6 +116,7 @@ export const mediaPickerRegistry = {
     name: 'media-picker-gallery',
     description: 'Media picker with custom gallery modal',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['media-picker'],
     files: [
       {
@@ -133,7 +137,8 @@ export const mediaPickerRegistry = {
     name: 'media-picker-custom',
     description: 'Media picker with custom trigger button',
     type: 'registry:example',
-    registryDependencies: ['media-picker'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['media-picker', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/media-picker/media-picker-custom.tsx',
@@ -153,7 +158,8 @@ export const mediaPickerRegistry = {
     name: 'media-picker-preview',
     description: 'Media picker showing selected media previews',
     type: 'registry:example',
-    registryDependencies: ['media-picker'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['media-picker', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/media-picker/media-picker-preview.tsx',
@@ -173,7 +179,8 @@ export const mediaPickerRegistry = {
     name: 'media-picker-quality',
     description: 'Media picker with different quality settings',
     type: 'registry:example',
-    registryDependencies: ['media-picker'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['media-picker', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/media-picker/media-picker-quality.tsx',

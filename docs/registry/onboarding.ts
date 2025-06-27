@@ -49,7 +49,7 @@ export const onboardingRegistry = {
     name: 'onboarding-images',
     description: 'Onboarding flow with custom images for each step',
     type: 'registry:example',
-    registryDependencies: ['onboarding'],
+    registryDependencies: ['onboarding', 'image'],
     files: [
       {
         path: 'registry/examples/onboarding/onboarding-images.tsx',
@@ -68,6 +68,7 @@ export const onboardingRegistry = {
     name: 'onboarding-styled',
     description: 'Onboarding with custom colors and styling',
     type: 'registry:example',
+    dependencies: ['lucide-react-native', 'expo-linear-gradient'],
     registryDependencies: ['onboarding'],
     files: [
       {
@@ -87,6 +88,7 @@ export const onboardingRegistry = {
     name: 'onboarding-no-skip',
     description: 'Onboarding flow without skip functionality',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['onboarding'],
     files: [
       {
@@ -106,6 +108,7 @@ export const onboardingRegistry = {
     name: 'onboarding-no-swipe',
     description: 'Onboarding with swipe gestures disabled',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['onboarding'],
     files: [
       {
@@ -125,6 +128,7 @@ export const onboardingRegistry = {
     name: 'onboarding-custom-buttons',
     description: 'Onboarding with custom button text',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['onboarding'],
     files: [
       {
@@ -144,7 +148,7 @@ export const onboardingRegistry = {
     name: 'onboarding-hook',
     description: 'Media picker showing selected media previews',
     type: 'registry:example',
-    registryDependencies: ['onboarding'],
+    registryDependencies: ['onboarding', 'view', 'text', 'button'],
     files: [
       {
         path: 'registry/examples/onboarding/onboarding-hook.tsx',

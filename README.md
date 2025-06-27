@@ -14,6 +14,16 @@ Expo React Native CLI UI Library
 - Toast swipe crash
 - Sortable
 
+## Registry
+
+- ScrollView
+- Popover
+- ModeToggle
+- Link
+- Icon
+- HelloWave
+- HapticTap
+
 ## Get started
 
 1. Install dependencies

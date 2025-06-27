@@ -28,6 +28,7 @@ export const inputRegistry = {
     name: 'input-demo',
     description: 'A basic input with label and placeholder',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['input'],
     files: [
       {
@@ -48,7 +49,8 @@ export const inputRegistry = {
     name: 'input-icons',
     description: 'Inputs with left-side icons',
     type: 'registry:example',
-    registryDependencies: ['input'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['input', 'view'],
     files: [
       {
         path: 'registry/examples/input/input-icons.tsx',
@@ -68,7 +70,8 @@ export const inputRegistry = {
     name: 'input-variants',
     description: 'Different input variants - filled and outline',
     type: 'registry:example',
-    registryDependencies: ['input'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['input', 'view'],
     files: [
       {
         path: 'registry/examples/input/input-variants.tsx',
@@ -88,7 +91,8 @@ export const inputRegistry = {
     name: 'input-validation',
     description: 'Inputs with error states and validation messages',
     type: 'registry:example',
-    registryDependencies: ['input'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['input', 'view'],
     files: [
       {
         path: 'registry/examples/input/input-validation.tsx',
@@ -109,7 +113,8 @@ export const inputRegistry = {
     description:
       'Inputs with buttons, icons, or custom components on the right',
     type: 'registry:example',
-    registryDependencies: ['input', 'button'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['input', 'view', 'button', 'text'],
     files: [
       {
         path: 'registry/examples/input/input-right-components.tsx',
@@ -129,7 +134,8 @@ export const inputRegistry = {
     name: 'input-disabled',
     description: 'Disabled inputs with reduced opacity',
     type: 'registry:example',
-    registryDependencies: ['input'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['input', 'view'],
     files: [
       {
         path: 'registry/examples/input/input-disabled.tsx',
@@ -149,6 +155,7 @@ export const inputRegistry = {
     name: 'input-grouped',
     description: 'Multiple inputs grouped together in a card-like container',
     type: 'registry:example',
+    dependencies: ['lucide-react-native'],
     registryDependencies: ['input'],
     files: [
       {
@@ -169,7 +176,8 @@ export const inputRegistry = {
     name: 'input-form',
     description: 'Complete form example with various input types',
     type: 'registry:example',
-    registryDependencies: ['input', 'button'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['input', 'button', 'view', 'text'],
     files: [
       {
         path: 'registry/examples/input/input-form.tsx',

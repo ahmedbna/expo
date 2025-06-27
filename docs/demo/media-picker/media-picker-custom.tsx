@@ -1,5 +1,4 @@
 // registry/examples/media-picker-custom.tsx
-import { Button } from '@/components/ui/button';
 import { MediaPicker } from '@/components/ui/media-picker';
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';

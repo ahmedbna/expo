@@ -3,7 +3,6 @@ import { Onboarding, OnboardingStep } from '@/components/ui/onboarding';
 import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import { View } from 'react-native';
 
 const GradientIcon = ({
   iconName,
