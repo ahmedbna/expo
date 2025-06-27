@@ -8,7 +8,7 @@ export const textRegistry = {
       'A foundational View component with transparent background and ref forwarding support.',
     type: 'registry:ui',
     dependencies: [],
-    registryDependencies: ['text', 'text'],
+    registryDependencies: [],
     files: [
       {
         path: 'registry/components/ui/text.tsx',

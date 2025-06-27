@@ -1,17 +1,17 @@
-// Registry configuration for tabs component and examples
+// Registry configuration for sheet component and examples
 
-export const tabsRegistry = {
-  // Main tabs component
-  tabs: {
-    name: 'tabs',
+export const sheetRegistry = {
+  // Main sheet component
+  sheet: {
+    name: 'sheet',
     description:
-      'A foundational View component with transparent background and ref forwarding support.',
+      'A modal component that slides in from the side of the screen, commonly used for navigation menus, filters, and detail views.',
     type: 'registry:ui',
-    dependencies: [],
-    registryDependencies: ['text'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['button', 'text', 'view'],
     files: [
       {
-        path: 'registry/components/ui/tabs.tsx',
+        path: 'registry/components/ui/sheet.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -24,14 +24,14 @@ export const tabsRegistry = {
   },
 
   // Default demo
-  'tabs-demo': {
-    name: 'tabs-demo',
-    description: 'Basic tabs container with content',
+  'sheet-demo': {
+    name: 'sheet-demo',
+    description: 'A basic sheet that slides in from the right side',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['sheet', 'button', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-demo.tsx',
+        path: 'registry/examples/sheet/sheet-demo.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -43,14 +43,14 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-vertical': {
-    name: 'tabs-vertical',
-    description: 'Tabs arranged in vertical orientation',
+  'sheet-left': {
+    name: 'sheet-left',
+    description: 'A sheet that slides in from the left side',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['sheet', 'button', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-vertical.tsx',
+        path: 'registry/examples/sheet/sheet-left.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -62,14 +62,15 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-disabled': {
-    name: 'tabs-disabled',
-    description: 'Tabs with disabled states',
+  'sheet-navigation': {
+    name: 'sheet-navigation',
+    description: 'A sheet that slides in from the navigation side',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['sheet', 'button', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-disabled.tsx',
+        path: 'registry/examples/sheet/sheet-navigation.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -81,14 +82,14 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-styled': {
-    name: 'tabs-styled',
-    description: 'Tabs with custom colors and styling',
+  'sheet-form': {
+    name: 'sheet-form',
+    description: 'A sheet that slides in from the form side',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['sheet', 'button', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-styled.tsx',
+        path: 'registry/examples/sheet/sheet-form.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -100,14 +101,15 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-scrollable': {
-    name: 'tabs-scrollable',
-    description: 'Tabs that scroll horizontally when they overflow',
+  'sheet-filter': {
+    name: 'sheet-filter',
+    description: 'A sheet that slides in from the filter side',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['sheet', 'button', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-scrollable.tsx',
+        path: 'registry/examples/sheet/sheet-filter.tsx',
         type: 'registry:example',
         target: '',
       },

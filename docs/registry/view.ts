@@ -8,7 +8,7 @@ export const viewRegistry = {
       'A foundational View component with transparent background and ref forwarding support.',
     type: 'registry:ui',
     dependencies: [],
-    registryDependencies: ['text', 'view'],
+    registryDependencies: ['text'],
     files: [
       {
         path: 'registry/components/ui/view.tsx',

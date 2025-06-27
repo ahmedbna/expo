@@ -1,17 +1,17 @@
-// Registry configuration for tabs component and examples
+// Registry configuration for table component and examples
 
-export const tabsRegistry = {
-  // Main tabs component
-  tabs: {
-    name: 'tabs',
+export const tableRegistry = {
+  // Main table component
+  table: {
+    name: 'table',
     description:
-      'A foundational View component with transparent background and ref forwarding support.',
+      'A flexible data table component with sorting, filtering, pagination, and search functionality.',
     type: 'registry:ui',
-    dependencies: [],
-    registryDependencies: ['text'],
+    dependencies: ['lucide-react-native'],
+    registryDependencies: ['button', 'text', 'view'],
     files: [
       {
-        path: 'registry/components/ui/tabs.tsx',
+        path: 'registry/components/ui/table.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -24,14 +24,14 @@ export const tabsRegistry = {
   },
 
   // Default demo
-  'tabs-demo': {
-    name: 'tabs-demo',
-    description: 'Basic tabs container with content',
+  'table-demo': {
+    name: 'table-demo',
+    description: 'A basic data table with sample data',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['table'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-demo.tsx',
+        path: 'registry/examples/table/table-demo.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -43,14 +43,14 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-vertical': {
-    name: 'tabs-vertical',
-    description: 'Tabs arranged in vertical orientation',
+  'table-sortable': {
+    name: 'table-sortable',
+    description: 'Table with sortable columns',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['table'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-vertical.tsx',
+        path: 'registry/examples/table/table-sortable.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -62,14 +62,14 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-disabled': {
-    name: 'tabs-disabled',
-    description: 'Tabs with disabled states',
+  'table-custom-cells': {
+    name: 'table-custom-cells',
+    description: 'Table with custom cell renderers and formatting',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['table', 'avatar', 'badge', 'text', 'view'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-disabled.tsx',
+        path: 'registry/examples/table/table-custom-cells.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -81,14 +81,14 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-styled': {
-    name: 'tabs-styled',
-    description: 'Tabs with custom colors and styling',
+  'table-pagination': {
+    name: 'table-pagination',
+    description: 'Table with pagination controls',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['table'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-styled.tsx',
+        path: 'registry/examples/table/table-pagination.tsx',
         type: 'registry:example',
         target: '',
       },
@@ -100,14 +100,33 @@ export const tabsRegistry = {
     },
   },
 
-  'tabs-scrollable': {
-    name: 'tabs-scrollable',
-    description: 'Tabs that scroll horizontally when they overflow',
+  'table-search': {
+    name: 'table-search',
+    description: 'Table with search functionality',
     type: 'registry:example',
-    registryDependencies: ['tabs'],
+    registryDependencies: ['table'],
     files: [
       {
-        path: 'registry/examples/tabs/tabs-scrollable.tsx',
+        path: 'registry/examples/table/table-search.tsx',
+        type: 'registry:example',
+        target: '',
+      },
+    ],
+    preview: {
+      light:
+        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    },
+  },
+
+  'table-loading': {
+    name: 'table-loading',
+    description: 'Table showing loading state',
+    type: 'registry:example',
+    registryDependencies: ['table', 'button', 'view'],
+    files: [
+      {
+        path: 'registry/examples/table/table-loading.tsx',
         type: 'registry:example',
         target: '',
       },
