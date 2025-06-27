@@ -9,6 +9,7 @@ import { View } from '@/components/ui/view';
 import { MediaPickerDemo } from '@/components/media-picker-demo';
 import { Collapsible } from '@/components/ui/collapsible';
 import { Link } from '@/components/ui/link';
+import { HellowWaveDemo } from '@/docs/demo/hello-wave/hello-wave-demo';
 
 export default function HomeScreen() {
   return (
@@ -24,6 +25,8 @@ export default function HomeScreen() {
         <Text>Welcome!</Text>
         <HelloWave />
       </View>
+
+      <HellowWaveDemo />
 
       {/* <SpinnerDemo /> */}
 

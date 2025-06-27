@@ -1,11 +1,11 @@
 ---
 title: Hello Wave
-description: An animated waving hand emoji component with smooth rotation animation.
+description: An animated waving hand emoji component with smooth rotation animation and customizable sizes.
 ---
 
 <ComponentPreview
   name='hello-wave-demo'
-  description='An animated waving hand emoji'
+  description='An animated waving hand emoji with size variants'
 />
 
 ## Installation
@@ -56,24 +56,43 @@ import { HelloWave } from '@/components/ui/hello-wave';
 <HelloWave />
 ```
 
+```tsx
+<HelloWave size='lg' />
+```
+
+```tsx
+<HelloWave size='sm'>🙋‍♀️</HelloWave>
+```
+
 ## Examples
 
 ### Default
 
 <ComponentPreview
   name='hello-wave-demo'
-  description='An animated waving hand emoji'
+  description='Default animated waving hand emoji'
 />
 
 ## API Reference
 
 ### HelloWave
 
-An animated component that displays a waving hand emoji with rotation animation.
+An animated component that displays a waving hand emoji with rotation animation and customizable sizes.
 
-| Prop    | Type        | Default | Description                                  |
-| ------- | ----------- | ------- | -------------------------------------------- |
-| `style` | `ViewStyle` | -       | Additional styles to apply to the container. |
+| Prop       | Type                   | Default | Description                                         |
+| ---------- | ---------------------- | ------- | --------------------------------------------------- |
+| `size`     | `'sm' \| 'md' \| 'lg'` | `'md'`  | Controls the size of the emoji and animation scale. |
+| `children` | `React.ReactNode`      | `'👋'`  | Content to animate - typically an emoji string.     |
+
+## Size Variants
+
+The component includes three predefined size variants:
+
+| Size | Font Size | Line Height | Use Case                    |
+| ---- | --------- | ----------- | --------------------------- |
+| `sm` | 20px      | 24px        | Inline text, compact spaces |
+| `md` | 28px      | 32px        | Default size, most contexts |
+| `lg` | 36px      | 40px        | Headers, prominent display  |
 
 ## Animation Details
 
@@ -85,11 +104,35 @@ An animated component that displays a waving hand emoji with rotation animation.
 
 ## Customization
 
-While the component doesn't expose animation props directly, you can:
+### Custom Content
 
-- Wrap in a container with custom styling
-- Combine with other animated components
-- Modify the source code for different animation parameters
+You can pass any content as children, not just the default wave emoji:
+
+```tsx
+<HelloWave>🙋‍♀️</HelloWave>
+<HelloWave>✨</HelloWave>
+<HelloWave size="lg">🎉</HelloWave>
+```
+
+### Custom Components
+
+For more complex customization, you can pass React components:
+
+```tsx
+<HelloWave>
+  <CustomIcon name='wave' />
+</HelloWave>
+```
+
+### Styling
+
+The component uses a centered container layout. For additional styling, wrap the component:
+
+```tsx
+<View style={{ margin: 16 }}>
+  <HelloWave size='lg' />
+</View>
+```
 
 ## Technical Notes
 
@@ -97,6 +140,8 @@ While the component doesn't expose animation props directly, you can:
 - Animation runs on the UI thread for better performance
 - Automatically starts animation when component mounts
 - Uses `useSharedValue` and `useAnimatedStyle` for optimal performance
+- Size variants include margin adjustments for proper vertical alignment
+- Supports both string content and React components as children
 
 ## Accessibility
 
@@ -106,3 +151,4 @@ The HelloWave component:
 - Maintains proper text sizing for accessibility
 - Works with system accessibility settings
 - Animation doesn't interfere with screen reader functionality
+- Proper font sizing scales with system text size preferences

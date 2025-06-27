@@ -1,4 +1,5 @@
 import { Text } from '@/components/ui/text';
+import { View } from '@/components/ui/view';
 import { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
@@ -8,7 +9,30 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-export function HelloWave() {
+interface HelloWaveProps {
+  size?: 'sm' | 'md' | 'lg';
+  children?: React.ReactNode;
+}
+
+const sizeVariants = {
+  sm: {
+    fontSize: 20,
+    lineHeight: 24,
+    marginTop: -4,
+  },
+  md: {
+    fontSize: 28,
+    lineHeight: 32,
+    marginTop: -6,
+  },
+  lg: {
+    fontSize: 36,
+    lineHeight: 40,
+    marginTop: -8,
+  },
+};
+
+export function HelloWave({ children = '👋', size = 'md' }: HelloWaveProps) {
   const rotationAnimation = useSharedValue(0);
 
   useEffect(() => {
@@ -22,20 +46,24 @@ export function HelloWave() {
   }, [rotationAnimation]);
 
   const animatedStyle = useAnimatedStyle(() => ({
-    transform: [{ rotate: `${rotationAnimation.value}deg` }],
+    transform: [
+      {
+        rotate: `${rotationAnimation.value}deg`,
+      },
+    ],
   }));
 
+  const sizeStyle = sizeVariants[size];
+
   return (
-    <Animated.View style={animatedStyle}>
-      <Text
-        style={{
-          fontSize: 28,
-          lineHeight: 32,
-          marginTop: -6,
-        }}
-      >
-        👋
-      </Text>
-    </Animated.View>
+    <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+      <Animated.View style={animatedStyle}>
+        {typeof children === 'string' ? (
+          <Text style={sizeStyle}>{children}</Text>
+        ) : (
+          children
+        )}
+      </Animated.View>
+    </View>
   );
 }
