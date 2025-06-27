@@ -28,7 +28,7 @@ export const textRegistry = {
     name: 'text-demo',
     description: 'Basic text component showing different variants',
     type: 'registry:example',
-    registryDependencies: ['text'],
+    registryDependencies: ['text', 'view'],
     files: [
       {
         path: 'registry/examples/text/text-demo.tsx',
@@ -47,7 +47,7 @@ export const textRegistry = {
     name: 'text-variants',
     description: 'All text variants showing the typography hierarchy',
     type: 'registry:example',
-    registryDependencies: ['text'],
+    registryDependencies: ['text', 'view'],
     files: [
       {
         path: 'registry/examples/text/text-variants.tsx',
@@ -66,7 +66,7 @@ export const textRegistry = {
     name: 'text-colors',
     description: 'Text with custom light and dark mode colors',
     type: 'registry:example',
-    registryDependencies: ['text'],
+    registryDependencies: ['text', 'view'],
     files: [
       {
         path: 'registry/examples/text/text-colors.tsx',
