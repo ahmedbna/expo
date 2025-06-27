@@ -8,7 +8,7 @@ export const progressRegistry = {
       'A progress bar component to show completion status with optional interactivity.',
     type: 'registry:ui',
     dependencies: ['react-native-gesture-handler', 'react-native-reanimated'],
-    registryDependencies: ['view', 'use-theme-color'],
+    registryDependencies: ['view'],
     files: [
       {
         path: 'registry/components/ui/progress.tsx',
@@ -48,7 +48,7 @@ export const progressRegistry = {
     name: 'progress-interactive',
     description: 'An interactive progress bar that can be dragged or tapped',
     type: 'registry:example',
-    registryDependencies: ['progress'],
+    registryDependencies: ['progress', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/progress/progress-interactive.tsx',
@@ -67,7 +67,7 @@ export const progressRegistry = {
     name: 'progress-heights',
     description: 'Progress bars with different heights',
     type: 'registry:example',
-    registryDependencies: ['progress'],
+    registryDependencies: ['progress', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/progress/progress-heights.tsx',
@@ -86,7 +86,7 @@ export const progressRegistry = {
     name: 'progress-labels',
     description: 'Progress bars with percentage labels and descriptions',
     type: 'registry:example',
-    registryDependencies: ['progress'],
+    registryDependencies: ['progress', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/progress/progress-labels.tsx',
@@ -105,7 +105,7 @@ export const progressRegistry = {
     name: 'progress-animated',
     description: 'Progress bars with smooth animations and transitions',
     type: 'registry:example',
-    registryDependencies: ['progress'],
+    registryDependencies: ['progress', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/progress/progress-animated.tsx',
@@ -124,7 +124,7 @@ export const progressRegistry = {
     name: 'progress-media',
     description: 'Progress bars styled for media player controls',
     type: 'registry:example',
-    registryDependencies: ['progress'],
+    registryDependencies: ['progress', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/progress/progress-media.tsx',
@@ -143,7 +143,7 @@ export const progressRegistry = {
     name: 'progress-steps',
     description: 'Multi-step progress indicators',
     type: 'registry:example',
-    registryDependencies: ['progress'],
+    registryDependencies: ['progress', 'text', 'view'],
     files: [
       {
         path: 'registry/examples/progress/progress-steps.tsx',
