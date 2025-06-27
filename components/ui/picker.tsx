@@ -93,6 +93,7 @@ export function Picker({
   const primaryForeground = useThemeColor({}, 'primaryForeground');
   const input = useThemeColor({}, 'input');
   const mutedBg = useThemeColor({}, 'muted');
+  const textMutedColor = useThemeColor({}, 'textMuted');
 
   // Normalize data structure - convert options to sections format
   const normalizedSections: PickerSection[] =
@@ -171,75 +172,49 @@ export function Picker({
       ? values.includes(option.value)
       : value === option.value;
 
-    const isLastInSection =
-      optionIndex === filteredSections[sectionIndex].options.length - 1;
-    const isLastSection = sectionIndex === filteredSections.length - 1;
-
     return (
       <TouchableOpacity
         key={`${sectionIndex}-${option.value}`}
-        style={{
-          paddingHorizontal: 16,
-          paddingVertical: 12,
-          borderBottomWidth: !isLastInSection || !isLastSection ? 1 : 0,
-          borderBottomColor: borderColor,
-          backgroundColor: isSelected ? accent : 'transparent',
-          opacity: option.disabled ? 0.5 : 1,
-        }}
         onPress={() => !option.disabled && handleSelect(option.value)}
-        activeOpacity={0.7}
+        style={{
+          paddingVertical: 16,
+          paddingHorizontal: 20,
+          borderRadius: CORNERS,
+          backgroundColor: isSelected ? primary : 'transparent',
+          marginVertical: 2,
+          alignItems: 'center',
+          opacity: option.disabled ? 0.3 : 1,
+        }}
         disabled={option.disabled}
       >
         <View
           style={{
-            flexDirection: 'row',
+            width: '100%',
             alignItems: 'center',
-            justifyContent: 'space-between',
           }}
         >
-          <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              color: isSelected ? primaryForeground : text,
+              fontWeight: isSelected ? '600' : '400',
+              fontSize: FONT_SIZE,
+              textAlign: 'center',
+            }}
+          >
+            {option.label}
+          </Text>
+          {option.description && (
             <Text
+              variant='caption'
               style={{
-                fontSize: FONT_SIZE,
-                color: text,
-                fontWeight: isSelected ? '500' : '400',
+                marginTop: 4,
+                fontSize: 12,
+                color: isSelected ? primaryForeground : textMutedColor,
+                textAlign: 'center',
               }}
             >
-              {option.label}
+              {option.description}
             </Text>
-            {option.description && (
-              <Text
-                variant='caption'
-                style={{
-                  marginTop: 2,
-                  fontSize: 14,
-                }}
-              >
-                {option.description}
-              </Text>
-            )}
-          </View>
-          {multiple && isSelected && (
-            <View
-              style={{
-                width: 20,
-                height: 20,
-                borderRadius: 10,
-                backgroundColor: primary, // Now using the pre-defined variable
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginLeft: 8,
-              }}
-            >
-              <Text
-                style={{
-                  color: primaryForeground, // Now using the pre-defined variable
-                  fontSize: 12,
-                }}
-              >
-                ✓
-              </Text>
-            </View>
           )}
         </View>
       </TouchableOpacity>
@@ -397,7 +372,7 @@ export function Picker({
                   <TouchableOpacity onPress={() => setIsOpen(false)}>
                     <Text
                       style={{
-                        color: primary, // Now using the pre-defined variable
+                        color: primary,
                         fontWeight: '500',
                       }}
                     >
@@ -423,7 +398,7 @@ export function Picker({
                     height: 36,
                     paddingHorizontal: 12,
                     borderRadius: 8,
-                    backgroundColor: input, // Now using the pre-defined variable
+                    backgroundColor: input,
                     color: text,
                     fontSize: FONT_SIZE,
                   }}
@@ -435,56 +410,69 @@ export function Picker({
               </View>
             )}
 
-            {/* Options */}
-            <ScrollView
-              style={{
-                maxHeight: 460,
-              }}
-              showsVerticalScrollIndicator={false}
-            >
-              {filteredSections.map((section, sectionIndex) => (
-                <View key={sectionIndex}>
-                  {section.title && (
-                    <View
-                      style={{
-                        paddingHorizontal: 16,
-                        paddingVertical: 8,
-                        backgroundColor: mutedBg, // Now using the pre-defined variable
-                      }}
-                    >
-                      <Text
-                        variant='caption'
+            {/* Options - Updated to match date-picker styling */}
+            <View style={{ height: 300 }}>
+              <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                  paddingVertical: 20,
+                  paddingHorizontal: 16,
+                }}
+              >
+                {filteredSections.map((section, sectionIndex) => (
+                  <View key={sectionIndex}>
+                    {section.title && (
+                      <View
                         style={{
-                          fontWeight: '600',
-                          color: text,
+                          paddingHorizontal: 4,
+                          paddingVertical: 12,
+                          marginBottom: 8,
                         }}
                       >
-                        {section.title}
-                      </Text>
-                    </View>
-                  )}
-                  {section.options.map((option, optionIndex) =>
-                    renderOption(option, sectionIndex, optionIndex)
-                  )}
-                </View>
-              ))}
+                        <Text
+                          variant='caption'
+                          style={{
+                            fontWeight: '600',
+                            color: textMutedColor,
+                            fontSize: 12,
+                            textTransform: 'uppercase',
+                            letterSpacing: 0.5,
+                          }}
+                        >
+                          {section.title}
+                        </Text>
+                      </View>
+                    )}
+                    {section.options.map((option, optionIndex) =>
+                      renderOption(option, sectionIndex, optionIndex)
+                    )}
+                  </View>
+                ))}
 
-              {filteredSections.every(
-                (section) => section.options.length === 0
-              ) && (
-                <View
-                  style={{
-                    paddingHorizontal: 16,
-                    paddingVertical: 24,
-                    alignItems: 'center',
-                  }}
-                >
-                  <Text variant='caption'>
-                    {searchQuery ? 'No results found' : 'No options available'}
-                  </Text>
-                </View>
-              )}
-            </ScrollView>
+                {filteredSections.every(
+                  (section) => section.options.length === 0
+                ) && (
+                  <View
+                    style={{
+                      paddingHorizontal: 16,
+                      paddingVertical: 24,
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Text
+                      variant='caption'
+                      style={{
+                        color: textMutedColor,
+                      }}
+                    >
+                      {searchQuery
+                        ? 'No results found'
+                        : 'No options available'}
+                    </Text>
+                  </View>
+                )}
+              </ScrollView>
+            </View>
           </Pressable>
         </Pressable>
       </Modal>

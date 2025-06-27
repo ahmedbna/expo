@@ -20,7 +20,6 @@ import { Icon } from '@/components/ui/icon';
 import { GroupedInput, GroupedInputItem, Input } from '@/components/ui/input';
 import { ModeToggle } from '@/components/ui/mode-toggle';
 import { ScrollView } from '@/components/ui/scroll-view';
-import { Select } from '@/components/ui/select';
 import { Separator } from '@/components/ui/seperator';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Switch } from '@/components/ui/switch';
@@ -68,7 +67,6 @@ import {
 import { Progress } from './ui/progress';
 import { RadioButton, RadioGroup } from './ui/radio';
 import { SearchBar, SearchBarWithSuggestions } from './ui/searchbar';
-import { Textarea } from './ui/textarea';
 import { useToast } from './ui/toast';
 import { Toggle } from './ui/toggle';
 import { TableDemo } from './user-table';
@@ -124,14 +122,6 @@ export const Test = () => {
             minHeight: '100%', // Use minHeight instead of flex: 1
           }}
         >
-          <Select
-            options={[
-              { label: 'Option 1', value: 'option1' },
-              { label: 'Option 2', value: 'option2' },
-              { label: 'Option 3', value: 'option3' },
-            ]}
-          />
-
           <SheetExample />
 
           <Picker
@@ -317,19 +307,6 @@ export const Test = () => {
                 onChange={setSelectedDate}
                 placeholder='Select a date'
                 variant='group'
-              />
-
-              <Select
-                error=''
-                variant='group'
-                label='Select'
-                icon={TextSelectIcon}
-                // value='option1'
-                options={[
-                  { label: 'Option 1', value: 'option1' },
-                  { label: 'Option 2', value: 'option2' },
-                  { label: 'Option 3', value: 'option3' },
-                ]}
               />
 
               <GroupedInputItem
@@ -771,8 +748,6 @@ export const Test = () => {
               <Text>AB</Text>
             </AvatarFallback>
           </Avatar>
-
-          <Textarea />
 
           <Progress
             value={progress}
