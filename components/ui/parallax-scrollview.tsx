@@ -1,5 +1,5 @@
-import { useBottomTabOverflow } from '@/components/ui/blur-background';
 import { View } from '@/components/ui/view';
+import { useBottomTabOverflow } from '@/hooks/useBottomTabOverflow';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import type { PropsWithChildren, ReactElement } from 'react';
 import Animated, {

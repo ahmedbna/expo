@@ -22,7 +22,7 @@ Expo React Native CLI UI Library
 - Link
 - Icon
 - HelloWave
-- HapticTap
+- ParallaxScrollView
 
 ## Get started
 

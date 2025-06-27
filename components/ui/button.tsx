@@ -3,6 +3,7 @@ import { ButtonSpinner, SpinnerVariant } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS, FONT_SIZE, HEIGHT } from '@/theme/globals';
+import * as Haptics from 'expo-haptics';
 import { LucideProps } from 'lucide-react-native';
 import { forwardRef } from 'react';
 import {
@@ -34,6 +35,7 @@ export interface ButtonProps extends Omit<TouchableOpacityProps, 'style'> {
   label?: string;
   children: React.ReactNode;
   animation?: boolean;
+  haptic?: boolean;
   icon?: React.ComponentType<LucideProps>;
   onPress?: () => void;
   variant?: ButtonVariant;
@@ -56,6 +58,7 @@ export const Button = forwardRef<View, ButtonProps>(
       disabled = false,
       loading = false,
       animation = true,
+      haptic = true,
       loadingVariant = 'default',
       style,
       textStyle,
@@ -196,9 +199,21 @@ export const Button = forwardRef<View, ButtonProps>(
       }
     };
 
+    // Trigger haptic feedback
+    const triggerHapticFeedback = () => {
+      if (haptic && !disabled && !loading) {
+        if (process.env.EXPO_OS === 'ios') {
+          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        }
+      }
+    };
+
     // Improved animation handlers for liquid glass effect
-    const handlePressIn = () => {
+    const handlePressIn = (ev?: any) => {
       'worklet';
+      // Trigger haptic feedback
+      triggerHapticFeedback();
+
       // Scale up with bouncy spring animation
       scale.value = withSpring(1.04, {
         damping: 15,
@@ -211,9 +226,12 @@ export const Button = forwardRef<View, ButtonProps>(
         damping: 20,
         stiffness: 300,
       });
+
+      // Call original onPressIn if provided
+      props.onPressIn?.(ev);
     };
 
-    const handlePressOut = () => {
+    const handlePressOut = (ev?: any) => {
       'worklet';
       // Return to original size with smooth spring
       scale.value = withSpring(1, {
@@ -228,6 +246,9 @@ export const Button = forwardRef<View, ButtonProps>(
         damping: 20,
         stiffness: 300,
       });
+
+      // Call original onPressOut if provided
+      props.onPressOut?.(ev);
     };
 
     // Handle actual press action
@@ -235,6 +256,12 @@ export const Button = forwardRef<View, ButtonProps>(
       if (onPress && !disabled && !loading) {
         onPress();
       }
+    };
+
+    // Handle press for TouchableOpacity (non-animated version)
+    const handleTouchablePress = () => {
+      triggerHapticFeedback();
+      handlePress();
     };
 
     // Animated styles using useAnimatedStyle
@@ -288,7 +315,7 @@ export const Button = forwardRef<View, ButtonProps>(
       <TouchableOpacity
         ref={ref}
         style={[buttonStyle, disabled && { opacity: 0.5 }, style]}
-        onPress={onPress}
+        onPress={handleTouchablePress}
         disabled={disabled || loading}
         activeOpacity={0.8}
         {...props}
