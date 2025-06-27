@@ -1,6 +1,6 @@
 // Registry configuration for view component and examples
 
-export const switchRegistry = {
+export const viewRegistry = {
   // Main view component
   view: {
     name: 'view',
