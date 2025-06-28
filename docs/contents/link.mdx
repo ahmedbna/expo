@@ -5,7 +5,7 @@ description: A link component that handles both internal navigation and external
 
 <ComponentPreview
   name='link-demo'
-  description='Links that open external URLs'
+  description='Links for internal navigation and external URLs'
 />
 
 ## Installation
@@ -54,53 +54,76 @@ import { Link } from '@/components/ui/link';
 
 ```tsx
 <Link href="/profile">Go to Profile</Link>
-<Link href="https://example.com">Visit Website</Link>
+<Link href="https://example.com" external>Visit Website</Link>
 ```
 
 ## Examples
 
-### Default
+### Internal Navigation
 
 <ComponentPreview
-  name='link-demo'
+  name='link-internal-demo'
+  description='Links for internal app navigation'
+/>
+
+### External URLs
+
+<ComponentPreview
+  name='link-external-demo'
   description='Links that open external URLs'
+/>
+
+### Custom Content
+
+<ComponentPreview
+  name='link-custom-demo'
+  description='Links with custom content beyond text'
 />
 
 ## API Reference
 
 ### Link
 
-A component that handles both internal navigation and external URL opening.
+A component that handles both internal navigation and external URL opening with smart browser behavior.
 
-| Prop       | Type            | Default | Description                               |
-| ---------- | --------------- | ------- | ----------------------------------------- |
-| `href`     | `Href & string` | -       | The URL or route to navigate to.          |
-| `children` | `ReactNode`     | -       | The content to display inside the link.   |
-| `onPress`  | `function`      | -       | Custom press handler (overrides default). |
-| `style`    | `ViewStyle`     | -       | Additional styles to apply to the link.   |
+| Prop       | Type            | Default | Description                                                |
+| ---------- | --------------- | ------- | ---------------------------------------------------------- |
+| `href`     | `Href & string` | -       | The URL or route to navigate to.                           |
+| `children` | `ReactNode`     | -       | The content to display inside the link.                    |
+| `external` | `boolean`       | `false` | Whether to open external URLs in system browser vs in-app. |
+| `onPress`  | `function`      | -       | Custom press handler (extends default behavior).           |
 
 ### Additional Props
 
-The Link component accepts all props from Expo Router's `Link` component except `href` (which is required and typed).
+The Link component accepts all props from Expo Router's `Link` component except `href` (which is required and typed differently).
 
 ## Behavior
 
 ### Internal Navigation
 
 - Uses Expo Router for internal app navigation
-- Supports all Expo Router href formats
-- Maintains navigation history
+- Supports all Expo Router href formats (strings, objects)
+- Maintains navigation history and state
+- Works consistently across platforms
 
 ### External URLs
 
-- Opens external URLs in an in-app browser on native platforms
-- Falls back to system browser on web
-- Prevents accidental external navigation
+The component intelligently handles external URLs based on platform and the `external` prop:
+
+**Native Platforms (iOS/Android):**
+
+- `external={false}` (default): Opens in in-app browser via `expo-web-browser`
+- `external={true}`: Opens in system browser via `Linking.openURL`
+
+**Web Platform:**
+
+- Always opens in new tab/window regardless of `external` prop
+- Uses standard web link behavior
 
 ### Platform Differences
 
-- **Native (iOS/Android)**: External links open in in-app browser
-- **Web**: External links open in new tab/window
+- **Native**: Prevents default browser opening, uses custom handlers
+- **Web**: Uses standard web link behavior with `target="_blank"`
 - **All platforms**: Internal navigation works consistently
 
 ## URL Types
@@ -111,12 +134,19 @@ The Link component accepts all props from Expo Router's `Link` component except 
 <Link href="/profile">Profile</Link>
 <Link href="/settings/account">Account Settings</Link>
 <Link href="/(tabs)/home">Home Tab</Link>
+<Link href={{ pathname: '/user/[id]', params: { id: '123' } }}>User 123</Link>
 ```
 
 ### External URLs
 
 ```tsx
+{/* Opens in in-app browser (default on native) */}
 <Link href="https://example.com">Website</Link>
+
+{/* Opens in system browser */}
+<Link href="https://example.com" external>Website</Link>
+
+{/* Special URL schemes */}
 <Link href="mailto:hello@example.com">Email</Link>
 <Link href="tel:+1234567890">Phone</Link>
 ```
@@ -125,46 +155,94 @@ The Link component accepts all props from Expo Router's `Link` component except 
 
 ```tsx
 <Link href={`/user/${userId}`}>User Profile</Link>
-<Link href={{ pathname: '/search', params: { q: 'react' } }}>Search</Link>
+<Link href={{ pathname: '/search', params: { q: searchTerm } }}>
+  Search Results
+</Link>
 ```
 
-## Styling
+## Content Types
 
 ### Text Links
 
-When children is a string, it automatically uses the 'link' text variant:
+When `children` is a string, it automatically wraps with styled Text component:
 
 ```tsx
-<Link href='/about'>About Us</Link> // Automatically styled as link text
+<Link href='/about'>About Us</Link>;
+{
+  /* Renders: <Text variant="link">About Us</Text> */
+}
 ```
 
 ### Custom Content
 
-For custom content, style as needed:
+For custom content, provide any React elements:
 
 ```tsx
 <Link href='/profile'>
   <View style={styles.customLink}>
-    <Icon IconComponent={User} />
-    <Text>Profile</Text>
+    <Icon name='user' />
+    <Text>My Profile</Text>
   </View>
 </Link>
 ```
 
+## Styling
+
+### Text Styling
+
+The component automatically applies the `link` text variant for string children. Customize this in your Text component's variant system.
+
+### Custom Styling
+
+Apply additional styles using standard React Native style props:
+
+```tsx
+<Link href='/home' style={{ padding: 10, backgroundColor: 'blue' }}>
+  Styled Link
+</Link>
+```
+
+## Error Handling
+
+The component includes basic error handling for URL operations:
+
+- Wraps `Linking.openURL` and `openBrowserAsync` in try-catch blocks
+- Gracefully falls back if browser opening fails
+- Maintains app stability during navigation errors
+
 ## Accessibility
 
-The Link component maintains accessibility:
+The Link component maintains full accessibility support:
 
 - Preserves all accessibility props from Expo Router
-- Supports screen reader navigation
-- Maintains proper focus behavior
-- Works with keyboard navigation on supported platforms
-- Announces link destinations to screen readers
+- Supports screen reader navigation and announcements
+- Maintains proper focus behavior across platforms
+- Works with keyboard navigation where supported
+- Announces link destinations to assistive technologies
 
 ## Best Practices
 
+### URL Handling
+
+- Use `external={true}` for URLs that should open in system browser
+- Test external link behavior on both platforms
+- Consider user preferences for in-app vs system browsing
+
+### Content
+
 - Use descriptive link text that makes sense out of context
 - Distinguish between internal and external links visually
-- Test link behavior on all target platforms
-- Consider loading states for external links
-- Use semantic HTML structure when possible
+- Provide loading feedback for slow external links
+
+### Performance
+
+- Avoid creating new objects in href prop on every render
+- Pre-load critical navigation routes when possible
+- Consider lazy loading for heavy external content
+
+### Testing
+
+- Test all link types on both iOS and Android
+- Verify external links work with various URL schemes
+- Test navigation state preservation
+- Ensure proper back button behavior

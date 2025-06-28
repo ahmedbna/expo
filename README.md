@@ -21,7 +21,6 @@ Expo React Native CLI UI Library
 - ModeToggle
 - Link
 - Icon
-- HelloWave
 - ParallaxScrollView
 
 ## Get started

@@ -29,15 +29,7 @@ import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
 import { CORNERS } from '@/theme/globals';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-import {
-  Camera,
-  Eye,
-  EyeOff,
-  Lock,
-  Pen,
-  Search,
-  TextSelectIcon,
-} from 'lucide-react-native';
+import { Camera, Eye, EyeOff, Lock, Pen, Search } from 'lucide-react-native';
 import { useState } from 'react';
 import { Pressable } from 'react-native';
 import ActionSheetExample from './action-sheet-examples';
@@ -123,6 +115,15 @@ export const Test = () => {
           }}
         >
           <SheetExample />
+
+          <Link href='https://www.ahmedbna.com'>BNA</Link>
+          <Link browser='external' href='https://www.ahmedbna.com'>
+            BNA
+          </Link>
+          <Link href='/welcome'>Welcome</Link>
+          <Link href='/welcome'>
+            <Button>Welcome</Button>
+          </Link>
 
           <Picker
             options={countryOptions}
@@ -241,8 +242,6 @@ export const Test = () => {
           </Button>
 
           <PickerExamples />
-
-          <Link href='/'>Hello</Link>
 
           <View style={{ width: '100%', gap: 16 }}>
             <Checkbox
