@@ -96,7 +96,7 @@ export function CardPricing() {
                   key={featureIndex}
                   style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
                 >
-                  <Icon IconComponent={Check} color='#22c55e' size={16} />
+                  <Icon name={Check} color='#22c55e' size={16} />
                   <Text>{feature}</Text>
                 </View>
               ))}

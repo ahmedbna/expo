@@ -422,7 +422,6 @@ export function CarouselArrow({
   style,
 }: CarouselArrowProps) {
   const primaryColor = useThemeColor({}, 'primary');
-  const IconComponent = direction === 'left' ? ChevronLeft : ChevronRight;
 
   return (
     <TouchableOpacity
@@ -450,7 +449,11 @@ export function CarouselArrow({
           alignItems: 'center',
         }}
       >
-        <IconComponent size={20} color={primaryColor} />
+        {direction === 'left' ? (
+          <ChevronLeft size={20} color={primaryColor} />
+        ) : (
+          <ChevronRight size={20} color={primaryColor} />
+        )}
       </BlurView>
     </TouchableOpacity>
   );

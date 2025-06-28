@@ -773,11 +773,11 @@ export function DatePicker({
             }}
           >
             {mode === 'time' ? (
-              <Icon IconComponent={Clock} size={20} strokeWidth={1} />
+              <Icon name={Clock} size={20} strokeWidth={1} />
             ) : mode === 'datetime' ? (
-              <Icon IconComponent={CalendarClock} size={20} strokeWidth={1} />
+              <Icon name={CalendarClock} size={20} strokeWidth={1} />
             ) : (
-              <Icon IconComponent={Calendar} size={20} strokeWidth={1} />
+              <Icon name={Calendar} size={20} strokeWidth={1} />
             )}
 
             {/* Label takes 1/3 of available width when present */}

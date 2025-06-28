@@ -11,25 +11,25 @@ export function ActionSheetDisabled() {
     {
       title: 'Edit',
       onPress: () => console.log('Edit pressed'),
-      icon: <Icon IconComponent={Edit} size={20} />,
+      icon: <Icon name={Edit} size={20} />,
     },
     {
       title: 'Copy',
       onPress: () => console.log('Copy pressed'),
-      icon: <Icon IconComponent={Copy} size={20} />,
+      icon: <Icon name={Copy} size={20} />,
       disabled: true,
     },
     {
       title: 'Share',
       onPress: () => console.log('Share pressed'),
-      icon: <Icon IconComponent={Share} size={20} />,
+      icon: <Icon name={Share} size={20} />,
       disabled: true,
     },
     {
       title: 'Delete',
       onPress: () => console.log('Delete pressed'),
       destructive: true,
-      icon: <Icon IconComponent={Trash2} size={20} />,
+      icon: <Icon name={Trash2} size={20} />,
     },
   ];
 

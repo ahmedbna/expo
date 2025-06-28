@@ -16,22 +16,22 @@ export function ActionSheetHook() {
         {
           title: 'Take Photo',
           onPress: () => console.log('Take photo'),
-          icon: <Icon IconComponent={Camera} size={20} />,
+          icon: <Icon name={Camera} size={20} />,
         },
         {
           title: 'Choose from Gallery',
           onPress: () => console.log('Choose from gallery'),
-          icon: <Icon IconComponent={Image} size={20} />,
+          icon: <Icon name={Image} size={20} />,
         },
         {
           title: 'Record Audio',
           onPress: () => console.log('Record audio'),
-          icon: <Icon IconComponent={Mic} size={20} />,
+          icon: <Icon name={Mic} size={20} />,
         },
         {
           title: 'Add Document',
           onPress: () => console.log('Add document'),
-          icon: <Icon IconComponent={FileText} size={20} />,
+          icon: <Icon name={FileText} size={20} />,
         },
       ],
     });

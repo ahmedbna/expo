@@ -17,13 +17,13 @@ export function ActionSheetDestructive() {
       title: 'Delete Permanently',
       onPress: () => console.log('Delete permanently'),
       destructive: true,
-      icon: <Icon IconComponent={Trash2} size={20} />,
+      icon: <Icon name={Trash2} size={20} />,
     },
     {
       title: 'Report Content',
       onPress: () => console.log('Report content'),
       destructive: true,
-      icon: <Icon IconComponent={AlertTriangle} size={20} />,
+      icon: <Icon name={AlertTriangle} size={20} />,
     },
   ];
 

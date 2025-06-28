@@ -28,7 +28,7 @@ export function CardNotification() {
               justifyContent: 'center',
             }}
           >
-            <Icon IconComponent={Bell} color='white' size={20} />
+            <Icon name={Bell} color='white' size={20} />
           </View>
           <View style={{ flex: 1 }}>
             <CardTitle>New Notification</CardTitle>

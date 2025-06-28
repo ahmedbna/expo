@@ -245,7 +245,7 @@ export function ToggleGroup({
               style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}
             >
               <Icon
-                IconComponent={item.icon}
+                name={item.icon}
                 size={16}
                 strokeWidth={2.5}
                 color={
@@ -270,7 +270,7 @@ export function ToggleGroup({
             </View>
           ) : item.icon ? (
             <Icon
-              IconComponent={item.icon}
+              name={item.icon}
               size={16}
               strokeWidth={2.5}
               color={

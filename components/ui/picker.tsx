@@ -240,11 +240,7 @@ export function Picker({
           pointerEvents='none'
         >
           {icon && (
-            <Icon
-              IconComponent={icon}
-              size={16}
-              color={error ? danger : muted}
-            />
+            <Icon name={icon} size={16} color={error ? danger : muted} />
           )}
           {label && (
             <Text

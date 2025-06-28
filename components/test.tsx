@@ -258,7 +258,7 @@ export const Test = () => {
                 icon={Search}
                 rightComponent={() => (
                   <Pressable onPress={() => console.log('click')}>
-                    <Icon IconComponent={EyeOff} size={20} />
+                    <Icon name={EyeOff} size={20} />
                   </Pressable>
                 )}
               />
@@ -315,7 +315,7 @@ export const Test = () => {
                 icon={Search}
                 rightComponent={() => (
                   <Pressable onPress={() => console.log('click')}>
-                    <Icon IconComponent={EyeOff} size={20} />
+                    <Icon name={EyeOff} size={20} />
                   </Pressable>
                 )}
               />
@@ -359,7 +359,7 @@ export const Test = () => {
               secureTextEntry
               rightComponent={() => (
                 <Pressable onPress={() => console.log('click')}>
-                  <Icon IconComponent={EyeOff} size={20} />
+                  <Icon name={EyeOff} size={20} />
                 </Pressable>
               )}
             />
@@ -371,7 +371,7 @@ export const Test = () => {
               error='Password must be 8 characters long'
               rightComponent={() => (
                 <Pressable onPress={() => console.log('click')}>
-                  <Icon IconComponent={Eye} size={20} />
+                  <Icon name={Eye} size={20} />
                 </Pressable>
               )}
             />
@@ -732,7 +732,7 @@ export const Test = () => {
             </AccordionItem>
           </Accordion>
 
-          <Icon IconComponent={Camera} size={48} />
+          <Icon name={Camera} size={48} />
 
           <Toggle variant='outline'>B</Toggle>
 

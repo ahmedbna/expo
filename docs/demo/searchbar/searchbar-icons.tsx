@@ -3,7 +3,7 @@ import { Icon } from '@/components/ui/icon';
 import { SearchBar } from '@/components/ui/searchbar';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { MapPin, Filter, User } from 'lucide-react-native';
+import { Filter, MapPin, User } from 'lucide-react-native';
 import React, { useState } from 'react';
 
 export function SearchBarIcons() {
@@ -18,7 +18,7 @@ export function SearchBarIcons() {
         placeholder='Search locations...'
         value={locationQuery}
         onChangeText={setLocationQuery}
-        leftIcon={<Icon IconComponent={MapPin} size={16} color={icon} />}
+        leftIcon={<Icon name={MapPin} size={16} color={icon} />}
         onSearch={(query) => console.log('Location search:', query)}
       />
 
@@ -27,8 +27,8 @@ export function SearchBarIcons() {
         placeholder='Search users...'
         value={userQuery}
         onChangeText={setUserQuery}
-        leftIcon={<Icon IconComponent={User} size={16} color={icon} />}
-        rightIcon={<Icon IconComponent={Filter} size={16} color={icon} />}
+        leftIcon={<Icon name={User} size={16} color={icon} />}
+        rightIcon={<Icon name={Filter} size={16} color={icon} />}
         showClearButton={false}
         onSearch={(query) => console.log('User search:', query)}
       />

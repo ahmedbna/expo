@@ -62,7 +62,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
-            <Icon IconComponent={Home} size={24} color={color} />
+            <Icon name={Home} size={24} color={color} />
           ),
         }}
       />
@@ -72,7 +72,7 @@ export default function TabLayout() {
         options={{
           title: 'Maps',
           tabBarIcon: ({ color }) => (
-            <Icon IconComponent={MapPlus} size={24} color={color} />
+            <Icon name={MapPlus} size={24} color={color} />
           ),
           tabBarStyle: { display: 'none' }, // This line hides the tab bar for the 'maps' screen
         }}
@@ -83,7 +83,7 @@ export default function TabLayout() {
         options={{
           title: 'Welcome',
           tabBarIcon: ({ color }) => (
-            <Icon IconComponent={HeartHandshakeIcon} size={24} color={color} />
+            <Icon name={HeartHandshakeIcon} size={24} color={color} />
           ),
         }}
       />
@@ -94,7 +94,7 @@ export default function TabLayout() {
           title: 'Demo',
           tabBarIcon: ({ color }) => (
             <Icon
-              IconComponent={LucideSquareDashedMousePointer}
+              name={LucideSquareDashedMousePointer}
               size={24}
               color={color}
             />
@@ -107,7 +107,7 @@ export default function TabLayout() {
         options={{
           title: 'Charts',
           tabBarIcon: ({ color }) => (
-            <Icon IconComponent={ChartCandlestick} size={24} color={color} />
+            <Icon name={ChartCandlestick} size={24} color={color} />
           ),
         }}
       />

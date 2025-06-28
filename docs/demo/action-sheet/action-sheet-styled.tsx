@@ -11,22 +11,22 @@ export function ActionSheetStyled() {
     {
       title: 'Add to Favorites',
       onPress: () => console.log('Add to favorites'),
-      icon: <Icon IconComponent={Heart} size={20} color='#FF6B6B' />,
+      icon: <Icon name={Heart} size={20} color='#FF6B6B' />,
     },
     {
       title: 'Rate this Item',
       onPress: () => console.log('Rate item'),
-      icon: <Icon IconComponent={Star} size={20} color='#FFD93D' />,
+      icon: <Icon name={Star} size={20} color='#FFD93D' />,
     },
     {
       title: 'Save for Later',
       onPress: () => console.log('Save for later'),
-      icon: <Icon IconComponent={Bookmark} size={20} color='#4ECDC4' />,
+      icon: <Icon name={Bookmark} size={20} color='#4ECDC4' />,
     },
     {
       title: 'Share with Friends',
       onPress: () => console.log('Share with friends'),
-      icon: <Icon IconComponent={Send} size={20} color='#45B7D1' />,
+      icon: <Icon name={Send} size={20} color='#45B7D1' />,
     },
   ];
 

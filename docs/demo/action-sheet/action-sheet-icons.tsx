@@ -11,23 +11,23 @@ export function ActionSheetIcons() {
     {
       title: 'Edit',
       onPress: () => console.log('Edit pressed'),
-      icon: <Icon IconComponent={Edit} size={20} />,
+      icon: <Icon name={Edit} size={20} />,
     },
     {
       title: 'Share',
       onPress: () => console.log('Share pressed'),
-      icon: <Icon IconComponent={Share} size={20} />,
+      icon: <Icon name={Share} size={20} />,
     },
     {
       title: 'Download',
       onPress: () => console.log('Download pressed'),
-      icon: <Icon IconComponent={Download} size={20} />,
+      icon: <Icon name={Download} size={20} />,
     },
     {
       title: 'Delete',
       onPress: () => console.log('Delete pressed'),
       destructive: true,
-      icon: <Icon IconComponent={Trash2} size={20} />,
+      icon: <Icon name={Trash2} size={20} />,
     },
   ];
 

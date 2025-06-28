@@ -11,9 +11,9 @@ import {
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { useThemeColor } from '@/hooks/useThemeColor';
-import { Home, Settings, User, Mail, Bell, Search } from 'lucide-react-native';
+import { Bell, Home, Mail, Search, Settings, User } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 export function SheetNavigation() {
   const [open, setOpen] = useState(false);
@@ -52,7 +52,7 @@ export function SheetNavigation() {
         </SheetHeader>
         <View style={styles.navigationContainer}>
           {navigationItems.map((item) => {
-            const IconComponent = item.icon;
+            const name = item.icon;
             const isActive = activeItem === item.id;
 
             return (
@@ -69,10 +69,7 @@ export function SheetNavigation() {
                 ]}
                 onPress={() => handleItemPress(item.id)}
               >
-                <IconComponent
-                  size={20}
-                  color={isActive ? textColor : mutedColor}
-                />
+                <name size={20} color={isActive ? textColor : mutedColor} />
                 <Text
                   style={[
                     styles.navigationText,

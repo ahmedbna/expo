@@ -40,7 +40,7 @@ export function CarouselArrows() {
   return (
     <Carousel showArrows showIndicators loop>
       {slides.map((slide, index) => {
-        const IconComponent = slide.icon;
+        const name = slide.icon;
         return (
           <CarouselItem key={index}>
             <View
@@ -52,7 +52,7 @@ export function CarouselArrows() {
                 padding: 20,
               }}
             >
-              <IconComponent size={48} color={slide.color} />
+              <name size={48} color={slide.color} />
               <Text
                 variant='title'
                 style={{

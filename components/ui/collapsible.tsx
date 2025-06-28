@@ -23,7 +23,7 @@ export function Collapsible({
         activeOpacity={0.8}
       >
         <Icon
-          IconComponent={ChevronRight}
+          name={ChevronRight}
           size={18}
           style={{ transform: [{ rotate: isOpen ? '90deg' : '0deg' }] }}
         />

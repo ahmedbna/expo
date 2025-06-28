@@ -49,7 +49,7 @@ export const ModeToggle = ({ variant = 'outline', size = 'icon' }: Props) => {
   return (
     <Button variant={variant} size={size} onPress={toggleMode}>
       <Animated.View style={animatedStyle}>
-        <Icon IconComponent={showIcon === 'moon' ? Moon : Sun} size={24} />
+        <Icon name={showIcon === 'moon' ? Moon : Sun} size={24} />
       </Animated.View>
     </Button>
   );

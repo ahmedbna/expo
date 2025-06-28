@@ -6,13 +6,13 @@ import React from 'react';
 export type Props = LucideProps & {
   lightColor?: string;
   darkColor?: string;
-  IconComponent: React.ComponentType<LucideProps>;
+  name: React.ComponentType<LucideProps>;
 };
 
 export function Icon({
   lightColor,
   darkColor,
-  IconComponent,
+  name: IconComponent,
   color,
   size = 24,
   strokeWidth = 1.8,
