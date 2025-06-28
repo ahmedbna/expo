@@ -1,32 +1,30 @@
-// registry/examples/popover-example.tsx
+// registry/examples/scroll-view-example.tsx
 import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
-import { PopoverAlignment } from '@/docs/demo/popover/popover-alignment';
-import { PopoverControlled } from '@/docs/demo/popover/popover-controlled';
-import { PopoverCustom } from '@/docs/demo/popover/popover-custom';
-import { PopoverDemo } from '@/docs/demo/popover/popover-demo';
-import { PopoverForm } from '@/docs/demo/popover/popover-form';
-import { PopoverMenu } from '@/docs/demo/popover/popover-menu';
-import { PopoverPositioning } from '@/docs/demo/popover/popover-positioning';
+import { ScrollViewDemo } from '@/docs/demo/scroll-view/scroll-view-demo';
+import { ScrollViewHorizontal } from '@/docs/demo/scroll-view/scroll-view-horizontal';
+import { ScrollViewIndicators } from '@/docs/demo/scroll-view/scroll-view-indicators';
+import { ScrollViewInset } from '@/docs/demo/scroll-view/scroll-view-inset';
+import { ScrollViewNested } from '@/docs/demo/scroll-view/scroll-view-nested';
+import { ScrollViewRefresh } from '@/docs/demo/scroll-view/scroll-view-refresh';
+import { ScrollViewStyled } from '@/docs/demo/scroll-view/scroll-view-styled';
+import { ScrollViewVertical } from '@/docs/demo/scroll-view/scroll-view-vertical';
 import React from 'react';
 import { ScrollView } from 'react-native';
 
 // Main demo screen combining all examples
-export function PopoverExample() {
+export function ScrollViewExample() {
   return (
     <ScrollView
       style={{
         flex: 1,
         padding: 16,
       }}
-      contentContainerStyle={{
-        paddingBottom: 32,
-      }}
     >
       <View style={{ gap: 32 }}>
         <View>
           <Text variant='heading' style={{ marginBottom: 16 }}>
-            Popover Examples
+            ScrollView Examples
           </Text>
 
           <View style={{ gap: 24 }}>
@@ -34,49 +32,56 @@ export function PopoverExample() {
               <Text variant='title' style={{ marginBottom: 12 }}>
                 Default
               </Text>
-              <PopoverDemo />
+              <ScrollViewDemo />
             </View>
 
             <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
-                Positioning
+                Vertical Scrolling
               </Text>
-              <PopoverPositioning />
+              <ScrollViewVertical />
             </View>
 
             <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
-                Alignment
+                Horizontal Scrolling
               </Text>
-              <PopoverAlignment />
+              <ScrollViewHorizontal />
             </View>
 
             <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
-                Controlled State
+                Nested ScrollViews
               </Text>
-              <PopoverControlled />
+              <ScrollViewNested />
             </View>
 
             <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
-                Custom Content & Styling
+                Pull to Refresh
               </Text>
-              <PopoverCustom />
+              <ScrollViewRefresh />
             </View>
 
             <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
-                Form Content
+                Custom Styling
               </Text>
-              <PopoverForm />
+              <ScrollViewStyled />
             </View>
 
             <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
-                Menu Style
+                Scroll Indicators
               </Text>
-              <PopoverMenu />
+              <ScrollViewIndicators />
+            </View>
+
+            <View>
+              <Text variant='title' style={{ marginBottom: 12 }}>
+                Content Inset Adjustments
+              </Text>
+              <ScrollViewInset />
             </View>
           </View>
         </View>

@@ -16,7 +16,6 @@ Expo React Native CLI UI Library
 
 ## Registry
 
-- Icon
 - Popover
 - ScrollView
 - ParallaxScrollView
