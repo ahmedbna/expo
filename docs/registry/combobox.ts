@@ -31,7 +31,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox'],
     files: [
       {
-        path: 'registry/components/ui/combobox-demo.tsx',
+        path: 'registry/examples/combobox/combobox-demo.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -50,7 +50,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox'],
     files: [
       {
-        path: 'registry/components/ui/combobox-groups.tsx',
+        path: 'registry/examples/combobox/combobox-groups.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -68,7 +68,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox'],
     files: [
       {
-        path: 'registry/components/ui/combobox-multiple.tsx',
+        path: 'registry/examples/combobox/combobox-multiple.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -86,7 +86,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox'],
     files: [
       {
-        path: 'registry/components/ui/combobox-disabled.tsx',
+        path: 'registry/examples/combobox/combobox-disabled.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -104,7 +104,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox'],
     files: [
       {
-        path: 'registry/components/ui/combobox-search.tsx',
+        path: 'registry/examples/combobox/combobox-search.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -122,7 +122,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox', 'text', 'view'],
     files: [
       {
-        path: 'registry/components/ui/combobox-form.tsx',
+        path: 'registry/examples/combobox/combobox-form.tsx',
         type: 'registry:ui',
         target: '',
       },
@@ -140,7 +140,7 @@ export const comboboxRegistry = {
     registryDependencies: ['combobox'],
     files: [
       {
-        path: 'registry/components/ui/combobox-large.tsx',
+        path: 'registry/examples/combobox/combobox-large.tsx',
         type: 'registry:ui',
         target: '',
       },

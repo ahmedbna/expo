@@ -13,34 +13,36 @@ import { ScrollView } from 'react-native';
 // Main demo screen combining all examples
 export function AccordionExample() {
   return (
-    <ScrollView
+    <View
       style={{
         flex: 1,
         padding: 16,
+        gap: 32,
+        // alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
-      <View style={{ gap: 32 }}>
-        <View>
-          <Text variant='heading' style={{ marginBottom: 16 }}>
-            Accordion Examples
-          </Text>
+      <View>
+        <Text variant='heading' style={{ marginBottom: 16 }}>
+          Accordion
+        </Text>
 
-          <View style={{ gap: 24 }}>
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Default (Single, Collapsible)
-              </Text>
-              <AccordionDemo />
-            </View>
+        <View style={{ gap: 24 }}>
+          {/* <View>
+            <Text variant='title' style={{ marginBottom: 12 }}>
+              Default (Single, Collapsible)
+            </Text>
+            <AccordionDemo />
+          </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Multiple Selection
-              </Text>
-              <AccordionMultiple />
-            </View>
+          <View>
+            <Text variant='title' style={{ marginBottom: 12 }}>
+              Multiple Selection
+            </Text>
+            <AccordionMultiple />
+          </View>
 
-            <View>
+          {/*    <View>
               <Text variant='title' style={{ marginBottom: 12 }}>
                 Controlled State
               </Text>
@@ -66,10 +68,9 @@ export function AccordionExample() {
                 Custom Styled
               </Text>
               <AccordionStyled />
-            </View>
-          </View>
+            </View>*/}
         </View>
       </View>
-    </ScrollView>
+    </View>
   );
 }
