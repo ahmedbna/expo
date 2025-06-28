@@ -65,20 +65,6 @@ import { ModeToggle } from '@/components/ui/mode-toggle';
   description='Animated theme toggle button'
 />
 
-### Different Variants
-
-<ComponentPreview
-  name='mode-toggle-variants'
-  description='Mode toggles in various variants'
-/>
-
-### Different Sizes
-
-<ComponentPreview
-  name='mode-toggle-sizes'
-  description='Mode toggles in various sizes'
-/>
-
 ## API Reference
 
 ### ModeToggle
@@ -118,26 +104,6 @@ Example theme hook:
 
 ```tsx
 const { toggleMode, isDark } = useModeToggle();
-```
-
-## Customization
-
-### Custom Button Styling
-
-```tsx
-<ModeToggle style={{ borderRadius: 12, backgroundColor: 'transparent' }} />
-```
-
-### Custom Animation Timing
-
-Modify the source code to adjust animation timing:
-
-```tsx
-// Faster transitions
-scale.value = withTiming(0, { duration: 100 }, () => {
-  runOnJS(setShowIcon)(isDark ? 'moon' : 'sun');
-  scale.value = withTiming(1, { duration: 100 });
-});
 ```
 
 ## Performance
