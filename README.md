@@ -16,10 +16,6 @@ Expo React Native CLI UI Library
 
 ## Registry
 
-- Popover
-- ScrollView
-- ParallaxScrollView
-
 ## Get started
 
 1. Install dependencies
