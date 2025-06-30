@@ -13,54 +13,64 @@ import { AudioPlayerMusic } from '../demo/audio-player/audio-player-music';
 // Main demo screen combining all examples
 export function AudioPlayerExample() {
   return (
-    <View style={{ width: '100%', gap: 24 }}>
-      <View>
+    <View
+      style={{
+        flex: 1,
+        padding: 16,
+        justifyContent: 'center',
+      }}
+    >
+      <Text variant='heading' style={{ marginBottom: 16 }}>
+        AudioPlayer
+      </Text>
+
+      {/* <View>
         <Text variant='title'>Default</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Full-featured audio player with waveform, controls, and timer
         </Text>
         <AudioPlayerDemo />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Minimal Player</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Simple player with only essential controls and progress bar
         </Text>
         <AudioPlayerMinimal />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Waveform Focus</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Player emphasizing waveform visualization for audio content
         </Text>
         <AudioPlayerWaveform />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Progress Bar Only</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Clean interface using progress bar for seeking and playback
         </Text>
         <AudioPlayerProgress />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Auto Play</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Player that automatically starts when audio is loaded
         </Text>
         <AudioPlayerAutoplay />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Custom Styling</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Styled player with custom appearance and shadow effects
         </Text>
         <AudioPlayerStyled />
-      </View>
+      </View> */}
 
       <View>
         <Text variant='title'>Audio Player Music</Text>

@@ -36,6 +36,8 @@ export function Badge({
 
   const getBadgeStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
+      alignItems: 'center',
+      justifyContent: 'center',
       paddingVertical: 6,
       paddingHorizontal: 12,
       borderRadius: CORNERS,
@@ -64,6 +66,7 @@ export function Badge({
     const baseTextStyle: TextStyle = {
       fontSize: 15,
       fontWeight: '500',
+      textAlign: 'center',
     };
 
     switch (variant) {

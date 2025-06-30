@@ -22,16 +22,6 @@ export function CarouselCustomWidth() {
 
   return (
     <View>
-      <Text
-        variant='body'
-        style={{
-          marginBottom: 16,
-          color: textColor,
-          textAlign: 'center',
-        }}
-      >
-        Swipe to see more products →
-      </Text>
       <Carousel
         itemWidth={screenWidth * 0.7}
         spacing={16}
@@ -82,6 +72,15 @@ export function CarouselCustomWidth() {
           </CarouselItem>
         ))}
       </Carousel>
+
+      <Text
+        variant='caption'
+        style={{
+          marginTop: 16,
+        }}
+      >
+        Swipe to see more products →
+      </Text>
     </View>
   );
 }

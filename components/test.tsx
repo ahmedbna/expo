@@ -74,7 +74,7 @@ const countryOptions: PickerOption[] = [
   { label: 'Australia', value: 'au' },
 ];
 
-export const Test = () => {
+export const Demos = () => {
   const bottomSheet = useBottomSheet();
   const settingsSheet = useBottomSheet();
   const bottom = useBottomTabBarHeight();

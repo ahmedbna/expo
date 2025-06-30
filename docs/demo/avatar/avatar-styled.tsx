@@ -33,12 +33,11 @@ export function AvatarStyled() {
           borderColor: '#10b981',
         }}
       >
-        <AvatarImage source={{ uri: 'https://reactnative.dev/Home/Logo' }} />
         <AvatarFallback
           style={{ backgroundColor: '#10b981' }}
           textStyle={{ color: 'white', fontWeight: 'bold' }}
         >
-          RN
+          BNA
         </AvatarFallback>
       </Avatar>
 

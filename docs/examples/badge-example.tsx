@@ -8,76 +8,69 @@ import { BadgeNotifications } from '@/docs/demo/badge/badge-notifications';
 import { BadgeSizes } from '@/docs/demo/badge/badge-sizes';
 import { BadgeStatus } from '@/docs/demo/badge/badge-status';
 import { BadgeStyled } from '@/docs/demo/badge/badge-styled';
-import React from 'react';
-import { ScrollView } from 'react-native';
 
 // Main demo screen combining all examples
 export function BadgeExample() {
   return (
-    <ScrollView
+    <View
       style={{
         flex: 1,
         padding: 16,
+        justifyContent: 'center',
       }}
     >
-      <View style={{ gap: 32 }}>
-        <View>
-          <Text variant='heading' style={{ marginBottom: 16 }}>
-            Badge Examples
-          </Text>
+      <Text variant='heading' style={{ marginBottom: 16 }}>
+        Badge
+      </Text>
 
-          <View style={{ gap: 24 }}>
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Default Variants
-              </Text>
-              <BadgeDemo />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Default Variants
+        </Text>
+        <BadgeDemo />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                With Icons
-              </Text>
-              <BadgeIcons />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          With Icons
+        </Text>
+        <BadgeIcons />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Notification Badges
-              </Text>
-              <BadgeNotifications />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Notification Badges
+        </Text>
+        <BadgeNotifications />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Custom Styling
-              </Text>
-              <BadgeStyled />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Custom Styling
+        </Text>
+        <BadgeStyled />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Interactive Badges
-              </Text>
-              <BadgeInteractive />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Interactive Badges
+        </Text>
+        <BadgeInteractive />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Different Sizes
-              </Text>
-              <BadgeSizes />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Different Sizes
+        </Text>
+        <BadgeSizes />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Status Indicators
-              </Text>
-              <BadgeStatus />
-            </View>
-          </View>
-        </View>
+      <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Status Indicators
+        </Text>
+        <BadgeStatus />
       </View>
-    </ScrollView>
+    </View>
   );
 }

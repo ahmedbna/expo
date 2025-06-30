@@ -32,8 +32,7 @@ export function AvatarStatus() {
 
       <View style={{ position: 'relative' }}>
         <Avatar size={56}>
-          <AvatarImage source={{ uri: 'https://reactnative.dev/Home/Logo' }} />
-          <AvatarFallback>RN</AvatarFallback>
+          <AvatarFallback>BNA</AvatarFallback>
         </Avatar>
         <View
           style={{

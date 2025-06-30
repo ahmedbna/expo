@@ -17,8 +17,6 @@ export function AccordionExample() {
       style={{
         flex: 1,
         padding: 16,
-        gap: 32,
-        // alignItems: 'center',
         justifyContent: 'center',
       }}
     >
@@ -35,40 +33,40 @@ export function AccordionExample() {
             <AccordionDemo />
           </View> */}
 
-          <View>
+          {/* <View>
             <Text variant='title' style={{ marginBottom: 12 }}>
               Multiple Selection
             </Text>
             <AccordionMultiple />
+          </View> */}
+
+          {/* <View>
+            <Text variant='title' style={{ marginBottom: 12 }}>
+              Controlled State
+            </Text>
+            <AccordionControlled />
+          </View> */}
+
+          {/* <View>
+            <Text variant='title' style={{ marginBottom: 12 }}>
+              FAQ Style
+            </Text>
+            <AccordionFAQ />
+          </View> */}
+
+          {/* <View>
+            <Text variant='title' style={{ marginBottom: 12 }}>
+              Non-Collapsible (Always One Open)
+            </Text>
+            <AccordionNonCollapsible />
+          </View> */}
+
+          <View>
+            <Text variant='title' style={{ marginBottom: 12 }}>
+              Custom Styled
+            </Text>
+            <AccordionStyled />
           </View>
-
-          {/*    <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Controlled State
-              </Text>
-              <AccordionControlled />
-            </View>
-
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                FAQ Style
-              </Text>
-              <AccordionFAQ />
-            </View>
-
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Non-Collapsible (Always One Open)
-              </Text>
-              <AccordionNonCollapsible />
-            </View>
-
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Custom Styled
-              </Text>
-              <AccordionStyled />
-            </View>*/}
         </View>
       </View>
     </View>

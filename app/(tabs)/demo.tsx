@@ -1,5 +1,5 @@
-import { Test } from '@/components/test';
+import { Demos } from '@/components/test';
 
 export default function DemoScreen() {
-  return <Test />;
+  return <Demos />;
 }

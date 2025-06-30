@@ -7,12 +7,7 @@ import React from 'react';
 export function BadgeIcons() {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12 }}>
-      <Badge>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-          <Text style={{ fontSize: 12 }}>★</Text>
-          <Text>Featured</Text>
-        </View>
-      </Badge>
+      <Badge>★ Featured</Badge>
 
       <Badge variant='success'>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>

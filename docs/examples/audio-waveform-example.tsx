@@ -10,46 +10,56 @@ import { AudioWaveformStyled } from '@/docs/demo/audio-waveform/audio-waveform-s
 
 export function AudioWaveformExample() {
   return (
-    <View style={{ width: '100%', gap: 32 }}>
-      <View>
+    <View
+      style={{
+        flex: 1,
+        padding: 16,
+        justifyContent: 'center',
+      }}
+    >
+      <Text variant='heading' style={{ marginBottom: 16 }}>
+        Audio Waveform
+      </Text>
+
+      {/* <View>
         <Text variant='title'>Basic Audio Waveform</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Simple waveform with play/pause controls and progress tracking
         </Text>
         <AudioWaveformDemo />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Interactive Seeking</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Touch-enabled waveform for scrubbing through audio content
         </Text>
         <AudioWaveformInteractive />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Recording Mode</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Animated waveform for real-time recording visualization
         </Text>
         <AudioWaveformRecording />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Custom Styling</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Multiple themed waveforms with different visual styles
         </Text>
         <AudioWaveformStyled />
-      </View>
+      </View> */}
 
-      <View>
+      {/* <View>
         <Text variant='title'>Real-time Data</Text>
         <Text variant='caption' style={{ marginBottom: 16 }}>
           Live audio visualization with configurable wave patterns
         </Text>
         <AudioWaveformRealtime />
-      </View>
+      </View> */}
 
       <View>
         <Text variant='title'>Compact Messages</Text>

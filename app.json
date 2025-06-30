@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "test",
-    "slug": "test",
+    "name": "bna-ui",
+    "slug": "bna-ui",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "test",
+    "scheme": "bna-ui",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {

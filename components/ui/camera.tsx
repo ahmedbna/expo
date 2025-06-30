@@ -444,43 +444,27 @@ export const Camera = forwardRef<CameraRef, CameraProps>(
       );
     }
 
-    if (!permission.granted) {
-      return (
-        <View style={[styles.container, { backgroundColor }, style]}>
-          <View
-            style={[styles.permissionContainer, { backgroundColor: cardColor }]}
-          >
-            <CameraIcon
-              size={64}
-              color={textColor}
-              style={styles.permissionIcon}
-            />
-            <Text
-              variant='title'
-              style={[styles.permissionTitle, { color: textColor }]}
-            >
-              Camera Access Required
-            </Text>
-            <Text
-              variant='body'
-              style={[styles.permissionText, { color: textColor }]}
-            >
-              We need access to your camera to take pictures and videos
-            </Text>
-            <Button
-              variant='default'
-              size='lg'
-              style={styles.permissionButton}
-              onPress={requestPermission}
-            >
-              Grant Permission
-            </Button>
-          </View>
-        </View>
-      );
-    }
+    return !permission.granted ? (
+      <View
+        style={[styles.permissionContainer, { backgroundColor: cardColor }]}
+      >
+        <CameraIcon size={36} color={textColor} style={styles.permissionIcon} />
 
-    return (
+        <Text variant='title' style={{ textAlign: 'center' }}>
+          Camera Access Required
+        </Text>
+
+        <Text variant='body' style={{ textAlign: 'center' }}>
+          We need access to your camera to take pictures and videos
+        </Text>
+
+        <View style={{ width: '100%' }}>
+          <Button onPress={requestPermission} style={{ width: '100%' }}>
+            Grant Permission
+          </Button>
+        </View>
+      </View>
+    ) : (
       <Animated.View
         style={[
           styles.container,
@@ -1092,11 +1076,10 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   permissionContainer: {
+    gap: 16,
     padding: 32,
     borderRadius: BORDER_RADIUS,
     alignItems: 'center',
-    maxWidth: 320,
-    marginHorizontal: 20,
   },
   permissionIcon: {
     marginBottom: 16,
@@ -1109,9 +1092,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 24,
     fontSize: FONT_SIZE,
-  },
-  permissionButton: {
-    minWidth: 200,
   },
   loadingText: {
     marginTop: 16,

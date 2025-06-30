@@ -29,8 +29,8 @@ export function CardPricing() {
       features: [
         '10 Projects',
         '100GB Storage',
-        'Priority Support',
-        'Advanced Analytics',
+        // 'Priority Support',
+        // 'Advanced Analytics',
       ],
       popular: true,
     },
@@ -41,8 +41,8 @@ export function CardPricing() {
       features: [
         'Unlimited Projects',
         '1TB Storage',
-        '24/7 Support',
-        'Custom Integrations',
+        // '24/7 Support',
+        // 'Custom Integrations',
       ],
       popular: false,
     },
@@ -102,14 +102,14 @@ export function CardPricing() {
               ))}
             </View>
           </CardContent>
-          <CardFooter>
+          {/* <CardFooter>
             <Button
               variant={plan.popular ? 'default' : 'outline'}
               style={{ width: '100%' }}
             >
               Get Started
             </Button>
-          </CardFooter>
+          </CardFooter> */}
         </Card>
       ))}
     </View>

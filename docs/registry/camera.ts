@@ -166,24 +166,4 @@ export const cameraRegistry = {
       dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/camera-settings-dark.mp4',
     },
   },
-
-  // Minimal example
-  'camera-minimal': {
-    name: 'camera-minimal',
-    description: 'Camera with minimal controls for simple use cases',
-    type: 'registry:example',
-    registryDependencies: ['camera'],
-    files: [
-      {
-        path: 'registry/examples/camera/camera-minimal.tsx',
-        type: 'registry:example',
-        target: '',
-      },
-    ],
-    preview: {
-      light:
-        'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/camera-minimal-light.mp4',
-      dark: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/camera-minimal-dark.mp4',
-    },
-  },
 };

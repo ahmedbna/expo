@@ -38,8 +38,7 @@ export function AvatarBordered() {
           elevation: 8,
         }}
       >
-        <AvatarImage source={{ uri: 'https://reactnative.dev/Home/Logo' }} />
-        <AvatarFallback>RN</AvatarFallback>
+        <AvatarFallback>BNA</AvatarFallback>
       </Avatar>
 
       <Avatar

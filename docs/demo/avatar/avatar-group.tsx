@@ -31,8 +31,12 @@ export function AvatarGroup() {
           zIndex: 3,
         }}
       >
-        <AvatarImage source={{ uri: 'https://reactnative.dev/Home/Logo' }} />
-        <AvatarFallback>RN</AvatarFallback>
+        <AvatarImage
+          source={{
+            uri: 'https://reactnative.dev/img/header_logo.svg',
+          }}
+        />
+        <AvatarFallback>AB</AvatarFallback>
       </Avatar>
 
       <Avatar

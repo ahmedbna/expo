@@ -13,14 +13,6 @@ export function CarouselCards() {
 
   const events = [
     {
-      title: 'Design Conference 2024',
-      location: 'San Francisco, CA',
-      date: 'Mar 15-17, 2024',
-      attendees: 1250,
-      category: 'Design',
-      color: '#3b82f6',
-    },
-    {
       title: 'Tech Summit',
       location: 'New York, NY',
       date: 'Apr 8-10, 2024',
@@ -35,6 +27,14 @@ export function CarouselCards() {
       attendees: 850,
       category: 'Creative',
       color: '#f59e0b',
+    },
+    {
+      title: 'Design Conference 2024',
+      location: 'San Francisco, CA',
+      date: 'Mar 15-17, 2024',
+      attendees: 1250,
+      category: 'Design',
+      color: '#3b82f6',
     },
   ];
 

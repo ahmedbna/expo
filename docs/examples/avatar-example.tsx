@@ -14,70 +14,65 @@ import { ScrollView } from 'react-native';
 // Main demo screen combining all examples
 export function AvatarExample() {
   return (
-    <ScrollView
+    <View
       style={{
         flex: 1,
         padding: 16,
+        justifyContent: 'center',
       }}
     >
-      <View style={{ gap: 32 }}>
-        <View>
-          <Text variant='heading' style={{ marginBottom: 16 }}>
-            Avatar Examples
-          </Text>
+      <Text variant='heading' style={{ marginBottom: 16 }}>
+        Avatar
+      </Text>
 
-          <View style={{ gap: 24 }}>
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Default
-              </Text>
-              <AvatarDemo />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Default
+        </Text>
+        <AvatarDemo />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Different Sizes
-              </Text>
-              <AvatarSizes />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Different Sizes
+        </Text>
+        <AvatarSizes />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Fallback Only
-              </Text>
-              <AvatarFallbackDemo />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Fallback Only
+        </Text>
+        <AvatarFallbackDemo />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Custom Styling
-              </Text>
-              <AvatarStyled />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Custom Styling
+        </Text>
+        <AvatarStyled />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Avatar Group
-              </Text>
-              <AvatarGroup />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Avatar Group
+        </Text>
+        <AvatarGroup />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                With Status Indicators
-              </Text>
-              <AvatarStatus />
-            </View>
+      {/* <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          With Status Indicators
+        </Text>
+        <AvatarStatus />
+      </View> */}
 
-            <View>
-              <Text variant='title' style={{ marginBottom: 12 }}>
-                Bordered with Shadows
-              </Text>
-              <AvatarBordered />
-            </View>
-          </View>
-        </View>
+      <View>
+        <Text variant='title' style={{ marginBottom: 12 }}>
+          Bordered with Shadows
+        </Text>
+        <AvatarBordered />
       </View>
-    </ScrollView>
+    </View>
   );
 }

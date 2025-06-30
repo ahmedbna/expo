@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
+import { Text } from '@/components/ui/text';
 import { View } from '@/components/ui/view';
 import { Star } from 'lucide-react-native';
-import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 export function ButtonCustom() {
   return (
@@ -25,16 +26,28 @@ export function ButtonCustom() {
       >
         Custom Orange
       </Button>
-      <Button
-        icon={Star}
+
+      <LinearGradient
+        colors={['#FF6B6B', '#4ECDC4']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
         style={{
-          backgroundColor: 'linear-gradient(45deg, #FF6B6B, #4ECDC4)',
-          borderRadius: 25,
+          borderRadius: 12,
+          overflow: 'hidden',
+          flex: 1,
         }}
-        onPress={() => {}}
       >
-        Gradient Style
-      </Button>
+        <Button
+          icon={Star}
+          style={{
+            backgroundColor: 'transparent',
+          }}
+          textStyle={{ color: 'white', fontWeight: 'bold' }}
+          onPress={() => {}}
+        >
+          Gradient Style
+        </Button>
+      </LinearGradient>
     </View>
   );
 }
